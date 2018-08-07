@@ -26,7 +26,6 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/admin', function () {
     return view('admin.dashboard');
 })->middleware('auth');
-
 //Route::get('admin/users', 'Admin\AdminController@usersList');
 
 Route::group(['prefix' => 'admin'], function () {
@@ -40,5 +39,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('/logout', 'Admin\Auth\LoginController@getLogout');
     Route::post('/userdatatable', 'Admin\AdminController@fetchAllUsers');
     Route::post('/deleteuser/{id}', 'Admin\AdminController@deleteUser');
-   
+  
 });
+
+
