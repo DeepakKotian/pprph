@@ -1,22 +1,36 @@
-@extends('layouts.adminapp')
+@extends('adminlte::page')
+
+@section('title', 'Dashboard')
+
+@section('content_header')   
+   <h1>
+Users List
+        <small>it all starts here</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+      
+        <li class="active">Users List</li>
+      </ol>
+
+@stop
 
 @section('content')
 
-@section('title','Dashboard') 
-@section('description','Dashboard Description') 
-<div class="content-wrapper" id="users-app">
-    <div class="container-fluid">
+            
+            <!-- /.box-header -->
+            
+            <div class="box" id="users-app">
+  
         <!-- Breadcrumbs-->
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-            <a href="">Home</a>
-            </li>
-            <li class="breadcrumb-item active">Users List</li>
-        </ol>
-        <div class="row">
-            <div class="col-12">
+        <div class="box-header">
+              <h3 class="box-title">Data Table With Full Features</h3>
+              <div class="box-tools">
                 <a class="btn btn-primary btn-md pull-right" href="{{ url('admin/user-form') }}">Add New</a>
             </div>
+            </div>
+    <div class="box-body">
+             
             <div class="col-12">
             <div class="table table-responsive">
                 <table class="table table-bordered" id="userTable">
@@ -30,11 +44,14 @@
                         <tbody>
                             <tr v-for="row in usersData">
                                 <td><% row.id %></td>
-                                <td><% row.name %></td>
+                                <td><% row.first_name %> <% row.last_name %></td>
                                 <td><% row.email %></td>
-                                <td><% row.usertype %></td>
-                                <td> &emsp;<a v-bind:href="'/admin/user-form/'+ row.id" title="SHOW" ><span class="fa fa-edit"></span></a>&emsp;
-                                &emsp;<a href="javascript:void(0)" data-toggle="modal" data-target="#deleteModal" v-on:click="onDelete(row.id)"><span class="fa fa-trash"></span></a>
+                                <td><% row.role | role-type %>  </td>
+                                <td>
+              <a type="button"  v-bind:href="'/admin/user-form/'+ row.id" class="btn btn-default"><i class="fa fa-edit"></i></a>
+              <a type="button" data-toggle="modal" data-target="#deleteModal" class="btn btn-default" v-on:click="onDelete(row.id)"><i class="fa fa-trash"></i></a>
+             
+                                
                                 </td>
                             </tr>
                         </tbody>				
@@ -60,49 +77,17 @@
           </div>
         </div>
       </div>
-    </div>
+ 
 </div>
 
-@endsection
-@section('script')
+@stop
 
-<script src="{{ asset('js/datatable/jquery.dataTables.js') }}"></script>
+@section('css')
+    <link rel="stylesheet" href="/css/admin_custom.css">
+@stop
 
-<script>
-    // $(document).ready(function(){
-    //     $('#userTable').DataTable({
-    //         "processing": true,
-    //         "serverSide": true,
-    //         "searching":false,
-    //         "ajax":{
-    //                  "url": "/admin/userdatatable",
-    //                  "dataType": "json",
-    //                  "type": "POST",
-    //                  "data":{ _token: "{{csrf_token()}}"},
-    //                  "dataSrc" : function (response) {
-    //                    return response.data;
-    //                 }
-    //                },
-            
-    //         "columns": [
-    //             { "data": "id" },
-    //             { "data": "name" },
-    //             { "data": "email" },
-    //             { "data": "usertype" },
-    //             { "data": "options" }
-    //         ],
-    //         "columnDefs": [{
-    //             "targets": 4,
-    //             "data": "options",
-    //             "render": function ( data, type, row, meta ) {
-    //                 var str;
-    //                 str= '&emsp;<a href="admin/user-form/'+data+'" title="SHOW" ><span class="fa fa-edit"></span></a>';
-    //                 str+='&emsp;<a href="javascript:void(0)" data-toggle="modal" data-target="#deleteModal" v-on:click="onDelete('+data+')"><span class="fa fa-trash"></span></a>';
-    //                 return str;
-    //             }
-    //         }]	 
-    //     });
-    // })
-</script>
+@section('js')
 <script src="{!! asset('js/users-app.js') !!}"></script>
-@endsection
+@stop
+
+

@@ -6,6 +6,7 @@ if (token) {
         next()
       })
 } 
+
 var tokenDt = token.content;
 Vue.use(window.vuelidate.default)
 Vue.use(VToaster, {timeout: 5000})
@@ -28,8 +29,9 @@ var app = new Vue({
       user:{
         email:null,
         password:null,
-        name:null,
-        usertype:'',
+        first_name:null,
+        last_name:null,
+        role:'',
       },
       usersData:[],
       errors:[],
@@ -42,20 +44,21 @@ var app = new Vue({
               email:email,
           },
           password:{
-            required:required
+            required:required,
           },
-          usertype:{
-            required:required
+          role:{
+            required:required,
           },
-          name:{
-            required:required
+          first_name:{
+            required:required,
           }
         }
     },
     created: function(){
         this.currentUserId = $('#currentUserId').val();
         
-    }, mounted: function(){
+    }, 
+    mounted: function(){
         if(this.currentUserId)
         this.getUserData();
         if($('#userTable').length>0){
@@ -64,7 +67,8 @@ var app = new Vue({
      },
     methods: {
         addNewUser: function () {
-        if (this.$v.$invalid) {
+          
+          if (this.$v.$invalid) {
             this.$v.$touch()
         }else{
             this.$http.post(this.urlPrefix+'saveuser',this.user).then(
@@ -78,19 +82,27 @@ var app = new Vue({
                   });
             });
         } 
-     }, getUserData: function () {
+     }, 
+     getUserData: function () {
         this.$http.get(this.urlPrefix+'fetchuser/'+this.currentUserId).then(function(response){
             this.user=response.data;
+       
+        
         });
-      }, updateUser: function (event) {
+      }, 
+      updateUser: function (event) {
             this.$http.post(this.urlPrefix+'user-form/'+this.currentUserId,this.user).then(
             function(response){
                 this.$toaster.success(response.data);
             }
         )
-      },onDelete:function(id){
+      },
+      
+      onDelete:function(id){
           this.currentUserId = id;
-      },deleteUser:function(){
+      },
+      
+      deleteUser:function(){
             this.$http.post(this.urlPrefix+'deleteuser/'+this.currentUserId,this.currentUserId).then(
                 function(response){
                    $('#userTable').DataTable().destroy();
@@ -105,6 +117,7 @@ var app = new Vue({
             this.$http.post(this.urlPrefix+'userdatatable').then(
                 function(response){
                     self.usersData  = response.data.data;
+               
                 }
             )
             self.loadDataTable();
@@ -116,6 +129,22 @@ var app = new Vue({
      },
      
     delimiters: ["<%","%>"]
+  })
+
+  Vue.filter('role-type', function (value) {
+      console.log(value);
+     
+    if(value==1){
+      $roleType="Admin";
+      return $roleType;
+     }
+     else{
+        $roleType="User";
+        return $roleType;
+      
+     }
+
+ 
   })
 
   

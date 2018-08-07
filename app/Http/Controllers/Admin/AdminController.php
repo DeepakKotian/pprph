@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Auth;
-use App\Admin;
 use DataTables;
 
 class AdminController extends Controller
@@ -34,15 +33,10 @@ class AdminController extends Controller
         return view('home');
     }
     
-    public function dashboard()
-    {
-      $usrType = Auth::guard('admin')->user()->usertype; 
-      return view('backend.dashboard',compact('usrType'));
-    }
-
+   
     public function usersList()
     {
-      return view('backend.users');
+      return view('admin.users');
     }
 
     
@@ -51,7 +45,7 @@ class AdminController extends Controller
     {
         $data = [];
         if($id!=''){
-            $data = DB::table('admins')->select('*')->where('admins.id',$id)->first();
+            $data = DB::table('users')->select('*')->where('users.id',$id)->first();
             if(!empty($data)){
                 $data->id = $id;
             }else{
@@ -59,14 +53,14 @@ class AdminController extends Controller
             }
 
         }
-        return view('backend.userform',compact('data'));
+        return view('admin.userform',compact('data'));
     }
 
     public function fetchUser(Request $request)
     { 
         $data = [];
         if($request->id!=''){
-            $data = DB::table('admins')->select('*')->where('admins.id',$request->id)->first();
+            $data = DB::table('users')->select('*')->where('users.id',$request->id)->first();
             if(!empty($data)){
                 $data->id = $request->id;
             }
@@ -76,33 +70,37 @@ class AdminController extends Controller
 
     public function saveUser(Request $request)
     {
-         $request = $this->validate(request(),[
-            'name' => 'required|min:3',
-            'email' => 'required|email|unique:admins',
+        
+         $validate = $this->validate(request(),[
+            'first_name' => 'required|min:3',
+            'email' => 'required|email|unique:users',
             'password' => 'required|min:3',
-            'usertype' => 'required',
+            'role' => 'required',
             ]
         );
-        $insertData = Admin::create([
-            'name' => $request['name'],
+  
+        $insertData = user::create([
+            'first_name' => $request['first_name'],
+            'last_name' => $request['last_name'],
             'email' => $request['email'],
             'password' => Hash::make($request['password']),
-            'usertype' => $request['usertype'],
+            'role' => $request['role'],
         ]);
         if($insertData)
         return response()->json('Successfully created',200);
-            return redirect()->back()->withErrors($request->errors());
+            return redirect()->back()->withErrors($validate->errors());
        
     }
 
-    public function updateUser(Request $request,Admin $admin){
-        $admin = DB::table('admins');
-        $checkAdmin =  $admin->select('admins.email')->where('admins.email',$request->email)->where('admins.id','<>',$request->id)->first();
+    public function updateUser(Request $request,user $user){
+        $user = DB::table('users');
+        $checkAdmin =  $user->select('users.email')->where('users.email',$request->email)->where('users.id','<>',$request->id)->first();
         if(empty($checkAdmin)){
-            $data['name'] = $request->name;
+            $data['first_name'] = $request->first_name;
+            $data['last_name'] = $request->last_name;
             $data['email'] = $request->email;
-            $data['usertype'] = $request->usertype;
-            if(Admin::whereId($request->id)->update($data));
+            $data['role'] = $request->role;
+            if(user::whereId($request->id)->update($data));
             return response()->json('Successfully updated',200);
         }
       
@@ -110,13 +108,13 @@ class AdminController extends Controller
 
     public function fetchAllUsers(){
       $data = [];
-      $data = DataTables::of(DB::table('admins'))->toJson();
+      $data = DataTables::of(DB::table('users')->where('id','<>',auth::user()->id))->toJson();
       if($data)
       return $data;
     }
 
     public function deleteUser(Request $request){
-        $json_data = Admin::whereId($request->id)->delete();
+        $json_data = user::whereId($request->id)->delete();
         return response()->json('Successfully Deleted', 200);
     }
 }

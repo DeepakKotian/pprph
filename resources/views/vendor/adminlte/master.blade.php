@@ -7,6 +7,7 @@
 @yield('title', config('adminlte.title', 'AdminLTE 2'))
 @yield('title_postfix', config('adminlte.title_postfix', ''))</title>
     <!-- Tell the browser to be responsive to screen width -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.7 -->
     <link rel="stylesheet" href="{{ asset('vendor/adminlte/vendor/bootstrap/dist/css/bootstrap.min.css') }}">
@@ -14,6 +15,7 @@
     <link rel="stylesheet" href="{{ asset('vendor/adminlte/vendor/font-awesome/css/font-awesome.min.css') }}">
     <!-- Ionicons -->
     <link rel="stylesheet" href="{{ asset('vendor/adminlte/vendor/Ionicons/css/ionicons.min.css') }}">
+    <link href="{{ asset('css/v-toaster.css') }}" rel="stylesheet">
 
     @if(config('adminlte.plugins.select2'))
         <!-- Select2 -->
@@ -60,7 +62,11 @@
     <!-- ChartJS -->
     <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.min.js"></script>
 @endif
-
+<script src="{!! asset('js/validators.min.js') !!}"></script>
+<script src="{!! asset('js/vuelidate.min.js') !!}"></script>
+<script src="{!! asset('js/vue.js') !!}"></script>
+<script src="{!! asset('js/vue-resource.js') !!}"></script>
+<script src="{!! asset('js/v-toaster.js') !!}"></script>
 @yield('adminlte_js')
 
 </body>

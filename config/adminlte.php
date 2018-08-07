@@ -136,16 +136,16 @@ return [
         ],
         'ADMINISTRATION',
         [
-            'text'    => 'Users',
+            'text'    => 'User Management',
             'icon'    => 'users',
             'submenu' => [
                 [
                     'text' => 'View Users',
-                    'url'  => '#',
+                    'url'  => 'admin/users',
                 ],
                 [
                     'text' => 'Add User',
-                    'url'  => '#',
+                    'url'  => 'admin/user-form',
                 ],
                 // [
                 //     'text'    => 'Level One',
