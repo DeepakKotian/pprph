@@ -22,3 +22,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/admin', function () {
     return view('admin.dashboard');
 })->middleware('auth');
+
+Route::get('/admin/appointment', function () {
+    return view('admin.appointment');
+})->middleware('auth');
