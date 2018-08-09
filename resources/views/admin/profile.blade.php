@@ -3,21 +3,10 @@
 @section('title', 'Dashboard')
 
 @section('content_header')
-<h1> @if(!empty($data))
-   Edit User
-   @else
-           Add User  
-            @endif
-     
-      </h1>
+<h1> Edit Profile </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-      
-        @if(!empty($data))
-             <li class="breadcrumb-item active">Edit User  </li>
-            @else
-             <li class="breadcrumb-item active">Add User  </li>
-            @endif
+         <li class="breadcrumb-item active">Edit Profile  </li>  
       </ol>
 @stop
 
@@ -31,10 +20,10 @@
     <!-- Profile Image -->
     <div class="box box-primary">
       <div class="box-body box-profile">
-      <div :style="{ backgroundImage: 'url(' + urlPrefix + '../uploads/userphoto/' +user.photo + ')' }"  id="user_photo_holder" class="img-custom-responsive"> </div>
+      <div :style="{ backgroundImage: 'url(' + urlPrefix + '../uploads/userphoto/' +profile.photo + ')' }"  id="user_photo_holder" class="img-custom-responsive"> </div>
       <div class="btn-section userphtoinput">
       <label type="button" for="user_photo" class="btn btn-block btn-primary">Choose Photo</label>
-      <input type="hidden"  class="form-control input-rounded"  v-model="user.photo" id="userphoto_file" style="margin-right: 20px;" >
+      <input type="hidden"  class="form-control input-rounded"  v-model="profile.photo" id="userphoto_file" style="margin-right: 20px;" >
         <input type="file" class="op_0" id="user_photo" >
       </div>
       </div>
@@ -55,14 +44,11 @@
     
         <div class="tab-pane active" id="settings">
        
-                @if(!empty($data))
-                        <input type="hidden" name="currentUserId" id="currentUserId"  value="{{ $data->id }}">
-                @endif
-            <div class="form-group" :class="{ 'has-error': $v.user.first_name.$error }">
+            <div class="form-group" :class="{ 'has-error': $v.profile.first_name.$error }">
               <label for="inputName" class="col-sm-2 control-label">First Name *</label>
 
               <div class="col-sm-10">
-              <input type="text" name="first_name" class="form-control col-sm-4" v-model="$v.user.first_name.$model" id="first_name"  placeholder="Enter First Name">
+              <input type="text" name="first_name" class="form-control col-sm-4" v-model="$v.profile.first_name.$model" id="first_name"  placeholder="Enter First Name">
               </div>
             </div>
 
@@ -70,41 +56,31 @@
               <label for="inputName" class="col-sm-2 control-label">Last Name </label>
 
               <div class="col-sm-10">
-              <input type="text" name="last_name" class="form-control col-sm-4" v-model="user.last_name" id="last_name"  placeholder="Enter Last Name">
+              <input type="text" name="last_name" class="form-control col-sm-4" v-model="profile.last_name" id="last_name"  placeholder="Enter Last Name">
               </div>
             </div>
-             <div class="form-group" :class="{ 'has-error': $v.user.phone.$error }">
+
+            <div class="form-group" :class="{ 'has-error': $v.profile.phone.$error }" >
               <label for="inputName" class="col-sm-2 control-label">Phone </label>
 
               <div class="col-sm-10">
-              <input type="text" name="phone" class="form-control col-sm-4" v-model="$v.user.phone.$model" id="phone"  placeholder="Enter Phone">
+              <input type="text" name="phone" class="form-control col-sm-4" v-model="$v.profile.phone.$model" id="phone"  placeholder="Enter Phone">
               </div>
             </div>
             
-            <div class="form-group" :class="{ 'has-error': $v.user.email.$error }">
+            <div class="form-group" :class="{ 'has-error': $v.profile.email.$error }">
               <label for="inputName" class="col-sm-2 control-label">Email *</label>
 
               <div class="col-sm-10">
-              <input type="email"  name="email" class="form-control col-sm-4"  v-model="$v.user.email.$model" id="email"  placeholder="Enter email">
+              <input type="email"  name="email" class="form-control col-sm-4"  v-model="$v.profile.email.$model" id="email"  placeholder="Enter email">
               </div>
             </div>
-            @if(!empty($data))
-              @else
-            <div class="form-group" :class="{ 'has-error': $v.user.password.$error }" >
-              <label for="inputName" class="col-sm-2 control-label">Password * </label>
-
-              <div class="col-sm-10">
-        
-              <input type="password" name="password" class="form-control col-sm-4" v-model="$v.user.password.$model"  id="password"  placeholder="Enter Password">
-         
-              </div>
-            </div>
-            @endif
-            <div class="form-group" :class="{ 'has-error': $v.user.role.$error }">
+           
+            <div class="form-group" :class="{ 'has-error': $v.profile.role.$error }">
               <label for="inputName" class="col-sm-2 control-label">Role *</label>
 
               <div class="col-sm-10">
-              <select name="role" class="form-control col-sm-2" id="role" v-model="$v.user.role.$model">
+              <select name="role" class="form-control col-sm-2" id="role" v-model="$v.profile.role.$model">
                             <option value="">Please select</option>
                             <option value="0">User</option>
                             <option value="1">Admin</option>
@@ -115,11 +91,9 @@
             
             <div class="form-group">
               <div class="col-sm-offset-2 col-sm-10">
-                       @if(!empty($data))
-                            <button type="button" class="btn btn-primary" v-on:click="updateUser()">Update</button>
-                        @else
-                            <button type="button" class="btn btn-primary" v-on:click="addNewUser()">Save</button>
-                        @endif
+                   
+                            <button type="button" class="btn btn-primary" v-on:click="updateProfile()">Update</button>
+                       
               </div>
             </div>
           

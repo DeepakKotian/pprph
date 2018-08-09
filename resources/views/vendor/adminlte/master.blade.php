@@ -16,6 +16,8 @@
     <!-- Ionicons -->
     <link rel="stylesheet" href="{{ asset('vendor/adminlte/vendor/Ionicons/css/ionicons.min.css') }}">
     <link href="{{ asset('css/v-toaster.css') }}" rel="stylesheet">
+   
+    <link rel="stylesheet" href="{{ asset('css/admin_custom.css') }} ">
 
     @if(config('adminlte.plugins.select2'))
         <!-- Select2 -->

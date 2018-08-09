@@ -1,0 +1,48 @@
+.img-custom-responsive{
+    height: 250px;
+    background-position: center;
+    background-size: cover;
+    width: 70%;
+    border-radius: 50%;
+    border: 1px solid #d0d0d0;
+    padding: 5px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.img-responsive-drop-top{
+    height: 25px;
+    background-position: center;
+    background-size: cover;
+    width: 25px;
+    border-radius: 50%;
+    border: 1px solid #d0d0d0;
+    padding: 5px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.img-responsive-drop{
+    height: 75px;
+    background-position: center;
+    background-size: cover;
+    width: 75px;
+    border-radius: 50%;
+    border: 1px solid #d0d0d0;
+    padding: 5px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.userphtoinput input{
+    display: none;
+}
+.userphtoinput label{
+    display: block;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}

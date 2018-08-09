@@ -19,7 +19,7 @@ var required     = window.validators.required,
  numeric         = window.validators.numeric,
  url             = window.validators.url,
  pwdRegx = regexhelpers('pwdRegx', /^(?=.[a-z])(?=.[A-Z])(?=.\d)(?=.[$@$!%*?&])[A-Za-z\d$@$!%*?&]{6,}/),
- phoneRegx = regexhelpers('phoneRegx',/^\d{10,14}$/);
+ phoneRegx = regexhelpers('phoneRegx',/^[+]?[0-9]\d{9,}$/);
 
 var app = new Vue({
     el: '#users-app',
@@ -28,11 +28,14 @@ var app = new Vue({
       currentUserId:"",
       user:{
         email:null,
-        password:null,
         first_name:null,
         last_name:null,
         role:'',
+        phone:null,
+        password:null,
+        photo:'userdefault.jpg',
       },
+      profile:{ },
       usersData:[],
       errors:[],
 
@@ -43,37 +46,76 @@ var app = new Vue({
               required:required,
               email:email,
           },
-          password:{
-            required:required,
-          },
           role:{
             required:required,
           },
           first_name:{
             required:required,
-          }
+          },
+          password:{
+            required:required,
+          },
+          phone:{
+          
+            phoneRegx:phoneRegx,
         }
+        },
+        profile:{
+            email:{
+                required:required,
+                email:email,
+            },
+            role:{
+              required:required,
+            },
+            first_name:{
+              required:required,
+            },
+         
+            phone:{
+ 
+                phoneRegx:phoneRegx,
+            }
+          }
     },
     created: function(){
         this.currentUserId = $('#currentUserId').val();
-        
     }, 
     mounted: function(){
+        this.userData();
         if(this.currentUserId)
         this.getUserData();
+
         if($('#userTable').length>0){
             this.loadAllUsers();
         }
      },
+
     methods: {
         addNewUser: function () {
-          
-          if (this.$v.$invalid) {
+          console.log(this.$v.user);
+          if (this.$v.user.$invalid) {
             this.$v.$touch()
         }else{
-            this.$http.post(this.urlPrefix+'saveuser',this.user).then(
+            this.user.photo= $('#user_photo')[0].files[0];
+         
+            let formData= new FormData();
+          
+            formData.append('first_name',this.user.first_name);
+            formData.append('last_name',this.user.last_name);
+            formData.append('email',this.user.email);
+            formData.append('phone',this.user.phone);
+            formData.append('photo',this.user.photo);
+            formData.append('role',this.user.role);
+            formData.append('password', this.user.password);
+            this.$http.post(this.urlPrefix+'saveuser',formData,{
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+              }).then(
                 function(response){
                     this.$toaster.success(response.data);
+                    
                 }
             ).catch(function(response){
                 let self = this;
@@ -85,17 +127,81 @@ var app = new Vue({
      }, 
      getUserData: function () {
         this.$http.get(this.urlPrefix+'fetchuser/'+this.currentUserId).then(function(response){
-            this.user=response.data;
+        this.user=response.data;
        
-        
         });
       }, 
+
+      userData: function () {
+        this.$http.get(this.urlPrefix+'userdata/').then(function(response){
+        this.profile=response.data;
+       
+        });
+      }, 
+
       updateUser: function (event) {
-            this.$http.post(this.urlPrefix+'user-form/'+this.currentUserId,this.user).then(
+      
+
+        if($('#user_photo')[0].files[0])
+        {
+            this.user.photo= $('#user_photo')[0].files[0];
+        }
+       
+        let formData= new FormData();
+        formData.append('first_name',this.user.first_name);
+        formData.append('last_name',this.user.last_name);
+        formData.append('email',this.user.email);
+        formData.append('phone',this.user.phone);
+        formData.append('photo',this.user.photo);
+        formData.append('role',this.user.role);
+        if (this.$v.user.$invalid) {
+            this.$v.$touch()
+        }
+        else{
+            this.$http.post(this.urlPrefix+'user-form/'+this.currentUserId,formData,{
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+                }).then(
+                function(response){
+                    this.$toaster.success(response.data);
+                }
+                ).catch(function(response){
+                    this.$toaster.error(response.data);
+                });
+        }
+      },
+
+      updateProfile: function (event) {
+        if($('#user_photo')[0].files[0])
+        {
+            this.profile.photo= $('#user_photo')[0].files[0];
+        }
+       
+        let formData= new FormData();
+        formData.append('first_name',this.profile.first_name);
+        formData.append('last_name',this.profile.last_name);
+        formData.append('email',this.profile.email);
+        formData.append('phone',this.profile.phone);
+        formData.append('photo',this.profile.photo);
+        formData.append('role',this.profile.role);
+     
+        if (this.$v.profile.$invalid) {
+            this.$v.profile.$touch()
+        }
+        else{
+            this.$http.post(this.urlPrefix+'updateprofile/',formData,{
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+              }).then(
             function(response){
                 this.$toaster.success(response.data);
             }
-        )
+            ).catch(function(response){
+                    this.$toaster.error(response.data);
+            });
+       }
       },
       
       onDelete:function(id){
@@ -112,6 +218,7 @@ var app = new Vue({
                 }
             )
         },
+
         loadAllUsers:function(){
             let self = this;
             this.$http.post(this.urlPrefix+'userdatatable').then(
@@ -122,6 +229,7 @@ var app = new Vue({
             )
             self.loadDataTable();
         },
+
         loadDataTable:function(){
             setTimeout( function(){ $('#userTable').DataTable(); },500)
         }
@@ -132,7 +240,7 @@ var app = new Vue({
   })
 
   Vue.filter('role-type', function (value) {
-      console.log(value);
+     
      
     if(value==1){
       $roleType="Admin";

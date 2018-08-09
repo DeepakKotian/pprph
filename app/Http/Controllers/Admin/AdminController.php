@@ -74,15 +74,28 @@ class AdminController extends Controller
          $validate = $this->validate(request(),[
             'first_name' => 'required|min:3',
             'email' => 'required|email|unique:users',
-            'password' => 'required|min:3',
+            'password' => 'required|min:6',
             'role' => 'required',
             ]
         );
+        
+        if($request->hasFile('photo')){
+            $file=$request->file('photo');
+            $imageName = uniqid().time().'.'.$file->getClientOriginalExtension();
+            $destinationPath = public_path('/uploads/userphoto');
+            $file->move($destinationPath, $imageName);
+            $userphoto['photo'] = $imageName;
+        }
+        else{
+            $userphoto['photo'] ='userdefault.jpg';
+        }
   
         $insertData = user::create([
             'first_name' => $request['first_name'],
             'last_name' => $request['last_name'],
             'email' => $request['email'],
+            'phone' => $request['phone'],
+            'photo' => $userphoto['photo'],
             'password' => Hash::make($request['password']),
             'role' => $request['role'],
         ]);
@@ -96,12 +109,27 @@ class AdminController extends Controller
         $user = DB::table('users');
         $checkAdmin =  $user->select('users.email')->where('users.email',$request->email)->where('users.id','<>',$request->id)->first();
         if(empty($checkAdmin)){
+            if($request->hasFile('photo')){
+                $file=$request->file('photo');
+                $imageName = uniqid().time().'.'.$file->getClientOriginalExtension();
+                $destinationPath = public_path('/uploads/userphoto');
+                $file->move($destinationPath, $imageName);
+                $userphoto['photo'] = $imageName;
+            }
+            else{
+                $userphoto['photo'] =$request->photo;
+            }
+            $data['photo'] = $userphoto['photo'];
             $data['first_name'] = $request->first_name;
             $data['last_name'] = $request->last_name;
             $data['email'] = $request->email;
+            $data['phone'] = $request->phone;
             $data['role'] = $request->role;
             if(user::whereId($request->id)->update($data));
             return response()->json('Successfully updated',200);
+        }
+        else{
+            return response()->json('Email Aready Taken', 500);
         }
       
     }
@@ -117,5 +145,9 @@ class AdminController extends Controller
         $json_data = user::whereId($request->id)->delete();
         return response()->json('Successfully Deleted', 200);
     }
+
+    
 }
+
+
 
