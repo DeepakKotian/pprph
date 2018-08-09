@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Auth;
 use DataTables;
+use Gate;
 
 class AdminController extends Controller
 {
@@ -19,8 +20,11 @@ class AdminController extends Controller
      *
      * @return void
      */
+
     public function __construct()
     {
+        $this->middleware('auth');
+  
 
     }
     /**
@@ -33,27 +37,45 @@ class AdminController extends Controller
         return view('home');
     }
     
-   
+    
     public function usersList()
     {
-      return view('admin.users');
+        $users = view('admin.users');
+        if (Gate::denies('manage-admin', $users)) {
+        return redirect('/admin');
+       
+        }
+        else{
+        return $users;
+        }
+        
     }
 
     
 
     public function userForm($id='')
     {
+       
         $data = [];
+
         if($id!=''){
             $data = DB::table('users')->select('*')->where('users.id',$id)->first();
             if(!empty($data)){
                 $data->id = $id;
             }else{
-                return redirect('/admin/user-form');
+                $userform= redirect('/admin/user-form');
             }
 
         }
-        return view('admin.userform',compact('data'));
+        $userform= view('admin.userform',compact('data'));
+
+        if (Gate::denies('manage-admin', $userform)) {
+         return redirect('/admin');
+        }
+           else{
+           return $userform;
+       }
+
     }
 
     public function fetchUser(Request $request)
@@ -65,7 +87,14 @@ class AdminController extends Controller
                 $data->id = $request->id;
             }
         }
-        return response()->json($data, 200);
+        $fetchData= response()->json($data, 200);
+
+        if (Gate::denies('manage-admin', $fetchData)) {
+            return redirect('/admin');
+           }
+              else{
+              return $fetchData;
+          }
     }
 
     public function saveUser(Request $request)
@@ -101,8 +130,8 @@ class AdminController extends Controller
         ]);
         if($insertData)
         return response()->json('Successfully created',200);
-            return redirect()->back()->withErrors($validate->errors());
-       
+        return redirect()->back()->withErrors($validate->errors());
+ 
     }
 
     public function updateUser(Request $request,user $user){
@@ -130,19 +159,27 @@ class AdminController extends Controller
         }
         else{
             return response()->json('Email Aready Taken', 500);
-        }
-      
+        }  
     }
 
     public function fetchAllUsers(){
       $data = [];
-      $data = DataTables::of(DB::table('users')->where('id','<>',auth::user()->id))->toJson();
+      $data = DataTables::of(DB::table('users')->where('id','<>',auth::user()->id)->where('deleted_at','=',null))->toJson();
       if($data)
-      return $data;
+      $fchdata= $data;
+      
+      if (Gate::denies('manage-admin', $fchdata)) {
+        return redirect('/admin');
+       }
+          else{
+          return $fchdata;
+      }
     }
 
     public function deleteUser(Request $request){
-        $json_data = user::whereId($request->id)->delete();
+        $data['deleted_at']=now();
+       
+        $json_data = user::whereId($request->userId)->update($data);
         return response()->json('Successfully Deleted', 200);
     }
 

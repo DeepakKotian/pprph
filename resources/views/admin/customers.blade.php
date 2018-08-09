@@ -20,7 +20,7 @@ Users List
             
             <!-- /.box-header -->
             
-            <div class="box" id="users-app">
+            <div class="box box-primary" id="users-app">
   
         <!-- Breadcrumbs-->
         <div class="box-header">

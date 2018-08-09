@@ -204,12 +204,16 @@ var app = new Vue({
        }
       },
       
-      onDelete:function(id){
-          this.currentUserId = id;
+      onDelete:function(data){
+        
+         this.currentUserId = data.id;
+         this.user.first_name = data.first_name;
+         this.user.last_name = data.last_name;
       },
       
-      deleteUser:function(){
-            this.$http.post(this.urlPrefix+'deleteuser/'+this.currentUserId,this.currentUserId).then(
+      deleteUser:function(userId){
+      
+            this.$http.post(this.urlPrefix+'deleteuser',{userId:userId}).then(
                 function(response){
                    $('#userTable').DataTable().destroy();
                    this.loadAllUsers();
