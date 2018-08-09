@@ -30,26 +30,24 @@ Route::get('/admin', function () {
 
 Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     Route::get('/dashboard', 'Admin\AdminController@dashboard');
- 
     Route::get('/users', 'Admin\AdminController@usersList');
     Route::get('/user-form', 'Admin\AdminController@userForm');
     Route::get('/user-form/{id}', 'Admin\AdminController@userForm');
     Route::post('/user-form/{id}', 'Admin\AdminController@updateUser');
     Route::get('/fetchuser/{id}', 'Admin\AdminController@fetchUser');
     Route::post('/saveuser', 'Admin\AdminController@saveUser');
-    Route::post('/userdatatable', 'Admin\AdminController@fetchAllUsers');
-    Route::post('/deleteuser', 'Admin\AdminController@deleteUser');
-   
     Route::post('/logout', 'Admin\Auth\LoginController@getLogout');
-   
+    Route::post('/userdatatable', 'Admin\AdminController@fetchAllUsers');
+    Route::post('/deleteuser/{id}', 'Admin\AdminController@deleteUser');
      // profile of login user
     Route::get('/profile', 'Admin\ProfileController@index');
     Route::get('/userdata', 'Admin\ProfileController@userData');
     Route::post('/updateprofile', 'Admin\ProfileController@updateProfile'); // profile of login user
-
+    
     //Customer Management
     Route::get('/customers', 'Admin\CustomerController@index');
     Route::get('/customer-form', 'Admin\CustomerController@show');
+    Route::get('/customer-form/{id}', 'Admin\CustomerController@show');
     Route::get('/fetchcustomer/{id}', 'Admin\CustomerController@fetchCustomer');
     Route::get('/customer-filter-data', 'Admin\CustomerController@getCustomFilterData');
 
