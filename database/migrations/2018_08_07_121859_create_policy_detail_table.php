@@ -15,7 +15,8 @@ class CreatePolicyDetailTable extends Migration
     {
         Schema::create('policy_detail', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('insurance_id');
+            $table->integer('insurance_ctg_id');
+            $table->integer('provider_id');
             $table->integer('customer_id');
             $table->string('policy_number')->unique();
             $table->timestamps();

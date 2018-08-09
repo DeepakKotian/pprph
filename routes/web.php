@@ -28,7 +28,7 @@ Route::get('/admin', function () {
 })->middleware('auth');
 //Route::get('admin/users', 'Admin\AdminController@usersList');
 
-Route::group(['prefix' => 'admin'], function () {
+Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     Route::get('/dashboard', 'Admin\AdminController@dashboard');
     Route::get('/users', 'Admin\AdminController@usersList');
     Route::get('/user-form', 'Admin\AdminController@userForm');
@@ -44,4 +44,10 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/userdata', 'Admin\ProfileController@userData');
     Route::post('/updateprofile', 'Admin\ProfileController@updateProfile'); // profile of login user
     
+    //Customer Management
+    Route::get('/customers', 'Admin\CustomerController@index');
+    Route::get('/user-form', 'Admin\CustomerController@show');
+    Route::get('/user-form/{id}', 'Admin\CustomerController@show');
+    Route::get('/customer-filter-data', 'Admin\CustomerController@getCustomFilterData');
+
 });
