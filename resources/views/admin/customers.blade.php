@@ -103,7 +103,30 @@ Users List
 @stop
 
 @section('css')
-
+<style>
+.icheckbox.checked{
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    background: green;
+    border: none;
+    cursor: pointer;
+}
+.icheckbox{
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    background: #DDD;
+    border: none;
+    cursor: pointer;
+}
+</style>
 @stop
 
 @section('js')
@@ -129,7 +152,23 @@ Users List
             @foreach($insuranceCtg as $key=> $rowCtg)
             {data: 'ctg{{ $key }}', name: 'ctg{{ $key }}'},
             @endforeach
-        ]
+        ],
+        columnDefs:[{
+            targets: [5,6,7,8],
+            data: null,
+            render: function(data, type, full, meta){
+                if(data>0){
+                    if(type === 'display'){
+                        data = '<input type="checkbox" class="icheckbox" name="ctg_'+meta.row+'_'+meta.col+'" value="'+data+'" checked >';
+                    }
+                }else{
+                    if(type === 'display'){
+                        data = '<input type="checkbox"  class="icheckbox" name="ctg_'+meta.row+'_'+meta.col+'"  value="'+data+'">';
+                    }
+                }
+               return data;
+            }
+       }]
     });
 
     $('#search-form').on('submit', function(e) {
@@ -142,6 +181,7 @@ Users List
         $('.selectJS').on('change', function (e) {
            $(this).closest('form').submit();
         });
+        
     });
 
 
