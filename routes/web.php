@@ -13,7 +13,7 @@
 
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/login');
 });
 
 Auth::routes();
@@ -39,13 +39,15 @@ Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     Route::post('/logout', 'Admin\Auth\LoginController@getLogout');
     Route::post('/userdatatable', 'Admin\AdminController@fetchAllUsers');
     Route::post('/deleteuser/{id}', 'Admin\AdminController@deleteUser');
-
+     // profile of login user
+    Route::get('/profile', 'Admin\ProfileController@index');
+    Route::get('/userdata', 'Admin\ProfileController@userData');
+    Route::post('/updateprofile', 'Admin\ProfileController@updateProfile'); // profile of login user
+    
     //Customer Management
     Route::get('/customers', 'Admin\CustomerController@index');
     Route::get('/user-form', 'Admin\CustomerController@show');
     Route::get('/user-form/{id}', 'Admin\CustomerController@show');
     Route::get('/customer-filter-data', 'Admin\CustomerController@getCustomFilterData');
-  
+
 });
-
-

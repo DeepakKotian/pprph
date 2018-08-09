@@ -65,16 +65,17 @@
                                 </a>
                             @else
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-                                <img src="" class="user-image" alt="User Image">
-                                <span class="hidden-xs">Alexander Pierce</span>
+                                 <span class="img-circle img-responsive-drop user-image" style="background-image:url({!! asset('uploads/userphoto/'. Auth::user()->photo) !!})"> </span>
+                                <span class="hidden-xs">    {{ Auth::user()->fisrt_name }}  {{ Auth::user()->last_name }}</span>
                             </a>
              <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header">
-                <img src="" class="img-circle" alt="User Image">
+                  <span class="img-circle img-responsive-drop" style="background-image:url({!! asset('uploads/userphoto/'. Auth::user()->photo) !!})"> </span>
+               
                 <p>
-                  Alexander Pierce - Web Developer
-                  <small>Member since Nov. 2012</small>
+                 {{ Auth::user()->fisrt_name }}  {{ Auth::user()->last_name }}
+                
                 </p>
               </li>
               <!-- Menu Body -->
@@ -82,7 +83,7 @@
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
-                  <a href="#" class="btn btn-default btn-flat">Profile</a>
+                  <a href="{{url('/admin/profile/')}}" class="btn btn-default btn-flat">Profile</a>
                 </div>
                 <div class="pull-right">
                         <a href="#" class="btn btn-default btn-flat"
