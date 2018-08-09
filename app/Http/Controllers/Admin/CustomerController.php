@@ -42,13 +42,12 @@ class CustomerController extends Controller
     $insuranceCtg = DB::table('massparameter')->where('type','category')->get();
     foreach ($insuranceCtg as $key => $value) {
         $jnQry .= " LEFT JOIN massparameter ctg{$key} ON pd.insurance_ctg_id= ctg{$key}.id  AND ctg{$key}.id=$value->id AND ctg{$key}.type='category' ";
-       
         $name = preg_replace('/\s+/', '_', $value->name);
         $strArr[$key] = "(COUNT(IF(pd.insurance_ctg_id = ctg{$key}.id,1,NULL))) ctg{$key}";
     }
     $addQry =  implode(',',$strArr);
 
-    $selectQry =  "SELECT c.id, c.first_name, c.last_name, c.email,c.city,c.nationality,c.zip, {$addQry} FROM customers c LEFT JOIN policy_detail pd ON pd.customer_id = c.id {$jnQry} GROUP BY c.id, c.first_name, c.last_name, c.email,c.city,c.nationality,c.zip ";      
+    $selectQry =  "SELECT c.id, c.first_name, c.last_name, c.email,c.city,c.nationality,c.zip, {$addQry} FROM customers c LEFT JOIN policy_detail pd ON pd.customer_id = c.id {$jnQry} WHERE c.is_family=0 GROUP BY c.id, c.first_name, c.last_name, c.email,c.city,c.nationality,c.zip ";      
     $customer =  DB::select(DB::raw($selectQry));
 
         return Datatables::of($customer)
@@ -100,10 +99,23 @@ class CustomerController extends Controller
      * @param  \App\customer  $customer
      * @return \Illuminate\Http\Response
      */
-    public function show(customer $customer)
+    public function show($id='')
     {
-        //
+        $data = [];
+        if($id!=''){
+            $data = customer::select('*')->where('customers.id',$id)->first();
+            if(!empty($data)){
+                $data->id = $id;
+            }else{
+                return redirect('/admin/customer-form');
+            }
+        }
+        $insuranceCtg = DB::table('massparameter')->where('type','category')->get();
+        return view('admin.customerform',compact(['data','insuranceCtg']));
     }
+
+
+
 
     /**
      * Show the form for editing the specified resource.
@@ -111,9 +123,34 @@ class CustomerController extends Controller
      * @param  \App\customer  $customer
      * @return \Illuminate\Http\Response
      */
-    public function edit(customer $customer)
+    public function fetchCustomer(request $request)
     {
-        //
+        $data = [];
+        if($request->id!=''){
+            $data = customer::select('*')
+            ->where('customers.is_family','0')
+            ->where('customers.id',$request->id)
+            ->first();
+        $data->insurance = DB::table('massparameter')->select(['id','type','name'])
+        ->where('massparameter.type','category')
+        ->groupBy('massparameter.id')
+        ->get();
+        $data->policy = DB::table('massparameter')->select(['massparameter.id','insurance_ctg_id'])
+        ->leftJoin('policy_detail','policy_detail.insurance_ctg_id','=','massparameter.id')
+        ->where('massparameter.type','category')
+        ->where('customer_id',$request->id)
+        ->groupBy('massparameter.id')
+        ->get();
+        $insuranceCtgArr = [];
+        foreach ($data->policy as $key => $value) {
+           $insuranceCtgArr[] = $value->insurance_ctg_id;
+        }
+        $data->policyArr =  $insuranceCtgArr;
+            if(!empty($data)){
+                $data->id = $request->id;
+            }
+        }
+        return response()->json($data, 200);
     }
 
     /**

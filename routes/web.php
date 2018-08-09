@@ -46,8 +46,9 @@ Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     
     //Customer Management
     Route::get('/customers', 'Admin\CustomerController@index');
-    Route::get('/user-form', 'Admin\CustomerController@show');
-    Route::get('/user-form/{id}', 'Admin\CustomerController@show');
+    Route::get('/customer-form', 'Admin\CustomerController@show');
+    Route::get('/customer-form/{id}', 'Admin\CustomerController@show');
+    Route::get('/fetchcustomer/{id}', 'Admin\CustomerController@fetchCustomer');
     Route::get('/customer-filter-data', 'Admin\CustomerController@getCustomFilterData');
 
 });
