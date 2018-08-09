@@ -16,7 +16,7 @@
     background-size: cover;
     width: 25px;
     border-radius: 50%;
-    border: 1px solid #d0d0d0;
+   
     padding: 5px;
     display: block;
     margin-left: auto;
@@ -28,7 +28,7 @@
     background-size: cover;
     width: 75px;
     border-radius: 50%;
-    border: 1px solid #d0d0d0;
+ 
     padding: 5px;
     display: block;
     margin-left: auto;
@@ -45,4 +45,15 @@
     margin-right: auto;
     margin-top: 10px;
     margin-bottom: 10px;
+}
+
+.modal-header .close {
+    margin-top: -2px;
+    background: #0681bf;
+    opacity: 1;
+    color: #fff;
+    border-radius: 50%;
+    height: 30px;
+    width: 29px;
+    padding-bottom: 3px;
 }

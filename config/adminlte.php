@@ -108,12 +108,11 @@ return [
     */
 
     'menu' => [
-        'HOME',
         [
             'text' => 'Dashboard',
-            'url'  => 'admin/dashboard',
-            'icon' => 'square',
-            'can'  => 'manage-admin',
+            'url'  => 'admin',
+            'icon' => 'dashboard',
+            
         ],
         // [
         //     'text'        => 'Pages',
@@ -123,21 +122,21 @@ return [
         //     'label_color' => 'success',
         //     'can'  => 'manage-admin',
         // ],
-        'SET UP',
-        [
-            'text' => 'Profile',
-            'url'  => 'admin/settings',
-            'icon' => 'user',
-        ],
-        [
-            'text' => 'Change Password',
-            'url'  => 'admin/settings',
-            'icon' => 'lock',
-        ],
-        'ADMINISTRATION',
+        // 'SET UP',
+        // [
+        //     'text' => 'Profile',
+        //     'url'  => 'admin/settings',
+        //     'icon' => 'user',
+        // ],
+        // [
+        //     'text' => 'Change Password',
+        //     'url'  => 'admin/settings',
+        //     'icon' => 'lock',
+        // ],
         [
             'text'    => 'User Management',
             'icon'    => 'users',
+            'can'  => 'manage-admin',
             'submenu' => [
                 [
                     'text' => 'View Users',
@@ -181,10 +180,10 @@ return [
             'submenu' => [
                 [
                     'text' => 'View Customers',
-                    'url'  => '#',
+                    'url'  => 'admin/customers',
                 ],
                 [
-                    'text' => 'Add Insurance',
+                    'text' => 'Add Customer',
                     'url'  => '#',
                 ],
             ],
