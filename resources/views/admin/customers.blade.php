@@ -24,7 +24,8 @@ Users List
   
         <!-- Breadcrumbs-->
         <div class="box-header">
-              <h3 class="box-title">View Customers List</h3>
+              <h3 class="box-title">       View Customers List</h3>
+         
               <div class="box-tools">
                 <a class="btn btn-primary btn-md pull-right" href="{{ url('admin/user-form') }}">Add New</a>
             </div>
@@ -135,7 +136,7 @@ Users List
             @endforeach
         ],
         columnDefs:[{
-            targets: [5,6,7,8],
+            targets: [{{ $arrClms }}],
             data: null,
             render: function(data, type, full, meta){
                 if(data>0){

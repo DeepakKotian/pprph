@@ -22,7 +22,14 @@ class CustomerController extends Controller
     {
         $customer = customer::select(['id','first_name','last_name'])->get();
         $insuranceCtg = DB::table('massparameter')->where('type','category')->get();
-        return view('admin.customers',compact(['customer','insuranceCtg']));
+        $arrClm = [];
+        $cnt = $insuranceCtg->count()+4;
+        for($i=5;$i<=$cnt;$i++){
+            $arrClm[]= $i;
+        }
+
+        $arrClms = implode(',',$arrClm);
+        return view('admin.customers',compact(['customer','insuranceCtg','arrClms']));
     }
 
     public function getCustomFilterData(Request $request)
