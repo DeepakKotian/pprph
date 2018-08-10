@@ -184,7 +184,7 @@ return [
                 ],
                 [
                     'text' => 'Add Customer',
-                    'url'  => '#',
+                    'url'  => 'admin/customer-form',
                 ],
             ],
         ],
