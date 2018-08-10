@@ -66,7 +66,7 @@
                             @else
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
                                  <span class="img-circle img-responsive-drop user-image" style="background-image:url({!! asset('uploads/userphoto/'. Auth::user()->photo) !!})"> </span>
-                                <span class="hidden-xs">    {{ Auth::user()->fisrt_name }}  {{ Auth::user()->last_name }}</span>
+                                <span class="hidden-xs">    {{ Auth::user()->first_name }}  {{ Auth::user()->last_name }}</span>
                             </a>
              <ul class="dropdown-menu">
               <!-- User image -->
@@ -74,7 +74,7 @@
                   <span class="img-circle img-responsive-drop" style="background-image:url({!! asset('uploads/userphoto/'. Auth::user()->photo) !!})"> </span>
                
                 <p>
-                 {{ Auth::user()->fisrt_name }}  {{ Auth::user()->last_name }}
+                 {{ Auth::user()->first_name }}  {{ Auth::user()->last_name }}
                 
                 </p>
               </li>
