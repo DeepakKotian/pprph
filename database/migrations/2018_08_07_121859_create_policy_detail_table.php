@@ -18,6 +18,8 @@ class CreatePolicyDetailTable extends Migration
             $table->integer('insurance_ctg_id');
             $table->integer('provider_id');
             $table->integer('customer_id');
+            $table->timestamp('start_date');
+            $table->timestamp('end_date');
             $table->string('policy_number')->unique();
             $table->timestamps();
         });
