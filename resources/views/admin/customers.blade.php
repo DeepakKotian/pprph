@@ -155,6 +155,11 @@ Users List
        }]
     });
 
+   $(document).on('click', '#customerTable tbody tr', function () {
+        var data = oTable.row(this).data();
+        window.location.href="/admin/customer-form/"+data.id;
+    });
+
     $('#search-form').on('submit', function(e) {
         oTable.draw();
         e.preventDefault();
