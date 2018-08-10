@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Customer;
+
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
+use App\customer;
 use DB;
 use Auth;
 use DataTables;
@@ -90,7 +91,32 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $validate = $this->validate(request(),[
+            'first_name' => 'required|min:3',
+            'email' => 'required|email|unique:customers', 
+            'gender' => 'required',
+            'language' => 'required',
+            ]
+        );
+        $insertData = customer::create([
+            'first_name' => $request['first_name'],
+            'last_name' => $request['last_name'],
+            'email' => $request['email'],
+            'email_office' => $request['email_office'],
+            'telephone' => $request['telephone'],
+            'mobile' => $request['mobile'],
+            'zip' => $request['zip'],
+            'dob' => $request['dob'],
+            'nationality' => $request['nationality'],
+            'address' => $request['address'],
+            'company' => $request['company'],
+            'gender' => $request['gender'],
+            'language' => $request['language'],
+        ]);
+        if($insertData)
+        return response()->json('Successfully created',200);
+        return redirect()->back()->withErrors($validate->errors());
     }
 
     /**
@@ -103,7 +129,7 @@ class CustomerController extends Controller
     {
         $data = [];
         if($id!=''){
-            $data = customer::select('*')->where('customers.id',$id)->first();
+            $data = customer::select('*')->where('customers.id',$id)->where('customers.is_family','0')->first();
             if(!empty($data)){
                 $data->id = $id;
             }else{
@@ -131,6 +157,7 @@ class CustomerController extends Controller
             ->where('customers.is_family','0')
             ->where('customers.id',$request->id)
             ->first();
+        $data->dob =  date('m/d/Y',strtotime($data->dob));
         $data->insurance = DB::table('massparameter')->select(['id','type','name'])
         ->where('massparameter.type','category')
         ->groupBy('massparameter.id')
@@ -141,6 +168,11 @@ class CustomerController extends Controller
         ->where('customer_id',$request->id)
         ->groupBy('massparameter.id')
         ->get();
+        $data->family = customer::select(['id','first_name','last_name',DB::raw('DATE_FORMAT(dob, "%d-%m-%Y") as dob'),'nationality'])
+        ->where('is_family','1')
+        ->where('parent_id',$request->id)
+        ->get();
+        
         $insuranceCtgArr = [];
         foreach ($data->policy as $key => $value) {
            $insuranceCtgArr[] = $value->insurance_ctg_id;
@@ -162,7 +194,57 @@ class CustomerController extends Controller
      */
     public function update(Request $request, customer $customer)
     {
-        //
+        $user = DB::table('customers');
+        $checkAdmin =  $user->select('customers.email')->where('customers.email',$request->email)->where('customers.id','<>',$request->id)->first();
+        if(empty($checkAdmin)){
+            $data['first_name'] = $request->first_name;
+            $data['last_name'] = $request->last_name;
+            $data['email'] = $request->email;
+            $data['email_office'] = $request->email_office;
+            $data['telephone'] = $request->telephone;
+            $data['mobile'] = $request->mobile;
+            $data['zip'] = $request->zip;
+            $data['dob'] = date('Y-m-d h:i:s',strtotime($request->dob));
+            $data['nationality'] = $request->nationality;
+            $data['address'] = $request->address;
+            $data['company'] = $request->company;
+            $data['gender'] = $request->gender;
+            $data['language'] = $request->language;
+            if(customer::whereId($request->id)->update($data));
+            return response()->json('Successfully updated',200);
+        }
+        else{
+            return response()->json('Email Aready Taken', 500);
+        }  
+    }
+
+    public function storeFamily(Request $request)
+    {
+        $insertData = customer::create([
+            'first_name' => $request['first_name_family'],
+            'last_name' => $request['last_name_family'],
+            'is_family'=>1,
+            'parent_id'=>$request['parent_id'],
+            'dob' => date('Y-m-d h:i:s',strtotime($request['dob_family'])),
+            'nationality' => $request['nationality_family'],
+        ]);
+        if($insertData)
+        return response()->json('Successfully created',200); 
+    }
+
+    public function updateFamily(Request $request)
+    {
+        $data['first_name'] = $request->first_name_family;
+        $data['last_name'] = $request->last_name_family;
+        $data['dob'] = date('Y-m-d h:i:s',strtotime($request->dob_family));
+        $data['nationality'] = $request->nationality_family;
+        if(customer::whereId($request->id)->update($data));
+        return response()->json('Successfully updated',200);
+    }
+
+    public function deleteFamily(Request $request){
+        if(customer::whereId($request->id)->delete());
+        return response()->json('Successfully deleted',200);
     }
 
     /**

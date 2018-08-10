@@ -45,11 +45,12 @@ var app = new Vue({
       customerData:[],
       errors:[],
       family:{
-        nationality_family:null,
         first_name_family:null,
+        last_name_family:null,
         dob_family:null,
         nationality_family:null,
       },
+      modalAction:'',
     },
     validations:{
         customer:{
@@ -78,9 +79,6 @@ var app = new Vue({
           address:{
             required:required,
           },
-          company:{
-            required:required,
-          },
           first_name:{
             required:required,
           },
@@ -102,9 +100,6 @@ var app = new Vue({
         first_name_family:{
             required:required,
           },
-        last_name_family:{
-            required:required,
-        },
         dob_family:{
             required:required,
         }
@@ -112,37 +107,32 @@ var app = new Vue({
     },
     created: function(){
         this.currentId = $('#currentId').val();
-        
+        this.family.parent_id = this.currentId;
     }, 
     mounted: function(){
         if(this.currentId)
         this.getCustomerData();
+        $('#dob').datepicker().on(
+            'changeDate', () => { this.customer.dob = $('#dob').val() }
+          )
+        $('#dob_family').datepicker().on(
+        'changeDate', () => { this.family.dob_family = $('#dob_family').val() }
+        )
      },
 
     methods: {
         addNewCustomer: function () {
-          console.log(this.$v.customer);
-          if (this.$v.customer.$invalid) {
-            this.$v.$touch()
+            console.log(this.customer);
+            console.log(this.$v.customer);
+        if (this.$v.customer.$invalid) {
+            this.$v.customer.$touch();
         }else{
-            this.customer.photo= $('#customer_photo')[0].files[0];
-         
-            let formData= new FormData();
-            formData.append('first_name',this.customer.first_name);
-            formData.append('last_name',this.customer.last_name);
-            formData.append('email',this.customer.email);
-            formData.append('phone',this.customer.phone);
-            formData.append('photo',this.customer.photo);
-            formData.append('role',this.customer.role);
-            formData.append('password', this.customer.password);
-            this.$http.post(this.urlPrefix+'savecustomer',formData,{
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-              }).then(
+            this.$http.post(this.urlPrefix+'storecustomer',this.customer).then(
                 function(response){
                     this.$toaster.success(response.data);
-                    
+                    setTimeout(function(){
+                        window.location.href = '/admin/customers'
+                    },2000)
                 }
             ).catch(function(response){
                 let self = this;
@@ -152,11 +142,6 @@ var app = new Vue({
             });
         } 
      }, 
-     saveFamilyMember:function(){
-        if (this.$v.family.$invalid) {
-            this.$v.family.$touch()
-        }
-     },
      getCustomerData: function () {
         this.$http.get(this.urlPrefix+'fetchcustomer/'+this.currentId).then(function(response){
         this.customer=response.data;
@@ -164,67 +149,84 @@ var app = new Vue({
         });
       }, 
 
-     updatecustomer: function (event) {
-        if($('#customer_photo')[0].files[0])
-        {
-            this.customer.photo= $('#customer_photo')[0].files[0];
-        }
-        let formData= new FormData();
-        formData.append('first_name',this.customer.first_name);
-        formData.append('last_name',this.customer.last_name);
-        formData.append('email',this.customer.email);
-        formData.append('phone',this.customer.phone);
-        formData.append('photo',this.customer.photo);
-        formData.append('role',this.customer.role);
+     updateCustomer: function (event) {
+        console.log(this.customer);
         if (this.$v.customer.$invalid) {
-            this.$v.$touch()
+            this.$v.customer.$touch()
         }
         else{
-            this.$http.post(this.urlPrefix+'customer-form/'+this.currentId,formData,{
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-                }).then(
+            this.$http.post(this.urlPrefix+'customer-form/'+this.currentId,this.customer).then(
                 function(response){
                     this.$toaster.success(response.data);
+                    this.getCustomerData();
                 }
-                ).catch(function(response){
-                    this.$toaster.error(response.data);
-                });
+            ).catch(function(response){
+                this.$toaster.error(response.data);
+            });
         }
       },
-
-      updateProfile: function (event) {
-        if($('#customer_photo')[0].files[0])
-        {
-            this.profile.photo= $('#customer_photo')[0].files[0];
+      loadFamily:function(item){
+        this.modalAction='add';
+        this.family.first_name_family="";
+        this.family.last_name_family="";
+        this.family.dob_family="";
+        this.family.nationality_family="";
+        if(item !== null){
+            this.modalAction='edit';
+            this.family.first_name_family = item.first_name;
+            this.family.last_name_family = item.last_name;
+            this.family.dob_family = item.dob;
+            this.family.nationality_family = item.nationality;
+            this.family.id = item.id; 
         }
-       
-        let formData= new FormData();
-        formData.append('first_name',this.profile.first_name);
-        formData.append('last_name',this.profile.last_name);
-        formData.append('email',this.profile.email);
-        formData.append('phone',this.profile.phone);
-        formData.append('photo',this.profile.photo);
-        formData.append('role',this.profile.role);
-     
-        if (this.$v.profile.$invalid) {
-            this.$v.profile.$touch()
-        }
-        else{
-            this.$http.post(this.urlPrefix+'updateprofile/',formData,{
-                headers: {
-                    'Content-Type': 'multipart/form-data'
+        this.$v.family.$reset();  
+      },
+      storeFamily: function () {
+          console.log(this.$v.family);
+        if (this.$v.family.$invalid) {
+            this.$v.family.$touch();
+        }else{
+            console.log(this.family);
+            this.$http.post(this.urlPrefix+'storefamily',this.family).then(
+                function(response){
+                    this.$toaster.success(response.data);
+                    this.getCustomerData();
                 }
-              }).then(
-            function(response){
-                this.$toaster.success(response.data);
-            }
             ).catch(function(response){
-                    this.$toaster.error(response.data);
+                let self = this;
+                $.each(response.data.errors, function(key, value){
+                    self.$toaster.error(value[0]);
+                  });
             });
-       }
-      }
+        } 
+      },
+      updateFamily: function () {
+            console.log(this.$v.family);
+        if (this.$v.family.$invalid) {
+            this.$v.family.$touch();
+        }else{
+            console.log(this.family);
+            this.$http.post(this.urlPrefix+'updatefamily',this.family).then(
+                function(response){
+                    this.$toaster.success(response.data);
+                    this.getCustomerData();
+                }
+            ).catch(function(response){
+                let self = this;
+                $.each(response.data.errors, function(key, value){
+                    self.$toaster.error(value[0]);
+                });
+            });
+        } 
+      },
+      deleteFamily: function () {
+            this.$http.post(this.urlPrefix+'deletefamily',this.family).then(
+                function(response){
+                    this.$toaster.success(response.data);
+                    this.getCustomerData();
+                }
+            )
+        }
      },
      
     delimiters: ["<%","%>"]
