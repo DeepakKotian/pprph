@@ -63,14 +63,16 @@ Users List
             <div class="table table-responsive">
                 <table class="table table-bordered" id="customerTable">
                         <thead>
-                            <th>Id</th>
-                            <th>Name</th>
-                            <th>Last Name</th>
-                            <th>City</th>
-                            <th>Postcode</th>
-                            @foreach($insuranceCtg as $key=> $rowCtg)
-                            <th> {{ $rowCtg->name }}</th>
-                            @endforeach
+                            <tr>
+                                <th>Id</th>
+                                <th>Name</th>
+                                <th>Last Name</th>
+                                <th>City</th>
+                                <th>Postcode</th>
+                                @foreach($insuranceCtg as $key=> $rowCtg)
+                                <th> {{ $rowCtg->name }}</th>
+                                @endforeach
+                            </tr>
                         </thead>
                         <tbody>
                    
@@ -104,28 +106,7 @@ Users List
 
 @section('css')
 <style>
-.icheckbox.checked{
-    display: inline-block;
-    vertical-align: middle;
-    margin: 0;
-    padding: 0;
-    width: 20px;
-    height: 20px;
-    background: green;
-    border: none;
-    cursor: pointer;
-}
-.icheckbox{
-    display: inline-block;
-    vertical-align: middle;
-    margin: 0;
-    padding: 0;
-    width: 20px;
-    height: 20px;
-    background: #DDD;
-    border: none;
-    cursor: pointer;
-}
+
 </style>
 @stop
 
@@ -159,11 +140,13 @@ Users List
             render: function(data, type, full, meta){
                 if(data>0){
                     if(type === 'display'){
-                        data = '<input type="checkbox" class="icheckbox" name="ctg_'+meta.row+'_'+meta.col+'" value="'+data+'" checked >';
+                        data = '<span class="fa fa-check" rel="ctg_'+meta.row+'_'+meta.col+'"></span>';
+                       // data = '<input type="checkbox" class="icheckbox" name="ctg_'+meta.row+'_'+meta.col+'" value="'+data+'" checked >';
                     }
                 }else{
                     if(type === 'display'){
-                        data = '<input type="checkbox"  class="icheckbox" name="ctg_'+meta.row+'_'+meta.col+'"  value="'+data+'">';
+                        data = '<span class="fa fa-times" rel="ctg_'+meta.row+'_'+meta.col+'"></span>';
+                       // data = '<input type="checkbox"  class="icheckbox" name="ctg_'+meta.row+'_'+meta.col+'"  value="'+data+'">';
                     }
                 }
                return data;

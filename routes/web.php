@@ -30,7 +30,6 @@ Route::get('/admin', function () {
 
 Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     Route::get('/dashboard', 'Admin\AdminController@dashboard');
- 
     Route::get('/users', 'Admin\AdminController@usersList');
     Route::get('/user-form', 'Admin\AdminController@userForm');
     Route::get('/user-form/{id}', 'Admin\AdminController@userForm');
@@ -41,17 +40,22 @@ Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     Route::post('/deleteuser', 'Admin\AdminController@deleteUser');
    
     Route::post('/logout', 'Auth\LoginController@getLogout');
-   
      // profile of login user
     Route::get('/profile', 'Admin\ProfileController@index');
     Route::get('/userdata', 'Admin\ProfileController@userData');
     Route::post('/updateprofile', 'Admin\ProfileController@updateProfile'); // profile of login user
-
+    
     //Customer Management
     Route::get('/customers', 'Admin\CustomerController@index');
     Route::get('/customer-form', 'Admin\CustomerController@show');
+    Route::post('/storecustomer', 'Admin\CustomerController@store');
     Route::get('/customer-form/{id}', 'Admin\CustomerController@show');
+    Route::get('/fetchcustomer/{id}', 'Admin\CustomerController@fetchCustomer');
     Route::get('/customer-filter-data', 'Admin\CustomerController@getCustomFilterData');
+    Route::post('/customer-form/{id}', 'Admin\CustomerController@update');
+    Route::post('/storefamily', 'Admin\CustomerController@storeFamily');
+    Route::post('/updatefamily', 'Admin\CustomerController@updateFamily');
+    Route::post('/deletefamily', 'Admin\CustomerController@deleteFamily');
 
    // insurance Management
 //    Route::get('/customers', 'Admin\CustomerController@index');
