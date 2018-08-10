@@ -192,6 +192,7 @@ return [
         [
             'text'    => 'Insurance Management',
             'icon'    => 'user-circle',
+            'can'  => 'manage-admin',
             'submenu' => [
                 [
                     'text' => 'Insurance',
