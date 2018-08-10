@@ -40,7 +40,7 @@ Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     Route::post('/userdatatable', 'Admin\AdminController@fetchAllUsers');
     Route::post('/deleteuser', 'Admin\AdminController@deleteUser');
    
-    Route::post('/logout', 'Admin\Auth\LoginController@getLogout');
+    Route::post('/logout', 'Auth\LoginController@getLogout');
    
      // profile of login user
     Route::get('/profile', 'Admin\ProfileController@index');
@@ -52,5 +52,17 @@ Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     Route::get('/customer-form', 'Admin\CustomerController@show');
     Route::get('/customer-form/{id}', 'Admin\CustomerController@show');
     Route::get('/customer-filter-data', 'Admin\CustomerController@getCustomFilterData');
+
+   // insurance Management
+//    Route::get('/customers', 'Admin\CustomerController@index');
+//    Route::get('/customer-form', 'Admin\CustomerController@show');
+//    Route::get('/customer-form/{id}', 'Admin\CustomerController@show');
+//    Route::get('/customer-filter-data', 'Admin\CustomerController@getCustomFilterData');
+
+    Route::post('/fetchinsurance', 'Admin\insuranceController@fetchInsurance');
+    Route::resource('insurance-list', 'Admin\insuranceController');
+
+    Route::post('/fetchprovider', 'Admin\providersController@fetchProvider');
+    Route::resource('providers-list', 'Admin\providersController');
 
 });

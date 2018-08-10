@@ -2,9 +2,9 @@
 @section('title', 'Dashboard')
 @section('content_header')   
 <h1>
-   Users List
+   Users List <small>View list of Users</small>
 </h1>
-<small>View list of Users</small>
+
 <ol class="breadcrumb">
    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
    <li class="active">Users List</li>
@@ -68,9 +68,7 @@
 </div>
 </div>
 @stop
-@section('css')
-<link rel="stylesheet" href="/css/admin_custom.css">
-@stop
+
 @section('js')
 <script src="{!! asset('js/users-app.js') !!}"></script>
 @stop

@@ -188,6 +188,21 @@ return [
                 ],
             ],
         ],
+
+        [
+            'text'    => 'Insurance Management',
+            'icon'    => 'user-circle',
+            'submenu' => [
+                [
+                    'text' => 'Insurance',
+                    'url'  => 'admin/insurance-list',
+                ],
+                [
+                    'text' => 'Insurance Providers',
+                    'url'  => 'admin/providers-list',
+                ],
+            ],
+        ],
         
         // 'LOGOUT',
         // [

@@ -173,6 +173,16 @@ class AdminController extends Controller
        }
           else{
           return $fchdata;
+      }$data = [];
+      $data = DataTables::of(DB::table('users')->where('id','<>',auth::user()->id)->where('deleted_at','=',null))->toJson();
+      if($data)
+      $fchdata= $data;
+      
+      if (Gate::denies('manage-admin', $fchdata)) {
+        return redirect('/admin');
+       }
+          else{
+          return $fchdata;
       }
     }
 
