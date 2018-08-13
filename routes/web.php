@@ -69,4 +69,10 @@ Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     Route::post('/fetchprovider', 'Admin\providersController@fetchProvider');
     Route::resource('providers-list', 'Admin\providersController');
 
+    //Document management
+    Route::get('/documents', 'Admin\documentsController@index');
+    Route::get('/document-filter-data', 'Admin\documentsController@getDocFilterData');
+
+    
+  
 });

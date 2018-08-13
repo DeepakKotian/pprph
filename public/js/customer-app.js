@@ -150,7 +150,7 @@ var app = new Vue({
       }, 
 
      updateCustomer: function (event) {
-        console.log(this.customer);
+        console.log(this.$v.customer);
         if (this.$v.customer.$invalid) {
             this.$v.customer.$touch()
         }
@@ -181,6 +181,7 @@ var app = new Vue({
         }
         this.$v.family.$reset();  
       },
+      
       storeFamily: function () {
           console.log(this.$v.family);
         if (this.$v.family.$invalid) {
@@ -226,8 +227,12 @@ var app = new Vue({
                     this.getCustomerData();
                 }
             )
+        },
+        loadInsuranceModal :function(item){
+           console.log(item)
         }
      },
+    
      
     delimiters: ["<%","%>"]
   })

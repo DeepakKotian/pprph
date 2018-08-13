@@ -29,7 +29,7 @@ Users List
               <div class="box-tools">
                 <a class="btn btn-primary btn-md pull-right" href="{{ url('admin/user-form') }}">Add New</a>
             </div>
-            </div>
+        </div>
     <div class="box-body">
             <div class="form-group">
                <form method="POST" id="search-form" class="form-inline" role="form">

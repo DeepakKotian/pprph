@@ -32,7 +32,7 @@
               @endif
               <div class="box-body">
               <div class="col-sm-12">
-                  
+                 
               </div>
               <div class="col-sm-5">
               <div class="row">
@@ -84,21 +84,27 @@
                     <textarea class="form-control" name="address" id="address" cols="10" rows="2" v-model="$v.customer.address.$model"></textarea>
                   </div>
                   <div class="row">
-                    <div class="form-group col-sm-6" :class="{ 'has-error': $v.customer.zip.$error }">
+                    <div class="form-group col-sm-4" :class="{ 'has-error': $v.customer.zip.$error }">
                       <label for="zip">Zip*</label>
                       <input type="text" class="form-control" name="zip"  id="zip" placeholder="Postal Code" v-model="$v.customer.zip.$model">
                     </div>
-                    <div class="form-group col-sm-6" :class="{ 'has-error': $v.customer.nationality.$error }">
-                      <label for="nationality">Nationality*</label>
-                      <input type="text" class="form-control" name="nationality"  id="nationality" placeholder="Company" v-model="$v.customer.nationality.$model">
+                    <div class="form-group col-sm-4">
+                      <label for="city">City</label>
+                      <input type="text" class="form-control" name="city"  id="city" placeholder="City" v-model="customer.city">
                     </div>
+                    <div class="form-group col-sm-4" :class="{ 'has-error': $v.customer.nationality.$error }">
+                      <label for="nationality">Nationality*</label>
+                      <input type="text" class="form-control" name="nationality"  id="nationality" placeholder="Nationality" v-model="$v.customer.nationality.$model">
+                    </div>
+                   
                   </div>
                   <div class="row">
                     <div class="form-group col-sm-6" :class="{ 'has-error': $v.customer.telephone.$error }">
                       <label for="telephone">Telephone*</label>
                       <input type="text" class="form-control" name="telephone"  id="telephone" placeholder="Telephone" v-model="$v.customer.telephone.$model">
                     </div>
-                    <div class="form-group col-sm-6" :class="{ 'has-error': $v.customer.mobile.phoneRegex }">
+
+                    <div class="form-group col-sm-6" :class="{ 'has-error': $v.customer.mobile.$error }">
                       <label for="telephone">Mobile</label>
                       <input type="text" class="form-control" name="mobile"  id="mobile" placeholder="Mobile" v-model="$v.customer.mobile.$model">
                     </div>
@@ -133,8 +139,8 @@
                             <tbody>
                               <tr v-for="(item, index) in customer.insurance">
                                   <td> <% item.name %></td>
-                                  <td> <input type="checkbox"  :checked="customer.policyArr.indexOf(item.id)>=0" class="apply"> </td>
-                                  <td>  <input type="checkbox"  :checked="customer.policyArr.indexOf(item.id)>=0" class="contract"> </td>
+                                  <td> <input type="checkbox" data-toggle="modal" data-target="#insuranceModal" v-on:click="loadInsuranceModal(customer)"  :checked="customer.policyArr.indexOf(item.id)>=0" class="apply"> </td>
+                                  <td>  <input type="checkbox" data-toggle="modal" data-target="#insuranceModal"  v-on:click="loadInsuranceModal(customer)" :checked="customer.policyArr.indexOf(item.id)>=0" class="contract"> </td>
                               </tr>
                             </tbody>
                           </table>
@@ -233,6 +239,46 @@
                  </div>
                 </div>
                </div>
+               <!-- ends  -->
+               <div class="modal fade" id="insuranceModal" tabindex="-1" role="dialog" aria-labelledby="insuranceModal" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                     <div class="modal-header">
+                      <h4 class="modal-title" id="exampleModalLabel"> <span style="text-transform:capitalize;">  </span> Insurance 
+                      <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                      </button>
+                      </h4>
+                    </div>
+                    <div class="modal-body">
+                       <div class="form-group">
+                            <label for="first_name_family">Provider Name*</label>
+                            <select class="form-control" name="provider" >
+                              <option value=""></option>
+                            </select>
+                        </div>
+                        <div class="form-group ">
+                            <label for="policy_number">Policy Number</label>
+                            <input type="text" class="form-control" name="policy_number"  id="policy_number"   placeholder="Policy Number">
+                        </div>
+                        <div class="form-group ">
+                            <label for="policy_number">Start Date</label>
+                            <input type="text" class="form-control" name="policy_number"  id="policy_number"   placeholder="Policy Number">
+                        </div>
+                        <div class="form-group ">
+                            <label for="policy_number">End Date</label>
+                            <input type="text" class="form-control" name="policy_number"  id="policy_number"   placeholder="Policy Number">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button class="btn btn-secondary" type="button"  data-dismiss="modal">Cancel</button>
+                      <button class="btn btn-primary"  type="button" v-on:click="">Save</button>
+                      <button class="btn btn-primary"  type="button"  v-on:click="">Update</button>
+                    </div>
+                 </div>
+                </div>
+               </div>
+               <!-- end -->
                <div class="modal fade" id="deleteFamilyModal" tabindex="-1" role="dialog" aria-labelledby="familyModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                   <div class="modal-content">
@@ -254,6 +300,8 @@
                 </div>
                </div>
           </div>
+
+          
         <!-- /.box -->
       </div>
 </div>

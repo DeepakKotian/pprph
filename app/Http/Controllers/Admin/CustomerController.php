@@ -116,6 +116,7 @@ class CustomerController extends Controller
             'zip' => $request['zip'],
             'dob' => $request['dob'],
             'nationality' => $request['nationality'],
+            'city' => $request['city'],
             'address' => $request['address'],
             'company' => $request['company'],
             'gender' => $request['gender'],
@@ -213,6 +214,7 @@ class CustomerController extends Controller
             $data['zip'] = $request->zip;
             $data['dob'] = date('Y-m-d h:i:s',strtotime($request->dob));
             $data['nationality'] = $request->nationality;
+            $data['city'] =   $request->city;
             $data['address'] = $request->address;
             $data['company'] = $request->company;
             $data['gender'] = $request->gender;

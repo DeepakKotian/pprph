@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePolicyDetailTable extends Migration
+class CreateDocumentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,11 @@ class CreatePolicyDetailTable extends Migration
      */
     public function up()
     {
-        Schema::create('policy_detail', function (Blueprint $table) {
+        Schema::create('documents', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('insurance_ctg_id');
-            $table->integer('provider_id');
             $table->integer('customer_id');
-            $table->timestamp('start_date');
-            $table->timestamp('end_date');
-            $table->string('document_name')->nullable();
-            $table->string('policy_number')->unique();
+            $table->string('document_name');
+            $table->integer('type');
             $table->timestamps();
         });
     }
@@ -33,6 +29,6 @@ class CreatePolicyDetailTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('policy_detail');
+        Schema::dropIfExists('documents');
     }
 }
