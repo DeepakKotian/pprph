@@ -17,6 +17,7 @@ class CreateInsuranceMappedTable extends Migration
             $table->increments('id');
             $table->integer('insurance_ctg_id');
             $table->integer('provider_id');
+            $table->string('document_name')->nullable();
             $table->timestamps();
         });
     }
