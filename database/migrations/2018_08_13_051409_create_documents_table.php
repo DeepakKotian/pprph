@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateInsuranceMappedTable extends Migration
+class CreateDocumentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateInsuranceMappedTable extends Migration
      */
     public function up()
     {
-        Schema::create('insurance_mapped', function (Blueprint $table) {
+        Schema::create('documents', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('insurance_ctg_id');
-            $table->integer('provider_id');
-            $table->string('document_name')->nullable();
+            $table->integer('customer_id');
+            $table->string('document_name');
+            $table->integer('type');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ class CreateInsuranceMappedTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('insurance_mapped');
+        Schema::dropIfExists('documents');
     }
 }
