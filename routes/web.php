@@ -57,16 +57,16 @@ Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     Route::post('/updatefamily', 'Admin\CustomerController@updateFamily');
     Route::post('/deletefamily', 'Admin\CustomerController@deleteFamily');
 
-   // insurance Management
-//    Route::get('/customers', 'Admin\CustomerController@index');
-//    Route::get('/customer-form', 'Admin\CustomerController@show');
-//    Route::get('/customer-form/{id}', 'Admin\CustomerController@show');
-//    Route::get('/customer-filter-data', 'Admin\CustomerController@getCustomFilterData');
-
+    // insurance management
+    Route::get('/policy-mapping', 'Admin\insuranceController@policyMapping');
+    Route::post('/fetchpolicymapping', 'Admin\insuranceController@fetchPolicyMapping');
+    Route::post('/addpolicymapping', 'Admin\insuranceController@addPolicyMapping');
+    
     Route::post('/fetchinsurance', 'Admin\insuranceController@fetchInsurance');
     Route::resource('insurance-list', 'Admin\insuranceController');
-
     Route::post('/fetchprovider', 'Admin\providersController@fetchProvider');
     Route::resource('providers-list', 'Admin\providersController');
+   
+
 
 });

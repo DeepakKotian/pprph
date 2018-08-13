@@ -32,7 +32,7 @@ return [
 
     'logo' => '<b>Prophos</b>',
 
-    'logo_mini' => '<b>A</b>LT',
+    'logo_mini' => '<b>Pr</b>phs',
 
     /*
     |--------------------------------------------------------------------------
@@ -202,6 +202,10 @@ return [
                     'text' => 'Insurance Providers',
                     'url'  => 'admin/providers-list',
                 ],
+                [
+                    'text' => 'Policy Mapping',
+                    'url'  => 'admin/policy-mapping',
+                ],
             ],
         ],
         
@@ -224,6 +228,7 @@ return [
         //     'text'       => 'Information',
         //     'icon_color' => 'aqua',
         // ],
+        
     ],
 
     /*

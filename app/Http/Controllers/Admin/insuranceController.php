@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\massparameter;
+use App\insurancemapped;
 use DataTables;
 use Auth;
 use Gate;
+use DB;
 class insuranceController extends Controller
 {
     /**
@@ -15,11 +17,18 @@ class insuranceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('auth');
+
+    }
+    
     public function index()
     {
         //
         return view('admin.insurancelist');
     }
+
     public function fetchInsurance()
     {
         $insuranceList = [];
@@ -116,4 +125,33 @@ class insuranceController extends Controller
     {
         //
     }
+
+    public function policyMapping()
+    {
+        return view('admin.insurancepolicymapped');
+    }
+    
+    public function fetchPolicyMapping()
+    {
+        $mappingList = [];
+        $mappingList = DataTables::of(insurancemapped::leftjoin('massparameter as inc','inc.id','=','insurance_ctg_id')->leftjoin('massparameter as prd','prd.id','=','provider_id')->groupby('insurance_ctg_id','provider_id')
+        ->select(DB::raw('inc.name as insurance_name'),DB::raw('prd.name as provider_name'),'insurance_mapped.id'))->toJson();
+        if($mappingList)
+            $fchmappingList= $mappingList;
+        if (Gate::denies('manage-admin', $fchmappingList)) {
+            return redirect('/admin');
+        }
+            else{
+              
+            return $fchmappingList;
+            dd($fchmappingList);
+        }
+    
+    }
+
+    public function addPolicyMapping()
+    {
+
+    }
+
 }

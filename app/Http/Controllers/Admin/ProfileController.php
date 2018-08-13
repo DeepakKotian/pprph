@@ -11,15 +11,19 @@ use DB;
 class ProfileController extends Controller
 {
     //
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     
     public function index(){
         return view('admin.profile');
-       }
+    }
+
     public function userData(){
         $userid=Auth::user()->id;
         $profileData=user::find($userid);
         return response()->json($profileData, 200);
-
     }
 
     public function updateProfile(Request $request){
@@ -51,8 +55,6 @@ class ProfileController extends Controller
         else{
             return response()->json('Email Aready Taken', 500);
         }
-        
-
     }
 
     
