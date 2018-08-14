@@ -141,12 +141,12 @@ Customers List
             render: function(data, type, full, meta){
                 if(data>0){
                     if(type === 'display'){
-                        data = '<span class="fa fa-check" rel="ctg_'+meta.row+'_'+meta.col+'"></span>';
+                        data = '<span class="fa fa-square text-green" rel="ctg_'+meta.row+'_'+meta.col+'"></span>';
                        // data = '<input type="checkbox" class="icheckbox" name="ctg_'+meta.row+'_'+meta.col+'" value="'+data+'" checked >';
                     }
                 }else{
                     if(type === 'display'){
-                        data = '<span class="fa fa-times" rel="ctg_'+meta.row+'_'+meta.col+'"></span>';
+                        data = '<span class="fa fa-square text-red" rel="ctg_'+meta.row+'_'+meta.col+'"></span>';
                        // data = '<input type="checkbox"  class="icheckbox" name="ctg_'+meta.row+'_'+meta.col+'"  value="'+data+'">';
                     }
                 }

@@ -59,7 +59,6 @@
                     </div>
                   </div>
                  <div class="row">
-                 
                     <div class="form-group col-sm-6" :class="{ 'has-error': $v.customer.first_name.$error }">
                       <label for="first_name">First Name*</label>
                       <input type="text" class="form-control" name="first_name"  id="first_name" placeholder="First Name" v-model="$v.customer.first_name.$model">
@@ -118,7 +117,10 @@
                       <label for="telephone">Email office</label>
                       <input type="email" class="form-control" name="email_office"  id="email_office" placeholder="Emai Office" v-model="$v.customer.email_office.$model">
                     </div>
+                    
                   </div>
+               
+                 
                 </div>
                <div class="col-sm-7">
                  @if(!empty($data))
@@ -131,16 +133,29 @@
                           <table class="table table-bordered">
                             <thead>
                               <tr>
-                                <th>Insurance Name</th>
+                                <th> Insurance Name</th>
                                 <th>Antrag</th>
                                 <th>Vertrag</th>
                               </tr>
                             </thead>
                             <tbody>
                               <tr v-for="(item, index) in customer.insurance">
-                                  <td> <% item.name %></td>
-                                  <td> <input type="checkbox" data-toggle="modal" data-target="#insuranceModal" v-on:click="loadInsuranceModal(customer)"  :checked="customer.policyArr.indexOf(item.id)>=0" class="apply"> </td>
-                                  <td>  <input type="checkbox" data-toggle="modal" data-target="#insuranceModal"  v-on:click="loadInsuranceModal(customer)" :checked="customer.policyArr.indexOf(item.id)>=0" class="contract"> </td>
+                          
+                                  <td> <a href="" data-toggle="modal" data-target="#insuranceModal" v-on:click="loadInsuranceModal(customer)" ><% item.name %></a></td>
+                                  <td>
+                                  <button v-if="customer.policyArr.indexOf(item.id)>=0" type="button" class="btn btn-default btn-sm">
+                              <i class="fa fa-square text-green" ></i></button>
+                              <button v-if="customer.policyArr.indexOf(item.id)<0" type="button" class="btn btn-default btn-sm">
+                              <i class="fa fa-square text-red" ></i></button>
+                               </td>
+                            <td>
+                            <button v-if="customer.policyArr.indexOf(item.id)>=0" type="button" class="btn btn-default btn-sm">
+                              <i class="fa fa-square text-green" ></i></button>
+                              <button v-if="customer.policyArr.indexOf(item.id)<0" type="button" class="btn btn-default btn-sm">
+                              <i class="fa fa-square text-red" ></i>
+                              </button>
+                            </td>
+
                               </tr>
                             </tbody>
                           </table>
@@ -198,9 +213,15 @@
                 <button type="reset" class="btn btn-info">Reset</button>
                 @if(!empty($data))
                   <button type="button" class="btn btn-primary" v-on:click="updateCustomer">Update</button>
+  &nbsp;
+                    <div class="btn-group btn-toggle"> 
+                    <button type="button" class="btn" v-bind:class="{'btn-primary':customer.status==1,'btn-default':customer.status==0}" >ACTIVE</button>
+                    <button  type="button" class="btn" v-bind:class="{'btn-primary':customer.status==0,'btn-default':customer.status==1}">DEACTIVE</button>
+                  </div>
                 @else
                   <button type="button" class="btn btn-primary" v-on:click="addNewCustomer">Save</button>
                 @endif
+                
               </div>
             </form>
             <div class="modal fade" id="familyModal" tabindex="-1" role="dialog" aria-labelledby="familyModalLabel" aria-hidden="true">
