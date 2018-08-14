@@ -19,7 +19,7 @@ Policy Mapping <small>View Policy Mapping </small>
    <div class="box-header">
       <h3 class="box-title">View Policy Mapping List </h3>
       <div class="box-tools">
-         <a class="btn btn-primary btn-md pull-right" data-toggle="modal" v-on:click="loadPolicyMappingmodal(null)" data-target="#addInsurance" >Add New</a>
+         <a class="btn btn-primary btn-md pull-right" data-toggle="modal" v-on:click="loadPolicyMappingmodal(null)" data-target="#addPolicyMapping" >Add Mapping</a>
       </div>
    </div>
 
@@ -40,7 +40,7 @@ Policy Mapping <small>View Policy Mapping </small>
                      <td><% row.insurance_name %> </td>
                      <td><% row.provider_name %> </td>
                      <td>
-                        <a type="button" data-toggle="modal"  data-target="#addInsurance"  v-on:click="loadPolicyMappingmodal(row)" class="btn btn-default"><i class="fa fa-edit"></i></a>
+                        <a type="button" data-toggle="modal"  data-target="#addPolicyMapping"  v-on:click="loadPolicyMappingmodal(row)" class="btn btn-default"><i class="fa fa-edit"></i></a>
                      
                      </td>
                   </tr>
@@ -69,7 +69,7 @@ Policy Mapping <small>View Policy Mapping </small>
    </div>
 </div>
  <!-- Add insurance -->
-<div class="modal fade" id="addInsurance" tabindex="-1" role="dialog" aria-labelledby="addInsuranceLabel" aria-hidden="true">
+<div class="modal fade" id="addPolicyMapping" tabindex="-1" role="dialog" aria-labelledby="addPolicymappingLabel" aria-hidden="true">
    <div class="modal-dialog" role="document">
       <div class="modal-content">
          <div class="modal-header">
@@ -102,11 +102,17 @@ Policy Mapping <small>View Policy Mapping </small>
               </select>
  
             </div>
+
+            <div class="form-group" >
+                  <label for="exampleInputFile">Upload Document: </label>
+                  <input type="file"  id="documentfile">
+                  <input type="hidden"  class="form-control input-rounded" v-model="policyMappings.ducumentData"  id="editDocumentfile" style="margin-right: 20px;" >
+             </div>
                
          </div>
          </div>
          <div class="modal-footer">
-          <button class="btn btn-primary" v-if="modalAction=='edit'" v-on:click="updatePolicymapping()" type="button">Save</a>
+          <button class="btn btn-primary" v-if="modalAction=='edit'" v-on:click="updatePolicymapping()" type="button"> Save</a>
           <button class="btn btn-primary" v-if="modalAction=='add'" v-on:click="addNewPolicymapping()" type="button">Save</a>
          </div>
       </div>

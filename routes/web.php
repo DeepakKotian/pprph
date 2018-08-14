@@ -61,13 +61,12 @@ Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     Route::get('/policy-mapping', 'Admin\insuranceController@policyMapping');
     Route::post('/fetchpolicymapping', 'Admin\insuranceController@fetchPolicyMapping');
     Route::post('/addpolicymapping', 'Admin\insuranceController@addPolicyMapping');
+    Route::post('/updatepolicymapping', 'Admin\insuranceController@updatePolicyMapping');
     
     Route::post('/fetchinsurance', 'Admin\insuranceController@fetchInsurance');
     Route::resource('insurance-list', 'Admin\insuranceController');
     Route::post('/fetchprovider', 'Admin\providersController@fetchProvider');
     Route::resource('providers-list', 'Admin\providersController');
-   
-
 
     //Document management
     Route::get('/documents', 'Admin\documentsController@index');

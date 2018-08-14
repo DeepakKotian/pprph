@@ -135,7 +135,7 @@ class insuranceController extends Controller
     {
         $mappingList = [];
         $mappingList = DataTables::of(insurancemapped::leftjoin('massparameter as inc','inc.id','=','insurance_ctg_id')->leftjoin('massparameter as prd','prd.id','=','provider_id')->groupby('insurance_ctg_id','provider_id')
-        ->select(DB::raw('inc.name as insurance_name'),DB::raw('prd.name as provider_name'),'insurance_mapped.id'))->toJson();
+        ->select(DB::raw('inc.name as insurance_name'),DB::raw('prd.name as provider_name'),'insurance_mapped.id','insurance_ctg_id','provider_id','document_name'))->toJson();
         if($mappingList)
             $fchmappingList= $mappingList;
         if (Gate::denies('manage-admin', $fchmappingList)) {
@@ -149,9 +149,72 @@ class insuranceController extends Controller
     
     }
 
-    public function addPolicyMapping()
-    {
+    public function addPolicyMapping(Request $request)
+     {
+        $pmap = DB::table('insurance_mapped');
+        $duplicate =  $pmap->select('*')->where('insurance_ctg_id',$request['insure_id'])->where('provider_id','=',$request['policy_id'])->first();
+       
+        if(empty($duplicate)){
+            $validate = $this->validate(request(),[
+                'insure_id' => 'required',
+                'policy_id' => 'required',
+                ]
+            );
+            
+            if($request->hasFile('documnetData')){
+                $file=$request->file('documnetData');
+                $imageName = uniqid().time().'.'.$file->getClientOriginalExtension();
+                $destinationPath = public_path('/uploads/antrag');
+                $file->move($destinationPath, $imageName);
+                $documnetData['documnetData'] = $imageName;
+            }
+            else{
+                $documnetData['documnetData'] =null;
+            }
 
+            $insertData = insurancemapped::create([
+                'insurance_ctg_id' => $request['insure_id'],
+                'provider_id' => $request['policy_id'],
+                'document_name' => $documnetData['documnetData'],
+            
+            ]);
+            if($insertData)
+            return response()->json('Successfully created',200);
+            return redirect()->back()->withErrors($validate->errors());
+            }
+            else{
+             return response()->json('Policy Already Mapped', 500);
+            }  
     }
 
+    public function updatePolicyMapping(Request $request){
+        $pmap = DB::table('insurance_mapped');
+        $duplicate =  $pmap->select('*')->where('insurance_ctg_id',$request['insure_id'])->where('provider_id','=',$request['policy_id'])->first();
+       
+        if(empty($duplicate)){
+
+        if($request->hasFile('documnetData')){
+            $file=$request->file('documnetData');
+            $imageName = uniqid().time().'.'.$file->getClientOriginalExtension();
+            $destinationPath = public_path('/uploads/antrag');
+            $file->move($destinationPath, $imageName);
+            $documnetData['documnetData'] = $imageName;
+        }
+        else{
+            $documnetData['documnetData']  =$request->documnetData;
+        }
+
+        $data['insurance_ctg_id'] = $request->insure_id;
+        $data['provider_id'] =  $request->policy_id;
+        $data['document_name'] =  $documnetData['documnetData'] ;
+        if(insurancemapped::whereId($request->mappingId)->update($data));
+        return response()->json('Successfully updated',200);
+       
+     }
+        else{
+            return response()->json('Policy Already Mapped', 500);
+        }
+
+
+    }
 }

@@ -201,10 +201,12 @@ var app = new Vue({
             this.loadDropDownproviders();
             if(item !== null){
                 this.modalAction='edit';
-                this.providers.name=item.name;
-                this.providers.id=item.id;
+                this.policyMappings.insure_id=item.insurance_ctg_id;
+                this.policyMappings.plcy_id=item.provider_id;
+                this.policyMappings.mappingId=item.id;
+                this.policyMappings.ducumentData = item.document_name;
             }
-            this.$v.providers.$reset();  
+            this.$v.policyMappings.$reset();  
         },
 
         loadDropDowninsurance:function(){
@@ -236,24 +238,71 @@ var app = new Vue({
         addNewPolicymapping:function(){
             if (this.$v.policyMappings.$invalid) {
                 this.$v.policyMappings.$touch()
-                }
-                else{
-                   
-                    this.$http.post(this.urlPrefix+'addpolicymapping',this.policyMappings).then(
-                        function(response){
-                            this.$toaster.success(response.data);
-                            this.loadAllProviders();
-                            
-                        }
-                    ).catch(function(response){
-                        let self = this;
-                        $.each(response.data.errors, function(key, value){
-                            self.$toaster.error(value[0]);
-                        });
+             }
+            else{
+                this.policyMappings.ducumentData= $('#documentfile')[0].files[0];
+                let formData= new FormData();
+                formData.append('insure_id',this.policyMappings.insure_id);
+                formData.append('policy_id',this.policyMappings.plcy_id);
+                formData.append('documnetData',this.policyMappings.ducumentData);
+                this.$http.post(this.urlPrefix+'addpolicymapping',formData,{
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                    }).then(
+                    function(response){
+                        this.$toaster.success(response.data);
+                        $('#policyMappingTable').DataTable().destroy();
+                        this.loadAllPolicyMapping();
+                        
+                    }
+                ).catch(function(response){
+                   if(response.data){
+                    this.$toaster.error(response.data);
+                   }
+                   else{
+                    let self = this;
+                    $.each(response.data.errors, function(key, value){
+                        self.$toaster.error(value[0]);
                     });
-                } 
-            }, 
-       
+                   }
+                    
+                });
+            } 
+        }, 
+        updatePolicymapping: function () {
+      
+            if($('#documentfile')[0].files[0])
+            {
+                this.policyMappings.ducumentData= $('#documentfile')[0].files[0];
+            }
+           
+            let formData= new FormData();
+          
+            formData.append('insure_id',this.policyMappings.insure_id);
+            formData.append('policy_id',this.policyMappings.plcy_id);
+            formData.append('documnetData',this.policyMappings.ducumentData);
+            formData.append('mappingId',this. policyMappings.mappingId);
+           
+            if (this.$v.policyMappings.$invalid) {
+                this.$v.policyMappings.$touch()
+            }
+            else{
+                this.$http.post(this.urlPrefix+'updatepolicymapping',formData,{
+                    headers:{
+                        'Content-Type': 'multipart/form-data'
+                    }
+                    }).then(
+                    function(response){
+                        this.$toaster.success(response.data);
+                        $('#policyMappingTable').DataTable().destroy();
+                        this.loadAllPolicyMapping();
+                    }
+                    ).catch(function(response){
+                        this.$toaster.error(response.data);
+                    });
+            }
+          },
        
         loadAllInsurance:function(){
             let self = this;
