@@ -239,7 +239,7 @@ var app = new Vue({
             if (this.$v.policyMappings.$invalid) {
                 this.$v.policyMappings.$touch()
              }
-            else{
+             else{
                 this.policyMappings.ducumentData= $('#documentfile')[0].files[0];
                 let formData= new FormData();
                 formData.append('insure_id',this.policyMappings.insure_id);
