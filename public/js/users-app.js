@@ -105,6 +105,9 @@ var app = new Vue({
             formData.append('last_name',this.user.last_name);
             formData.append('email',this.user.email);
             formData.append('phone',this.user.phone);
+            if(this.user.photo===undefined){
+                this.user.photo = 'userdefault.jpg';  
+            }
             formData.append('photo',this.user.photo);
             formData.append('role',this.user.role);
             formData.append('password', this.user.password);
