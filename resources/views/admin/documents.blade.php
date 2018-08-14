@@ -83,14 +83,14 @@ Documents List
             </button>
           </div>
           <div class="modal-body">
-            
+                
           </div>
-          <div class="modal-footer">
-            <!-- <button class="btn btn-primary"   type="button">OK</a> -->
-          </div>
-        </div>
-      </div>
+        <div class="modal-footer">
+       </div>
     </div>
+   </div>
+</div>
+
 @stop
 
 @section('css')
@@ -101,6 +101,11 @@ Documents List
 
 @section('js')
 <script>
+ $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+            });
   var oTable = $('#customerTable').DataTable({
         searching:false,
         processing: true,
@@ -141,12 +146,17 @@ Documents List
  
      $('#customerTable tbody').on('click', '.btn-view', function (e) {
         var data = oTable.row( $(this).parents('tr') ).data();
-        str = '';
-        str+='<div class="form-group"> <label> Name : '+data.name+'</label> </div>';
-        str+='<div class="form-group"> <label> File : </label> <a href=""> <img src="/document/'+data.name+'"> '+data.name+' </a>  </div>';
-        str+='<div class="form-group">  <a href="" class="btn btn-primary"> Download </a>  </div>';
-        $('#loadDocument').modal('show');
-        $('#loadDocument .modal-body').html(str);
+        
+        $.ajax({
+            url:'{{ url("admin/document-detail") }}',
+            type:'POST',
+            dataType:'json',
+            data:{id:data.customer_id},
+            success:function(response){
+               $('#loadDocument').modal('show');
+               $('#loadDocument .modal-body').html(response.data);
+            }
+        });
     });
     </script>
 @stop

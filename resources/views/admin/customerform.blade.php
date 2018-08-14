@@ -273,7 +273,7 @@
                     <div class="modal-footer">
                       <button class="btn btn-secondary" type="button"  data-dismiss="modal">Cancel</button>
                       <button class="btn btn-primary"  type="button" v-on:click="">Save</button>
-                      <button class="btn btn-primary"  type="button"  v-on:click="">Update</button>
+                      <button class="btn btn-primary"  type="button"  v-on:click="">Apply</button>
                     </div>
                  </div>
                 </div>

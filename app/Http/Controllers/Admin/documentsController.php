@@ -25,7 +25,7 @@ class documentsController extends Controller
     public function getDocFilterData(Request $request)
     {
        /* SELECT documents.id,documents.document_name, policy_documents.*, customers.first_name, inc.name as insurance_name, prd.name as provider_name FROM documents  LEFT JOIN policy_documents ON document_id = documents.id LEFT JOIN policy_detail ON policy_detail.id = policy_detail_id LEFT JOIN massparameter inc ON inc.id =  policy_detail.insurance_ctg_id LEFT JOIN massparameter prd ON prd.id =  policy_detail.provider_id LEFT JOIN customers ON customers.id = documents.customer_id */
-        $document =  DB::table('documents')->select(['documents.id','documents.document_name', 'policy_documents.*', 
+        $document =  DB::table('documents')->select(['documents.customer_id','documents.id','documents.document_name', 'policy_documents.*', 
         'customers.first_name as name', 'inc.name as insurance_name', 'prd.name as provider_name'])
         ->leftJoin('customers','customers.id','=','documents.customer_id')
         ->leftJoin('policy_documents','document_id','=','documents.id')
@@ -71,9 +71,22 @@ class documentsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        //
+        $document =  DB::table('documents')->select(['documents.customer_id','documents.id','documents.document_name', 'policy_documents.*', 
+        'customers.first_name as name', 'inc.name as insurance_name', 'prd.name as provider_name'])
+        ->leftJoin('customers','customers.id','=','documents.customer_id')
+        ->leftJoin('policy_documents','document_id','=','documents.id')
+        ->leftJoin('policy_detail','policy_detail.id','=','policy_detail_id')
+        ->leftJoin('massparameter as inc','inc.id','=','policy_detail.insurance_ctg_id')
+        ->leftJoin('massparameter as prd','prd.id','=','policy_detail.provider_id')
+        ->where('customers.id','=', $request->id)
+        ->get();
+        foreach ($document  as $key => $value) {
+            $document->docName = $value->document_name;
+        }
+        $view = view('admin.ajaxdocument', [ 'documents' => $document ])->render();
+        return response()->json(['data'=>$view]);
     }
 
     /**

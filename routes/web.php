@@ -72,7 +72,7 @@ Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     //Document management
     Route::get('/documents', 'Admin\documentsController@index');
     Route::get('/document-filter-data', 'Admin\documentsController@getDocFilterData');
-
+    Route::post('/document-detail', 'Admin\documentsController@show');
     
   
 });
