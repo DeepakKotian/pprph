@@ -24,7 +24,7 @@ var required     = window.validators.required,
 var app = new Vue({
     el: '#insurance-app',
     data: {
-      urlPrefix:"/admin/",
+      urlPrefix:"/prophos/public/admin/",
       modalAction:"",
       insurance:{
        name:null,

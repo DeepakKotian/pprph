@@ -24,7 +24,7 @@ var required     = window.validators.required,
 var app = new Vue({
     el: '#users-app',
     data: {
-      urlPrefix:"/admin/",
+      urlPrefix:"/prophos/public/admin/",
       currentUserId:"",
       user:{
         email:null,
@@ -116,6 +116,8 @@ var app = new Vue({
               }).then(
                 function(response){
                     this.$toaster.success(response.data);
+		    let self = this;
+		    setTimeout(function(){ window.location.href = self.urlPrefix+'users' },2000);
                     
                 }
             ).catch(function(response){
