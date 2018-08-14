@@ -57,3 +57,6 @@
     width: 29px;
     padding-bottom: 3px;
 }
+#customerTable tr{
+    cursor: pointer;
+}

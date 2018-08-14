@@ -118,12 +118,17 @@ var app = new Vue({
         $('#dob_family').datepicker().on(
         'changeDate', () => { this.family.dob_family = $('#dob_family').val() }
         )
+        let self = this;
+        $('#nationality').on('change',function(){
+              self.customer.nationality = $(this).val();
+        })
+       
      },
 
     methods: {
         addNewCustomer: function () {
-            console.log(this.customer);
-            console.log(this.$v.customer);
+            console.log(this.customer.nationality);
+            console.log(this.$v.customer.nationality);
         if (this.$v.customer.$invalid) {
             this.$v.customer.$touch();
         }else{
@@ -145,12 +150,15 @@ var app = new Vue({
      getCustomerData: function () {
         this.$http.get(this.urlPrefix+'fetchcustomer/'+this.currentId).then(function(response){
         this.customer=response.data;
-       
+        setTimeout(function() {
+            $('.selectJS').select2();
+        }, 100);
+         
         });
       }, 
 
      updateCustomer: function (event) {
-        console.log(this.$v.customer);
+        console.log(this.customer);
         if (this.$v.customer.$invalid) {
             this.$v.customer.$touch()
         }

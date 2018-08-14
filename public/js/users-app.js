@@ -98,9 +98,7 @@ var app = new Vue({
             this.$v.$touch()
         }else{
             this.user.photo= $('#user_photo')[0].files[0];
-         
             let formData= new FormData();
-          
             formData.append('first_name',this.user.first_name);
             formData.append('last_name',this.user.last_name);
             formData.append('email',this.user.email);
