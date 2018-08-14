@@ -102,11 +102,18 @@ Policy Mapping <small>View Policy Mapping </small>
               </select>
  
             </div>
-
+            
             <div class="form-group" >
                   <label for="exampleInputFile">Upload Document: </label>
-                  <input type="file"  id="documentfile">
-                  <input type="hidden"  class="form-control input-rounded" v-model="policyMappings.ducumentData"  id="editDocumentfile" style="margin-right: 20px;" >
+                  <div class="input-group ">
+                <div class="input-group-btn">
+                  <button type="button" id="OpenImgUpload" class="btn btn-primary">Choose file</button>
+                </div>
+                <input type="text"  readonly class="form-control input-rounded" v-model="policyMappings.ducumentData"  id="editDocumentfile"  >
+                <!-- /btn-group -->
+                <input type="file"  class="filestyle" id="documentfile">
+              </div>
+
              </div>
                
          </div>
@@ -126,4 +133,18 @@ Policy Mapping <small>View Policy Mapping </small>
 
 @section('js')
 <script src="{!! asset('js/insurance-app.js') !!}"></script>
+<script>
+$('#OpenImgUpload').click(function(){ 
+  
+$('#documentfile').trigger('click');
+
+});
+$('#documentfile').hide();
+$('#documentfile').change(function(){
+         var input = this;
+         var fileName = input.files[0].name;
+         $('#editDocumentfile').val(fileName)
+     });
+
+</script>
 @stop
