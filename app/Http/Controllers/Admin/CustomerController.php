@@ -121,6 +121,7 @@ class CustomerController extends Controller
             'mobile' => $request['mobile'],
             'zip' => $request['zip'],
             'dob' => $request['dob'],
+            'status' => $request['status'],
             'nationality' => $request['nationality'],
             'city' => $request['city'],
             'address' => $request['address'],
@@ -221,6 +222,7 @@ class CustomerController extends Controller
             $data['dob'] = date('Y-m-d h:i:s',strtotime($request->dob));
             $data['nationality'] = $request->nationality;
             $data['city'] =   $request->city;
+            $data['status'] =   $request->status;
             $data['address'] = $request->address;
             $data['company'] = $request->company;
             $data['gender'] = $request->gender;

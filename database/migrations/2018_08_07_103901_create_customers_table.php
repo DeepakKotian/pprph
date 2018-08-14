@@ -32,6 +32,7 @@ class CreateCustomersTable extends Migration
             $table->string('mobile')->nullable();
             $table->boolean('is_family')->default(false);
             $table->integer('parent_id')->default(0);
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }
