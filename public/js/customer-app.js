@@ -24,7 +24,11 @@ var required     = window.validators.required,
 var app = new Vue({
     el: '#customer-app',
     data: {
+<<<<<<< HEAD
       urlPrefix:"/admin/",
+=======
+      urlPrefix:urlPrefix,
+>>>>>>> 58d5f077c93308b7fb74de796e94883f9764bbd9
       currentId:"",
       customer:{
         id:null,

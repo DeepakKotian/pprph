@@ -66,6 +66,9 @@
     <!-- ChartJS -->
     <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.min.js"></script>
 @endif
+<script>
+    var urlPrefix = "/admin/";
+</script>
 <script src="{!! asset('js/validators.min.js') !!}"></script>
 <script src="{!! asset('js/vuelidate.min.js') !!}"></script>
 <script src="{!! asset('js/vue.js') !!}"></script>
