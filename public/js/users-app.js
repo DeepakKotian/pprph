@@ -24,7 +24,7 @@ var required     = window.validators.required,
 var app = new Vue({
     el: '#users-app',
     data: {
-      urlPrefix:"/prophos/public/admin/",
+      urlPrefix:urlPrefix,
       currentUserId:"",
       user:{
         email:null,
