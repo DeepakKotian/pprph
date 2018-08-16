@@ -241,6 +241,7 @@ class CustomerController extends Controller
             $data['end_date'] = date('Y-m-d',strtotime($request->end_date));
             dd($data);
             DB::table('policy_detail')->whereId($check->policy_id)->update($data);
+            
         }else{
             $data['insurance_ctg_id'] = $request->insurance_ctg_id;
             $data['provider_id'] = $request->provider_id;
