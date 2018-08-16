@@ -785,7 +785,7 @@
                             <label for="policy_number">Choose Family Members</label>
                             <div>
                               <span class="fmlyChk"  v-for="(val, index) in customer.family"> 
-                                <input type="checkbox" v-bind:class="'familychck'+index" v-bind:value="val.id"   v-model="insurancedata.family[index]"   :checked="checkIndex(insurancedata.family,val.id)" > <% val.first_name %> <% val.last_name %>
+                                <input type="checkbox"  v-bind:value="val.id"     :checked="checkIndex(insurancedata.family,val.id)" > <% val.first_name %> <% val.last_name %>
                               </span>
                              </div>
 
