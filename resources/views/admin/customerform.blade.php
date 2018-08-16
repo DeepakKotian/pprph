@@ -457,8 +457,8 @@
                   <button type="button" class="btn btn-primary" v-on:click="updateCustomer">Update</button>
   &nbsp;
                     <div class="btn-group btn-toggle"> 
-                    <button type="button" class="btn" v-bind:class="{'btn-primary':customer.status==1,'btn-default':customer.status==0}" >ACTIVE</button>
-                    <button  type="button" class="btn" v-bind:class="{'btn-primary':customer.status==0,'btn-default':customer.status==1}">DEACTIVE</button>
+                    <button type="button" class="btn"  data-toggle="modal" data-target="#statusModal" class="btn btn-default" v-on:click="onStatus(1)"  v-bind:class="{'btn-primary':customer.status==1,'btn-default':customer.status==0}" >ACTIVE</button>
+                    <button  type="button" class="btn" data-toggle="modal" data-target="#statusModal" class="btn btn-default" v-on:click="onStatus(0)"  v-bind:class="{'btn-primary':customer.status==0,'btn-default':customer.status==1}">DEACTIVE</button>
                   </div>
                 @else
                   <button type="button" class="btn btn-primary" v-on:click="addNewCustomer">Save</button>
@@ -825,6 +825,27 @@
           
         <!-- /.box -->
       </div>
+
+      <div class="modal fade" id="statusModal" tabindex="-1" role="dialog" aria-labelledby="statusModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                    <div class="modal-header">
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title" id="exampleModalLabel">Delete?</h4>
+                    </div>
+                    <div class="modal-body">Are you sure you want to <% statusText %> <b></b> ?</div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-primary" data-dismiss="modal" v-on:click="statusUpdate(currentId)" type="button">Yes</a>
+                    </div>
+            </div>
+
+    </div>
+
+</div>
+
 </div>
 @stop
 @section('js')

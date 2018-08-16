@@ -134,6 +134,7 @@ class AdminController extends Controller
     }
 
     public function updateUser(Request $request,user $user){
+       
         $user = DB::table('users');
         $checkAdmin =  $user->select('users.email')->where('users.email',$request->email)->where('users.id','<>',$request->id)->first();
         if(empty($checkAdmin)){

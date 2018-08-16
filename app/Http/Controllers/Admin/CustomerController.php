@@ -30,8 +30,8 @@ class CustomerController extends Controller
         $insuranceCtg = DB::table('massparameter')->where('type','category')->get();
         
         $arrClm = [];
-        $cnt = $insuranceCtg->count()+4;
-        for($i=5;$i<=$cnt;$i++){
+        $cnt = $insuranceCtg->count()+5;
+        for($i=6;$i<=$cnt;$i++){
             $arrClm[]= $i;
         }
         $arrClms = implode(',',$arrClm);
@@ -317,6 +317,15 @@ class CustomerController extends Controller
         if(customer::whereId($request->id)->delete());
         return response()->json('Successfully deleted',200);
     }
+
+    public function statusUpdate(Request $request){
+       
+        $data['status']=$request->currentStatusId;
+    
+        $json_data = customer::whereId($request->currentCustId)->update($data);
+        return response()->json('Successfully '.$request->statusText.'ed', 200);
+    }
+    
 
     /**
      * Remove the specified resource from storage.
