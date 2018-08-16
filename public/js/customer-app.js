@@ -41,6 +41,7 @@ var app = new Vue({
         telephone:null,
         parent_id:null,
         nationality:'',
+       
       },
       customerData:[],
       errors:[],
@@ -49,8 +50,17 @@ var app = new Vue({
         last_name_family:null,
         dob_family:null,
         nationality_family:null,
+        email_family:null,
       },
       modalAction:'',
+      insurancedata:{
+          policy_number:'',
+          start_date:'',
+          end_date:'',
+          family:[],
+          insurance_ctg_id:'',
+          provider_id:''
+      },
     },
     validations:{
         customer:{
@@ -97,6 +107,9 @@ var app = new Vue({
         nationality_family:{
             required:required,  
         },
+        email_family:{
+            email:email,
+        },
         first_name_family:{
             required:required,
           },
@@ -104,6 +117,20 @@ var app = new Vue({
             required:required,
         }
       },
+      insurancedata:{
+          provider_id:{
+              required:required,
+          },
+          start_date:{
+              required:required,
+          },
+          end_date:{
+            required:required,
+          },
+          policy_number:{
+            required:required,
+          }
+      }
     },
     created: function(){
         this.currentId = $('#currentId').val();
@@ -117,6 +144,12 @@ var app = new Vue({
           )
         $('#dob_family').datepicker().on(
         'changeDate', () => { this.family.dob_family = $('#dob_family').val() }
+        )
+        $('#start_date').datepicker().on(
+            'changeDate', () => { this.insurancedata.start_date = $('#start_date').val() }
+        )
+        $('#end_date').datepicker().on(
+            'changeDate', () => { this.insurancedata.end_date = $('#end_date').val() }
         )
         let self = this;
         $('#nationality').on('change',function(){
@@ -152,7 +185,8 @@ var app = new Vue({
         this.customer=response.data;
         setTimeout(function() {
             $('.selectJS').select2();
-        }, 100);
+            $('.selectJSFamily').select2();
+        }, 1000);
          
         });
       }, 
@@ -179,12 +213,14 @@ var app = new Vue({
         this.family.last_name_family="";
         this.family.dob_family="";
         this.family.nationality_family="";
+        this.family.email_family="";
         if(item !== null){
             this.modalAction='edit';
             this.family.first_name_family = item.first_name;
             this.family.last_name_family = item.last_name;
             this.family.dob_family = item.dob;
             this.family.nationality_family = item.nationality;
+            this.family.email_family = item.email;
             this.family.id = item.id; 
         }
         this.$v.family.$reset();  
@@ -237,7 +273,45 @@ var app = new Vue({
             )
         },
         loadInsuranceModal :function(item){
-           console.log(item)
+           this.insurancedata.insurance_ctg_id =  item.id;
+           $('#insuranceModal').find('.modal-body .selectJsFamily').select2();
+        },
+        fetchPolicyDetail :function(item){
+            this.insurancedata.provider_id = parseInt(item.target.value);
+            this.insurancedata.start_date = '';
+            // this.insurancedata.family = [];
+            this.insurancedata.end_date = '';
+            this.insurancedata.policy_number = '';
+            console.log(this.insurancedata.family.length);
+            this.$http.post(this.urlPrefix+'fetchpolicydetail/'+this.currentId,  this.insurancedata).then(function(response){
+                this.insurancedata.family = response.data.family;
+                this.insurancedata.start_date = response.data.start_date;
+                this.insurancedata.end_date = response.data.end_date;
+                this.insurancedata.policy_number = response.data.policy_number;
+            });
+        },
+        savePolicy:function(){
+            console.log(this.$v.insurancedata.$invalid);
+            if(this.$v.insurancedata.$invalid){
+               this.$v.insurancedata.$touch();
+            }else{
+                //let self = this;
+                // $('#insuranceModal').find('.modal-body input[type="checkbox"]:checked').each(function(){
+                //     console.log( self.insurancedata.family);
+                //     self.insurancedata.family.push(this.value);
+                //   })
+                console.log(this.insurancedata.family)
+             this.$http.post(this.urlPrefix+'savepolicy/'+this.currentId,  this.insurancedata).then(function(response){
+                this.insurancedata = response.data;
+            });
+          }
+        },
+        checkIndex:function(arr,val){
+            console.log($.inArray(val,arr));
+            if($.inArray(val,arr)>=0){
+                return true;
+            }
+            return false;
         }
      },
     
@@ -245,16 +319,8 @@ var app = new Vue({
     delimiters: ["<%","%>"]
   })
 
-  Vue.filter('role-type', function (value) {
-     if(value==1){
-      $roleType="Admin";
-      return $roleType;
-     }
-     else{
-        $roleType="customer";
-        return $roleType;
-      
-     }
- })
+//   Vue.filter('checkIndex', function (value) {
+//      console.log(value);
+//  })
 
   

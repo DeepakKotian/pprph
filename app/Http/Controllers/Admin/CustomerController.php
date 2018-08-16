@@ -28,12 +28,12 @@ class CustomerController extends Controller
     {
         $customer = customer::select(['id','first_name','last_name'])->get();
         $insuranceCtg = DB::table('massparameter')->where('type','category')->get();
+        
         $arrClm = [];
         $cnt = $insuranceCtg->count()+4;
         for($i=5;$i<=$cnt;$i++){
             $arrClm[]= $i;
         }
-
         $arrClms = implode(',',$arrClm);
         return view('admin.customers',compact(['customer','insuranceCtg','arrClms']));
     }
@@ -152,7 +152,8 @@ class CustomerController extends Controller
             }
         }
         $insuranceCtg = DB::table('massparameter')->where('type','category')->get();
-        return view('admin.customerform',compact(['data','insuranceCtg']));
+        $providers = DB::table('massparameter')->where('type','provider')->get();
+        return view('admin.customerform',compact(['data','insuranceCtg','providers']));
     }
 
 
@@ -177,27 +178,78 @@ class CustomerController extends Controller
         ->where('massparameter.type','category')
         ->groupBy('massparameter.id')
         ->get();
-        $data->policy = DB::table('massparameter')->select(['massparameter.id','insurance_ctg_id'])
+        $data->providers = DB::table('massparameter')->select(['id','type','name'])->where('type','provider')->get();
+        $data->policy = DB::table('massparameter')->select(['massparameter.id','insurance_ctg_id','provider_id'])
         ->leftJoin('policy_detail','policy_detail.insurance_ctg_id','=','massparameter.id')
         ->where('massparameter.type','category')
         ->where('customer_id',$request->id)
         ->groupBy('massparameter.id')
         ->get();
-        $data->family = customer::select(['id','first_name','last_name',DB::raw('DATE_FORMAT(dob, "%d-%m-%Y") as dob'),'nationality'])
+        $data->family = customer::select(['id','first_name','last_name','email',DB::raw('DATE_FORMAT(dob, "%d-%m-%Y") as dob'),'nationality'])
         ->where('is_family','1')
         ->where('parent_id',$request->id)
         ->get();
         
-        $insuranceCtgArr = [];
+        $insuranceCtgArr = $providerArr = [];
         foreach ($data->policy as $key => $value) {
            $insuranceCtgArr[] = $value->insurance_ctg_id;
+           $providerArr[] =  $value->provider_id;
         }
         $data->policyArr =  $insuranceCtgArr;
+        $data->providerArr =  $providerArr;
             if(!empty($data)){
                 $data->id = $request->id;
             }
         }
         return response()->json($data, 200);
+    }
+
+    public function fetchPolicyDetail($id,Request $request)
+    {
+        $data = DB::table('policy_detail')->select(['policy_detail.id as policy_id', 'insurance_ctg_id', 'customers.id','policy_number',DB::raw('DATE_FORMAT(start_date, "%d-%m-%Y") as start_date'),DB::raw('DATE_FORMAT(end_date, "%d-%m-%Y") as end_date'),'insurance_ctg_id','provider_id','first_name'])
+        ->leftJoin('customers','policy_detail.customer_id','=','customers.id')
+        ->where('customer_id',$id)
+        ->where('insurance_ctg_id',$request->insurance_ctg_id)
+        ->where('provider_id',$request->provider_id)
+        ->first();
+        if($data){
+            $family = DB::table('customer_policy_member')->select(['family_member_id'])
+                            ->where('policy_detail_id',$data->policy_id)
+                            ->get();
+            $familyArr = [];
+            foreach ($family as $key => $value) {
+                $familyArr[] = $value->family_member_id;
+            }
+            $data->family =  $familyArr;
+        }
+        return response()->json($data, 200);
+    }
+
+    public function savePolicy($id,Request $request)
+    {
+        $check = DB::table('policy_detail')->select(['policy_detail.id as policy_id', 'policy_number',DB::raw('DATE_FORMAT(start_date, "%d-%m-%Y") as start_date'),DB::raw('DATE_FORMAT(end_date, "%d-%m-%Y") as end_date'),'insurance_ctg_id','provider_id'])
+        ->where('customer_id',$id)
+        ->where('insurance_ctg_id',$request->insurance_ctg_id)
+        ->where('provider_id',$request->provider_id)
+        ->first();
+        if(!empty($check)){
+            
+            $data['insurance_ctg_id'] = $request->insurance_ctg_id;
+            $data['provider_id'] = $request->provider_id;
+            $data['policy_number'] = $request->policy_number;
+            $data['start_date'] = date('Y-m-d',strtotime( $request->start_date));
+            $data['end_date'] = date('Y-m-d',strtotime($request->end_date));
+            dd($data);
+            DB::table('policy_detail')->whereId($check->policy_id)->update($data);
+        }else{
+            $data['insurance_ctg_id'] = $request->insurance_ctg_id;
+            $data['provider_id'] = $request->provider_id;
+            $data['policy_number'] = $request->policy_number;
+            $data['start_date'] = date('Y-m-d',strtotime( $request->start_date));
+            $data['end_date'] = date('Y-m-d',strtotime($request->end_date));
+            dd($data);
+            DB::table('policy_detail')->create($data);
+        }
     }
 
     /**
@@ -251,6 +303,7 @@ class CustomerController extends Controller
 
     public function updateFamily(Request $request)
     {
+        
         $data['first_name'] = $request->first_name_family;
         $data['last_name'] = $request->last_name_family;
         $data['dob'] = date('Y-m-d h:i:s',strtotime($request->dob_family));
