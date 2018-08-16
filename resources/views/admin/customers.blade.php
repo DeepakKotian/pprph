@@ -66,8 +66,9 @@ Customers List
                         <thead>
                             <tr>
                                 <th>Id</th>
-                                <th>Name</th>
+                                <th>First Name</th>
                                 <th>Last Name</th>
+                                <th>Email</th>
                                 <th>City</th>
                                 <th>Postcode</th>
                                 @foreach($insuranceCtg as $key=> $rowCtg)
@@ -129,6 +130,7 @@ Customers List
             {data: 'id', name: 'id'},
             {data: 'first_name', name: 'first_name'},
             {data: 'last_name', name: 'last_name'},
+            {data: 'email', name: 'email'},
             {data: 'city', name: 'city'},
             {data: 'zip', name: 'zip'},
             @foreach($insuranceCtg as $key=> $rowCtg)

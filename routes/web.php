@@ -56,6 +56,8 @@ Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     Route::post('/storefamily', 'Admin\CustomerController@storeFamily');
     Route::post('/updatefamily', 'Admin\CustomerController@updateFamily');
     Route::post('/deletefamily', 'Admin\CustomerController@deleteFamily');
+    Route::post('/statusupdate', 'Admin\CustomerController@statusUpdate');
+    
 
     // insurance management
     Route::get('/policy-mapping', 'Admin\insuranceController@policyMapping');

@@ -22,11 +22,13 @@ class ProfileController extends Controller
 
     public function userData(){
         $userid=Auth::user()->id;
-        $profileData=user::find($userid);
+        $profileData=user::find($userid)->toarray();
+      
         return response()->json($profileData, 200);
     }
 
     public function updateProfile(Request $request){
+       
         $userid=Auth::user()->id;
         $user = DB::table('users');
         $email =  $user->select('users.email')->where('users.email',$request->email)->where('users.id','<>',$userid)->first();

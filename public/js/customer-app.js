@@ -24,12 +24,10 @@ var required     = window.validators.required,
 var app = new Vue({
     el: '#customer-app',
     data: {
-<<<<<<< HEAD
-      urlPrefix:"/admin/",
-=======
       urlPrefix:urlPrefix,
->>>>>>> 58d5f077c93308b7fb74de796e94883f9764bbd9
       currentId:"",
+      statusText:"",
+      statusId:"",
       customer:{
         id:null,
         gender:null,
@@ -162,7 +160,7 @@ var app = new Vue({
       }, 
 
      updateCustomer: function (event) {
-        console.log(this.customer);
+      
         if (this.$v.customer.$invalid) {
             this.$v.customer.$touch()
         }
@@ -177,6 +175,7 @@ var app = new Vue({
             });
         }
       },
+
       loadFamily:function(item){
         this.modalAction='add';
         this.family.first_name_family="";
@@ -213,6 +212,7 @@ var app = new Vue({
             });
         } 
       },
+
       updateFamily: function () {
             console.log(this.$v.family);
         if (this.$v.family.$invalid) {
@@ -232,6 +232,31 @@ var app = new Vue({
             });
         } 
       },
+      onStatus:function(status){
+        this.statusId=status;
+       
+        if(status=='1'){
+
+           this.statusText="Activate";
+        }
+        else{
+            this.statusText="Deactivate";
+        }
+    
+      },
+
+      statusUpdate:function(currentCustId){
+        this.statusId= this.statusId;
+        this.statusText=this.statusText;
+   
+        this.$http.post(this.urlPrefix+'statusupdate',{currentCustId:currentCustId,currentStatusId:this.statusId,statusText:this.statusText}).then(
+            function(response){
+                this.customer.status=this.statusId;
+               this.$toaster.success(response.data);
+            }
+        )
+      },
+
       deleteFamily: function () {
             this.$http.post(this.urlPrefix+'deletefamily',this.family).then(
                 function(response){
@@ -240,11 +265,12 @@ var app = new Vue({
                 }
             )
         },
-        loadInsuranceModal :function(item){
+       loadInsuranceModal :function(item){
            console.log(item)
         }
-     },
+      },
     
+      
      
     delimiters: ["<%","%>"]
   })

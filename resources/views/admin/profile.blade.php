@@ -56,7 +56,7 @@
               <label for="inputName" class="col-sm-2 control-label">Last Name </label>
 
               <div class="col-sm-10">
-              <input type="text" name="last_name" class="form-control col-sm-4" v-model="profile.last_name" id="last_name"  placeholder="Enter Last Name">
+              <input type="text" name="last_name" class="form-control col-sm-4" v-model="profile.last_name"  id="last_name"  placeholder="Enter Last Name">
               </div>
             </div>
 
@@ -64,7 +64,8 @@
               <label for="inputName" class="col-sm-2 control-label">Phone </label>
 
               <div class="col-sm-10">
-              <input type="text" name="phone" class="form-control col-sm-4" v-model="$v.profile.phone.$model" id="phone"  placeholder="Enter Phone">
+              <input type="text" name="phone" class="form-control col-sm-4" v-model.trim.lazy="$v.profile.phone.$model" id="phone"  placeholder="Enter Phone">
+              <span v-if="!$v.profile.phone.phoneRegx" :class="{ 'help-block': !$v.profile.phone.phoneRegx } " > Enter Valid Phone Number </span>
               </div>
             </div>
             
@@ -72,7 +73,8 @@
               <label for="inputName" class="col-sm-2 control-label">Email *</label>
 
               <div class="col-sm-10">
-              <input type="email"  name="email" class="form-control col-sm-4"  v-model="$v.profile.email.$model" id="email"  placeholder="Enter email">
+              <input type="email"  name="email" class="form-control col-sm-4" v-model.trim.lazy="$v.profile.email.$model" id="email"  placeholder="Enter email">
+              <span v-if="!$v.profile.email.email" :class="{ 'help-block': !$v.profile.email.email } " > Enter Valid Email </span>
               </div>
             </div>
            

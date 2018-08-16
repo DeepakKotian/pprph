@@ -70,22 +70,24 @@
               <label for="inputName" class="col-sm-2 control-label">Last Name </label>
 
               <div class="col-sm-10">
-              <input type="text" name="last_name" class="form-control col-sm-4" v-model="user.last_name" id="last_name"  placeholder="Enter Last Name">
+              <input type="text" name="last_name" class="form-control col-sm-4" v-model="user.last_name" v-bind:value="user.last_name" id="last_name"  placeholder="Enter Last Name">
               </div>
             </div>
              <div class="form-group" :class="{ 'has-error': $v.user.phone.$error }">
               <label for="inputName" class="col-sm-2 control-label">Phone </label>
-
               <div class="col-sm-10">
-              <input type="text" name="phone" class="form-control col-sm-4" v-model="$v.user.phone.$model" id="phone"  placeholder="Enter Phone">
+              <input type="text" name="phone"  class="form-control col-sm-4" v-model.trim.lazy="$v.user.phone.$model" id="phone"  placeholder="Enter Phone">
+              <span v-if="!$v.user.phone.phoneRegx" :class="{ 'help-block': !$v.user.phone.phoneRegx } " > Enter Valid Phone Number </span>
               </div>
+              
             </div>
             
             <div class="form-group" :class="{ 'has-error': $v.user.email.$error }">
               <label for="inputName" class="col-sm-2 control-label">Email *</label>
 
               <div class="col-sm-10">
-              <input type="email"  name="email" class="form-control col-sm-4"  v-model="$v.user.email.$model" id="email"  placeholder="Enter email">
+              <input type="email"  name="email" class="form-control col-sm-4"  v-model.trim.lazy="$v.user.email.$model" id="email"  placeholder="Enter email">
+              <span v-if="!$v.user.email.email" :class="{ 'help-block': !$v.user.email.email } " > Enter Valid Email </span>
               </div>
             </div>
             @if(!empty($data))
