@@ -142,8 +142,7 @@ var app = new Vue({
         var self = this;
         $.getJSON('/js/countries.json', function (countries) {
             self.countries = countries.data;
-            console.log(self.countries);
-            
+           
         });
     }, 
     mounted: function(){
@@ -335,6 +334,7 @@ var app = new Vue({
                 self.$toaster.error(response.data);
            });
         },
+
         savePolicy:function(){
             if(this.$v.insurancedata.$invalid){
                this.$v.insurancedata.$touch();
@@ -345,6 +345,20 @@ var app = new Vue({
            });
           }
         },
+
+        fetchProvidersData:function(insureId){
+            this.$http.post(this.urlPrefix+'fetchproviderslist/', {insureId:insureId}).then(function(response){
+               console.log(response.data);
+               
+            });
+        },
+
+        //antrag section
+        loadAntragModal:function(item){
+        
+        this.fetchProvidersData(item.id);
+        },
+
         chooseFamily:function(){
 
         },

@@ -58,8 +58,9 @@ Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     Route::post('/updatefamily', 'Admin\CustomerController@updateFamily');
     Route::post('/deletefamily', 'Admin\CustomerController@deleteFamily');
     Route::post('/savepolicy/{id}', 'Admin\CustomerController@savePolicy');
-
     Route::post('/statusupdate', 'Admin\CustomerController@statusUpdate');
+  
+    
     
 
     // insurance management
@@ -67,10 +68,10 @@ Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     Route::post('/fetchpolicymapping', 'Admin\insuranceController@fetchPolicyMapping');
     Route::post('/addpolicymapping', 'Admin\insuranceController@addPolicyMapping');
     Route::post('/updatepolicymapping', 'Admin\insuranceController@updatePolicyMapping');
-    
     Route::post('/fetchinsurance', 'Admin\insuranceController@fetchInsurance');
     Route::resource('insurance-list', 'Admin\insuranceController');
     Route::post('/fetchprovider', 'Admin\providersController@fetchProvider');
+    Route::post('/fetchproviderslist', 'Admin\insuranceController@fetchProvidersList'); //list the data by insure id
     Route::resource('providers-list', 'Admin\providersController');
 
     //Document management

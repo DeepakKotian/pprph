@@ -145,19 +145,18 @@
                             </thead>
                             <tbody>
                               <tr v-for="(item, index) in customer.insurance">
-                                  <td> <a href="" data-toggle="modal" data-target="#insuranceModal" v-on:click="loadInsuranceModal(item)" ><% item.name %></a></td>
                                   <td>
-                                  <button v-if="customer.policyArr.indexOf(item.id)>=0"  data-toggle="modal" data-target="#antragModal" type="button" class="btn btn-default btn-sm">
-                              <i class="fa fa-square text-green" ></i></button>
-                              <button v-if="customer.policyArr.indexOf(item.id)<0"  data-toggle="modal" data-target="#antragModal"  type="button" class="btn btn-default btn-sm">
-                              <i class="fa fa-square text-red" ></i></button>
+                               
+                                   <a href="" data-toggle="modal" data-target="#insuranceModal" v-on:click="loadInsuranceModal(item)" ><% item.name %></a></td>
+                                  <td>
+          
+                              <button  v-on:click="loadAntragModal(item)"  data-toggle="modal" data-target="#antragModal"  type="button" class="btn btn-default btn-sm">
+                              <i class="fa fa-square " :class="{'text-green':customer.policyArr.indexOf(item.id)>=0, 'text-red':customer.policyArr.indexOf(item.id)<0}" ></i></button>
                                </td>
                             <td>
-                            <button v-if="customer.policyArr.indexOf(item.id)>=0" type="button" class="btn btn-default btn-sm">
-                              <i class="fa fa-square text-green" ></i></button>
-                              <button v-if="customer.policyArr.indexOf(item.id)<0"  type="button" class="btn btn-default btn-sm">
-                              <i class="fa fa-square text-red" ></i>
-                              </button>
+                            <button  type="button" class="btn btn-default btn-sm">
+                            <i class="fa fa-square " :class="{'text-green':customer.policyArr.indexOf(item.id)>=0, 'text-red':customer.policyArr.indexOf(item.id)<0}" ></i></button></button>
+                             
                             </td>
 
                               </tr>
@@ -374,7 +373,7 @@
      <!-- Status Modal end-->
      <!-- Antrag Modal -->
     <div class="modal fade" id="antragModal" tabindex="-1" role="dialog" aria-labelledby="antragModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                     <div class="modal-header">
                         <button class="close" type="button" data-dismiss="modal" aria-label="Close">
@@ -382,8 +381,19 @@
                         </button>
                         <h4 class="modal-title" id="exampleModalLabel"> Antrag </h4>
                     </div>
-                    <div class="modal-body"><div style="text-align: center;">
-                    <embed src="{{ url('/uploads/antrag/5b765506d86091534481670.pdf')}}" frameborder="0" width="100%" height="400px">
+                    <div class="modal-body">
+                 <div class="row">
+                    <div class="form-group col-sm-4">
+                              <input type="hidden" name="insurance_ctg_id" id="insurance_ctg_id" v:bind:value="insurancedata.insurance_ctg_id" v-model="insurancedata.insurance_ctg_id">
+                                <label for="first_name_family">Provider Name*</label>
+                                <select sty="width:100%;" class="form-control" name="provider" id="providerSlct" v-model="$v.insurancedata.provider_id.$model" v-on:change="fetchPolicyDetail(event)">
+                                  <option value="">Please Select</option>
+                                  <option v-for="(vl, index) in customer.providers" v-bind:value="vl.id"  >  <% vl.name %></option>
+                                </select>
+                            </div>
+                      </div>
+                    <div style=" position: relative; display: block; height: 0;padding: 0; overflow: hidden; padding-bottom:69%">
+                    <embed src="{{ url('/uploads/antrag/5b765506d86091534481670.pdf')}}" frameborder="0" width="100%" height="600px">
                   </div></div>
                     <div class="modal-footer">
                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
