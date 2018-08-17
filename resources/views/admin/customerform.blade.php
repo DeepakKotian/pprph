@@ -145,21 +145,18 @@
                             </thead>
                             <tbody>
                               <tr v-for="(item, index) in customer.insurance">
-                                  <td>
-                               
-                                   <a href="" data-toggle="modal" data-target="#insuranceModal" v-on:click="loadInsuranceModal(item)" ><% item.name %></a></td>
-                                  <td>
-          
-                              <button  v-on:click="loadAntragModal(item)"  data-toggle="modal" data-target="#antragModal"  type="button" class="btn btn-default btn-sm">
-                              <i class="fa fa-square " :class="{'text-green':customer.policyArr.indexOf(item.id)>=0, 'text-red':customer.policyArr.indexOf(item.id)<0}" ></i></button>
-                               </td>
-                            <td>
-                            <button  type="button" class="btn btn-default btn-sm">
-                            <i class="fa fa-square " :class="{'text-green':customer.policyArr.indexOf(item.id)>=0, 'text-red':customer.policyArr.indexOf(item.id)<0}" ></i></button></button>
-                             
-                            </td>
-
-                              </tr>
+                                <td>
+                                   <a href="" data-toggle="modal" data-target="#insuranceModal" v-on:click="loadInsuranceModal(item)" ><% item.name %></a>
+                                </td>
+                                <td>
+                                  <button  v-on:click="loadAntragModal(item)"  data-toggle="modal" data-target="#antragModal"  type="button" class="btn btn-default btn-sm">
+                                  <i class="fa fa-square " :class="{'text-green':customer.policyArr.indexOf(item.id)>=0, 'text-red':customer.policyArr.indexOf(item.id)<0}" ></i></button>
+                                </td>
+                                <td>
+                                <button  type="button" class="btn btn-default btn-sm" v-on:click="loadVertragModal(item)">
+                                  <i class="fa fa-square " :class="{'text-green':customer.policyArr.indexOf(item.id)>=0, 'text-red':customer.policyArr.indexOf(item.id)<0}" ></i></button></button>
+                                </td>
+                             </tr>
                             </tbody>
                           </table>
                         </div>
