@@ -189,32 +189,37 @@ class insuranceController extends Controller
 
     public function updatePolicyMapping(Request $request){
         $pmap = DB::table('insurance_mapped');
-        $duplicate =  $pmap->select('*')->where('insurance_ctg_id',$request['insure_id'])->where('provider_id','=',$request['policy_id'])->first();
-       
+    
+        $duplicate =  $pmap->select('*')->where('insurance_ctg_id',$request['insure_id'])->where('provider_id','=',$request['policy_id'])->where('id','<>',$request->mappingId)->first();
+     
         if(empty($duplicate)){
 
-        if($request->hasFile('documnetData')){
-            $file=$request->file('documnetData');
-            $imageName = uniqid().time().'.'.$file->getClientOriginalExtension();
-            $destinationPath = public_path('/uploads/antrag');
-            $file->move($destinationPath, $imageName);
-            $documnetData['documnetData'] = $imageName;
-        }
-        else{
-            $documnetData['documnetData']  =$request->documnetData;
-        }
+            if($request->hasFile('documnetData')){
+                $file=$request->file('documnetData');
+                $imageName = uniqid().time().'.'.$file->getClientOriginalExtension();
+                $destinationPath = public_path('/uploads/antrag');
+                $file->move($destinationPath, $imageName);
+                $documnetData['documnetData'] = $imageName;
+            }
+            else{
+                $documnetData['documnetData']  =$request->documnetData;
+            }
 
-        $data['insurance_ctg_id'] = $request->insure_id;
-        $data['provider_id'] =  $request->policy_id;
-        $data['document_name'] =  $documnetData['documnetData'] ;
-        if(insurancemapped::whereId($request->mappingId)->update($data));
-        return response()->json('Successfully updated',200);
+            $data['insurance_ctg_id'] = $request->insure_id;
+            $data['provider_id'] =  $request->policy_id;
+            $data['document_name'] =  $documnetData['documnetData'] ;
+            if(insurancemapped::whereId($request->mappingId)->update($data));
+            return response()->json('Successfully updated',200);
        
-     }
+        }
         else{
             return response()->json('Policy Already Mapped', 500);
         }
 
 
+    }
+
+    public function fetchProvidersList(Request $request){
+       dd($request->insureId);
     }
 }
