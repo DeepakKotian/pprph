@@ -29,6 +29,7 @@ var app = new Vue({
       statusText:"",
       statusId:"",
       countries:null,
+      providerslist:[],
       customer:{
         id:null,
         gender:null,
@@ -314,7 +315,7 @@ var app = new Vue({
         },
         loadInsuranceModal :function(item){
            this.insurancedata.insurance_ctg_id =  item.id;
-           
+           this.fetchProvidersData(item.id);
         },
         fetchPolicyDetail :function(item){
             this.insurancedata.provider_id = parseInt(item.target.value);
@@ -349,14 +350,13 @@ var app = new Vue({
 
         fetchProvidersData:function(insureId){
             this.$http.post(this.urlPrefix+'fetchproviderslist/', {insureId:insureId}).then(function(response){
-               console.log(response.data);
+              this.providerslist=response.data;
                
             });
         },
 
         //antrag section
         loadAntragModal:function(item){
-        
         this.fetchProvidersData(item.id);
         },
 
