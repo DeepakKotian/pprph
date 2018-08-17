@@ -145,21 +145,18 @@
                             </thead>
                             <tbody>
                               <tr v-for="(item, index) in customer.insurance">
-                                  <td>
-                               
-                                   <a href="" data-toggle="modal" data-target="#insuranceModal" v-on:click="loadInsuranceModal(item)" ><% item.name %></a></td>
-                                  <td>
-          
-                              <button  v-on:click="loadAntragModal(item)"  data-toggle="modal" data-target="#antragModal"  type="button" class="btn btn-default btn-sm">
-                              <i class="fa fa-square " :class="{'text-green':customer.policyArr.indexOf(item.id)>=0, 'text-red':customer.policyArr.indexOf(item.id)<0}" ></i></button>
-                               </td>
-                            <td>
-                            <button  type="button" class="btn btn-default btn-sm">
-                            <i class="fa fa-square " :class="{'text-green':customer.policyArr.indexOf(item.id)>=0, 'text-red':customer.policyArr.indexOf(item.id)<0}" ></i></button></button>
-                             
-                            </td>
-
-                              </tr>
+                                <td>
+                                   <a href="" data-toggle="modal" data-target="#insuranceModal" v-on:click="loadInsuranceModal(item)" ><% item.name %></a>
+                                </td>
+                                <td>
+                                  <button  v-on:click="loadAntragModal(item)"  data-toggle="modal" data-target="#antragModal"  type="button" class="btn btn-default btn-sm">
+                                  <i class="fa fa-square " :class="{'text-green':customer.policyArr.indexOf(item.id)>=0, 'text-red':customer.policyArr.indexOf(item.id)<0}" ></i></button>
+                                </td>
+                                <td>
+                                <button  type="button" class="btn btn-default btn-sm" v-on:click="loadVertragModal(item)">
+                                  <i class="fa fa-square " :class="{'text-green':customer.policyArr.indexOf(item.id)>=0, 'text-red':customer.policyArr.indexOf(item.id)<0}" ></i></button></button>
+                                </td>
+                             </tr>
                             </tbody>
                           </table>
                         </div>
@@ -388,7 +385,6 @@
                     <div class="modal-body">
                  <div class="row">
                     <div class="form-group col-sm-4">
-                             
                                 <label for="first_name_family">Provider Name*</label>
                                 <select sty="width:100%;" class="form-control" name="provider" id="providerSlct" v-model="$v.insurancedata.provider_id.$model" v-on:change="loadAntragForm(event)">
                                   <option value="">Please Select</option>
@@ -415,6 +411,48 @@
       </div>
  <!-- Antrag Modal End -->
 
+
+ <!-- Vertrag Modal -->
+ <div class="modal fade" id="vertragModal" tabindex="-1" role="dialog" aria-labelledby="vertragModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content modal-lg">
+                    <div class="modal-header">
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title" id="exampleModalLabel"> Vertrag </h4>
+                    </div>
+                    <div class="modal-body">
+                    <div class="row">
+                      <div class="form-group col-sm-4">
+                          <label for="first_name_family">Provider Name*</label>
+                          <select sty="width:100%;" class="form-control" name="provider" id="providerSlct" v-model="$v.insurancedata.provider_id.$model">
+                            <option value="">Please Select</option>
+                            <option v-for="(prd, index) in providerslist" v-bind:value="prd.provider_id"  >  <% prd.providerName %></option>
+                          </select>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group col-sm-4">
+                        <label for="uploadDoc">Upload Document: </label> 
+                        <div class="input-group">
+                          <div class="input-group-btn">
+                            <button type="button" id="uploadFile" class="btn btn-primary">Choose file</button>
+                          </div> 
+                          <input type="file" id="document" class="filestyle" style="display: none;">
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-primary" data-dismiss="modal"  type="button">Yes</a>
+                    </div>
+            </div>
+
+        </div>
+      </div>
+ <!-- Vertrag Modal End -->
 </div>
 @stop
 @section('js')

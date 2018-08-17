@@ -384,16 +384,17 @@ var app = new Vue({
         
         //antrag section
         loadAntragModal:function(item){
-        this.fetchProvidersData(item.id);
+            this.fetchProvidersData(item.id);
         },
-
-        chooseFamily:function(){
-
+        loadVertragModal:function(item){
+           if(this.customer.policyArr.indexOf(item.id)>=0){
+                $('#vertragModal').modal('show');
+                this.fetchProvidersData(item.id);
+           }
         },
-                
+     
       },
     
-      
      
     delimiters: ["<%","%>"]
   })
