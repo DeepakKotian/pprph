@@ -28,6 +28,7 @@ var app = new Vue({
       currentId:"",
       statusText:"",
       statusId:"",
+      countries:null,
       customer:{
         id:null,
         gender:null,
@@ -137,6 +138,13 @@ var app = new Vue({
     created: function(){
         this.currentId = $('#currentId').val();
         this.family.parent_id = this.currentId;
+
+        var self = this;
+        $.getJSON('/js/countries.json', function (countries) {
+            self.countries = countries.data;
+            console.log(self.countries);
+            
+        });
     }, 
     mounted: function(){
         if(this.currentId)
@@ -320,6 +328,8 @@ var app = new Vue({
             });
         },
         savePolicy:function(){
+           
+            
             console.log(this.$v.insurancedata.$invalid);
             if(this.$v.insurancedata.$invalid){
                this.$v.insurancedata.$touch();
@@ -329,7 +339,7 @@ var app = new Vue({
                 //     console.log( self.insurancedata.family);
                 //     self.insurancedata.family.push(this.value);
                 //   })
-                console.log(this.insurancedata.family)
+                console.log(this.insurancedata.family);
              this.$http.post(this.urlPrefix+'savepolicy/'+this.currentId,  this.insurancedata).then(function(response){
                 this.insurancedata = response.data;
             });
