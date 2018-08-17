@@ -30,6 +30,8 @@ var app = new Vue({
       statusId:"",
       countries:null,
       providerslist:[],
+      currentAntragDocument:null,
+      isDocument:false,
       customer:{
         id:null,
         gender:null,
@@ -152,16 +154,16 @@ var app = new Vue({
         if(this.currentId)
         this.getCustomerData();
         $('#dob').datepicker().on(
-            'changeDate', () => { this.customer.dob = $('#dob').val() }
+            'changeDate', function() { this.customer.dob = $('#dob').val() }
           )
         $('#dob_family').datepicker().on(
-        'changeDate', () => { this.family.dob_family = $('#dob_family').val() }
+        'changeDate',  function() { this.family.dob_family = $('#dob_family').val() }
         )
         $('#start_date').datepicker().on(
-            'changeDate', () => { this.insurancedata.start_date = $('#start_date').val() }
+            'changeDate',  function() { this.insurancedata.start_date = $('#start_date').val() }
         )
         $('#end_date').datepicker().on(
-            'changeDate', () => { this.insurancedata.end_date = $('#end_date').val() }
+            'changeDate',  function() { this.insurancedata.end_date = $('#end_date').val() }
         )
         let self = this;
         $('#nationality').on('change',function(){
@@ -313,10 +315,12 @@ var app = new Vue({
                 }
             )
         },
+
         loadInsuranceModal :function(item){
            this.insurancedata.insurance_ctg_id =  item.id;
            this.fetchProvidersData(item.id);
         },
+
         fetchPolicyDetail :function(item){
             this.insurancedata.provider_id = parseInt(item.target.value);
             this.insurancedata.start_date = '';
@@ -351,10 +355,33 @@ var app = new Vue({
         fetchProvidersData:function(insureId){
             this.$http.post(this.urlPrefix+'fetchproviderslist/', {insureId:insureId}).then(function(response){
               this.providerslist=response.data;
+            
+               //console.log(this.providerslist.document_name);
                
             });
         },
 
+        loadAntragForm:function(item){
+         this.insurancedata.provider_id = parseInt(item.target.value);
+    
+           let providersLength = this.providerslist.length
+            for(var i = 0; i < providersLength; i++) {
+                if( this.providerslist[i].provider_id == this.insurancedata.provider_id){
+                  this.currentAntragDocument = this.providerslist[i].document_name;
+                    if(this.currentAntragDocument==null){
+                        this.isDocument=false;
+                    
+                    }
+                    else{
+                        this.isDocument=true;
+                    
+                    }
+
+                  }
+                  
+            }
+        },
+        
         //antrag section
         loadAntragModal:function(item){
         this.fetchProvidersData(item.id);

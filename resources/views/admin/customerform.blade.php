@@ -390,15 +390,21 @@
                     <div class="form-group col-sm-4">
                              
                                 <label for="first_name_family">Provider Name*</label>
-                                <select sty="width:100%;" class="form-control" name="provider" id="providerSlct" v-model="$v.insurancedata.provider_id.$model" v-on:change="fetchPolicyDetail(event)">
+                                <select sty="width:100%;" class="form-control" name="provider" id="providerSlct" v-model="$v.insurancedata.provider_id.$model" v-on:change="loadAntragForm(event)">
                                   <option value="">Please Select</option>
                                   <option v-for="(prd, index) in providerslist" v-bind:value="prd.provider_id"  >  <% prd.providerName %></option>
                                 </select>
                             </div>
                       </div>
                     <div style=" position: relative; display: block; height: 0;padding: 0; overflow: hidden; padding-bottom:69%">
-                    <embed src="{{ url('/uploads/antrag/5b765506d86091534481670.pdf')}}" frameborder="0" width="100%" height="600px">
-                  </div></div>
+                       <iframe v-show="isDocument" v-bind:src="urlPrefix+'../uploads/antrag/'+ currentAntragDocument" type="application/pdf" frameborder="0" width="100%" height="600px"></iframe>
+                       <div v-show="isDocument==false" class="text-danger">
+              
+                <h4><i class="icon fa fa-warning"></i> Alert!</h4>
+               No Document Found
+              </div>
+                    </div>
+                  </div>
                     <div class="modal-footer">
                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
                         <button class="btn btn-primary" data-dismiss="modal"  type="button">Yes</a>

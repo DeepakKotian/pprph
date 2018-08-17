@@ -62,7 +62,7 @@ Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
   
     
     
-
+    
     // insurance management
     Route::get('/policy-mapping', 'Admin\insuranceController@policyMapping');
     Route::post('/fetchpolicymapping', 'Admin\insuranceController@fetchPolicyMapping');
