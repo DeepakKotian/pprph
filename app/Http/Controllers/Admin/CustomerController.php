@@ -187,7 +187,7 @@ class CustomerController extends Controller
         ->where('customer_id',$request->id)
         ->groupBy('massparameter.id')
         ->get();
-        $data->family = customer::select(['id','first_name','last_name','email',DB::raw('DATE_FORMAT(dob, "%d-%m-%Y") as dob'),'nationality'])
+        $data->family = customer::select(['id','first_name','last_name','mobile','email',DB::raw('DATE_FORMAT(dob, "%d-%m-%Y") as dob'),'nationality'])
         ->where('is_family','1')
         ->where('parent_id',$request->id)
         ->get();
@@ -312,6 +312,7 @@ class CustomerController extends Controller
             'parent_id'=>$request['parent_id'],
             'dob' => date('Y-m-d h:i:s',strtotime($request['dob_family'])),
             'nationality' => $request['nationality_family'],
+            'mobile' => $request['mobile_family'],
         ]);
         if($insertData)
         return response()->json('Successfully created',200); 
@@ -324,6 +325,7 @@ class CustomerController extends Controller
         $data['last_name'] = $request->last_name_family;
         $data['dob'] = date('Y-m-d h:i:s',strtotime($request->dob_family));
         $data['nationality'] = $request->nationality_family;
+        $data['mobile'] = $request->mobile_family;
         if(customer::whereId($request->id)->update($data));
         return response()->json('Successfully updated',200);
     }

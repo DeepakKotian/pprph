@@ -183,7 +183,7 @@
                                   <th> Name</th>
                                   <th>Last Name</th>
                                   <th>DOB</th>
-                                  <th>Nationality</th>
+                                  <th>Mobile</th>
                                   <th>Action</th>
                                 </tr>
                               </thead>
@@ -192,7 +192,7 @@
                                    <td> <% item.first_name %></td>
                                     <td> <% item.last_name %></td>
                                     <td> <% item.dob %></td>
-                                    <td> <% item.nationality %></td>
+                                    <td> <% item.mobile %></td>
                                     <td>
                                       <a type="button" class="btn btn-default" data-toggle="modal" data-target="#familyModal" v-on:click="loadFamily(item)"><i class="fa fa-edit"></i></a> 
                                       <a type="button" data-toggle="modal" data-target="#deleteFamilyModal" v-on:click="loadFamily(item)" class="btn btn-default"><i class="fa fa-trash"></i></a>
@@ -252,12 +252,16 @@
                           <label for="dob_family">DOB*</label>
                           <input type="text" class="form-control datepicker" name="dob_family"  id="dob_family"  v-model="$v.family.dob_family.$model" placeholder="DOB" >
                         </div>
-                        <div class="form-group " :class="{ 'has-error': $v.family.nationality_family.$error }">
+                        <!-- <div class="form-group " :class="{ 'has-error': $v.family.nationality_family.$error }">
                           <label for="nationality_family">Nationality*</label>
-                          <select  class="form-control" id="nationality" placeholder="Nationality" v-model="$v.family.nationality_family.$model">
+                          <select  class="form-control" id="nationality_family" placeholder="Nationality" v-model="$v.family.nationality_family.$model">
                           <option v-for="country in countries" v-bind:value="country.name"> <% country.name %> </option>
                       </select>
-                        </div>   
+                        </div>    -->
+                        <div class="form-group " :class="{ 'has-error': $v.family.mobile_family.$error }">
+                            <label for="mobile_family">Mobile Number</label>
+                            <input type="text" class="form-control" name="mobile_family"  id="mobile_family"  v-model="family.mobile_family" placeholder="Mobile Number">
+                        </div>
                     </div>
                     <div class="modal-footer">
                       <button class="btn btn-secondary" type="button"  data-dismiss="modal">Cancel</button>
