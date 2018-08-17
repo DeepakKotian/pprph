@@ -220,6 +220,8 @@ class insuranceController extends Controller
     }
 
     public function fetchProvidersList(Request $request){
-       dd($request->insureId);
+       // SELECT provider_id,name FROM `insurance_mapped` left join massparameter on provider_id=massparameter.id WHERE insurance_ctg_id= 1
+        $providerList=insurancemapped::leftjoin('massparameter as ms','ms.id','=','provider_id')->select('provider_id','ms.name as providerName')->where('insurance_ctg_id','=',$request->insureId)->get();
+        return response()->json($providerList,200);
     }
 }

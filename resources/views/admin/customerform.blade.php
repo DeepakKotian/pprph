@@ -285,7 +285,7 @@
                                 <label for="first_name_family">Provider Name*</label>
                                 <select sty="width:100%;" class="form-control" name="provider" id="providerSlct" v-model="$v.insurancedata.provider_id.$model" v-on:change="fetchPolicyDetail(event)">
                                   <option value="">Please Select</option>
-                                  <option v-for="(vl, index) in customer.providers" v-bind:value="vl.id"  >  <% vl.name %></option>
+                                  <option v-for="(vl, index) in providerslist" v-bind:value="vl.provider_id"  >  <% vl.providerName %></option>
                                 </select>
                             </div>
                             <div class="form-group col-sm-6" :class="{ 'has-error': $v.insurancedata.policy_number.$error }">
@@ -385,11 +385,11 @@
                     <div class="modal-body">
                  <div class="row">
                     <div class="form-group col-sm-4">
-                              <input type="hidden" name="insurance_ctg_id" id="insurance_ctg_id" v:bind:value="insurancedata.insurance_ctg_id" v-model="insurancedata.insurance_ctg_id">
+                             
                                 <label for="first_name_family">Provider Name*</label>
                                 <select sty="width:100%;" class="form-control" name="provider" id="providerSlct" v-model="$v.insurancedata.provider_id.$model" v-on:change="fetchPolicyDetail(event)">
                                   <option value="">Please Select</option>
-                                  <option v-for="(vl, index) in customer.providers" v-bind:value="vl.id"  >  <% vl.name %></option>
+                                  <option v-for="(prd, index) in providerslist" v-bind:value="prd.provider_id"  >  <% prd.providerName %></option>
                                 </select>
                             </div>
                       </div>
