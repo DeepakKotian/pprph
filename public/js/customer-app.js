@@ -53,6 +53,7 @@ var app = new Vue({
         last_name_family:null,
         dob_family:null,
         nationality_family:null,
+        mobile_family:null,
         email_family:null,
       },
       modalAction:'',
@@ -107,8 +108,9 @@ var app = new Vue({
          },
       },
       family:{
-        nationality_family:{
-            required:required,  
+        mobile_family:{
+            required:required,
+            phoneRegx:phoneRegx,  
         },
         email_family:{
             email:email,
@@ -195,6 +197,7 @@ var app = new Vue({
         setTimeout(function() {
             $('.selectJS').select2();
             $('#insuranceModal').find('.modal-body #selectJSFamily').select2();
+           
         }, 1000);
          
         });
@@ -223,6 +226,7 @@ var app = new Vue({
         this.family.last_name_family="";
         this.family.dob_family="";
         this.family.nationality_family="";
+        this.family.mobile_family = "";
         this.family.email_family="";
         if(item !== null){
             this.modalAction='edit';
@@ -230,6 +234,7 @@ var app = new Vue({
             this.family.last_name_family = item.last_name;
             this.family.dob_family = item.dob;
             this.family.nationality_family = item.nationality;
+            this.family.mobile_family = item.mobile;
             this.family.email_family = item.email;
             this.family.id = item.id; 
         }
@@ -291,7 +296,6 @@ var app = new Vue({
       statusUpdate:function(currentCustId){
         this.statusId= this.statusId;
         this.statusText=this.statusText;
-   
         this.$http.post(this.urlPrefix+'statusupdate',{currentCustId:currentCustId,currentStatusId:this.statusId,statusText:this.statusText}).then(
             function(response){
                 this.customer.status=this.statusId;
@@ -319,9 +323,7 @@ var app = new Vue({
             this.insurancedata.end_date = '';
             this.insurancedata.policy_number = '';
             this.$http.post(this.urlPrefix+'fetchpolicydetail/'+this.currentId,  this.insurancedata).then(function(response){
-                
                     this.insurancedata.family = response.data.family;
-                    console.log(this.insurancedata.family)
                     $('#insuranceModal').find('.modal-body #selectJSFamily').val(this.insurancedata.family);
                     $('#insuranceModal').find('.modal-body #selectJSFamily').trigger('change');
                     this.insurancedata.start_date = response.data.start_date;
@@ -329,7 +331,6 @@ var app = new Vue({
                     this.insurancedata.policy_number = response.data.policy_number;
  
             }).catch(function(response){
-                console.log(response);
                 let self = this;
                 self.$toaster.error(response.data);
            });
@@ -341,7 +342,7 @@ var app = new Vue({
             }else{
              this.insurancedata.family =   $('#insuranceModal .modal-body .row').find('#selectJSFamily').val();
              this.$http.post(this.urlPrefix+'savepolicy/'+this.currentId,  this.insurancedata).then(function(response){
-               
+               this.getCustomerData();
            });
           }
         },
@@ -362,17 +363,7 @@ var app = new Vue({
         chooseFamily:function(){
 
         },
-        checkIndex:function(arr,val){
-            console.log($.inArray(val,arr));
-            if($.inArray(val,arr)>=0){
-                return true;
-            }
-            return false;
-        },
-        pushValues:function(event){
-            console.log(event);
-        },
-        
+                
       },
     
       
