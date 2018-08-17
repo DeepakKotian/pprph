@@ -399,6 +399,31 @@
       </div>
  <!-- Antrag Modal End -->
 
+
+ <!-- Vertrag Modal -->
+ <div class="modal fade" id="vertragModal" tabindex="-1" role="dialog" aria-labelledby="vertragModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content modal-lg">
+                    <div class="modal-header">
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title" id="exampleModalLabel"> Vertrag </h4>
+                    </div>
+                    <div class="modal-body">
+                      <div style="text-align: center;">
+                        <embed src="{{ url('/uploads/antrag/5b765506d86091534481670.pdf')}}" frameborder="0" width="100%" height="400px">
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-primary" data-dismiss="modal"  type="button">Yes</a>
+                    </div>
+            </div>
+
+        </div>
+      </div>
+ <!-- Vertrag Modal End -->
 </div>
 @stop
 @section('js')
