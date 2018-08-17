@@ -322,7 +322,6 @@ var app = new Vue({
                     this.insurancedata.policy_number = response.data.policy_number;
  
             }).catch(function(response){
-                console.log(response);
                 let self = this;
                 self.$toaster.error(response.data);
            });
@@ -333,7 +332,7 @@ var app = new Vue({
             }else{
              this.insurancedata.family =   $('#insuranceModal .modal-body .row').find('#selectJSFamily').val();
              this.$http.post(this.urlPrefix+'savepolicy/'+this.currentId,  this.insurancedata).then(function(response){
-               
+               this.getCustomerData();
            });
           }
         },
