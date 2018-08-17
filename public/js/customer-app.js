@@ -187,7 +187,7 @@ var app = new Vue({
         this.customer=response.data;
         setTimeout(function() {
             $('.selectJS').select2();
-            $('.selectJSFamily').select2();
+            $('#insuranceModal').find('.modal-body #selectJSFamily').select2();
         }, 1000);
          
         });
@@ -303,37 +303,42 @@ var app = new Vue({
         },
         loadInsuranceModal :function(item){
            this.insurancedata.insurance_ctg_id =  item.id;
-           $('#insuranceModal').find('.modal-body .selectJsFamily').select2();
+           
         },
         fetchPolicyDetail :function(item){
             this.insurancedata.provider_id = parseInt(item.target.value);
             this.insurancedata.start_date = '';
-            // this.insurancedata.family = [];
+            this.insurancedata.family = [];
             this.insurancedata.end_date = '';
             this.insurancedata.policy_number = '';
-            console.log(this.insurancedata.family.length);
             this.$http.post(this.urlPrefix+'fetchpolicydetail/'+this.currentId,  this.insurancedata).then(function(response){
-                this.insurancedata.family = response.data.family;
-                this.insurancedata.start_date = response.data.start_date;
-                this.insurancedata.end_date = response.data.end_date;
-                this.insurancedata.policy_number = response.data.policy_number;
-            });
+                
+                    this.insurancedata.family = response.data.family;
+                    console.log(this.insurancedata.family)
+                    $('#insuranceModal').find('.modal-body #selectJSFamily').val(this.insurancedata.family);
+                    $('#insuranceModal').find('.modal-body #selectJSFamily').trigger('change');
+                    this.insurancedata.start_date = response.data.start_date;
+                    this.insurancedata.end_date = response.data.end_date;
+                    this.insurancedata.policy_number = response.data.policy_number;
+ 
+            }).catch(function(response){
+                console.log(response);
+                let self = this;
+                self.$toaster.error(response.data);
+           });
         },
         savePolicy:function(){
-            console.log(this.$v.insurancedata.$invalid);
             if(this.$v.insurancedata.$invalid){
                this.$v.insurancedata.$touch();
             }else{
-                //let self = this;
-                // $('#insuranceModal').find('.modal-body input[type="checkbox"]:checked').each(function(){
-                //     console.log( self.insurancedata.family);
-                //     self.insurancedata.family.push(this.value);
-                //   })
-                console.log(this.insurancedata.family)
+             this.insurancedata.family =   $('#insuranceModal .modal-body .row').find('#selectJSFamily').val();
              this.$http.post(this.urlPrefix+'savepolicy/'+this.currentId,  this.insurancedata).then(function(response){
-                this.insurancedata = response.data;
-            });
+               
+           });
           }
+        },
+        chooseFamily:function(){
+
         },
         checkIndex:function(arr,val){
             console.log($.inArray(val,arr));
@@ -341,7 +346,11 @@ var app = new Vue({
                 return true;
             }
             return false;
-        }
+        },
+        pushValues:function(event){
+            console.log(event);
+        },
+        
       },
     
       

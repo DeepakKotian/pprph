@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
 use App\customer;
+use App\customerpolicymember;
+use App\policydetail;
 use DB;
 use Auth;
 use DataTables;
@@ -206,6 +208,7 @@ class CustomerController extends Controller
 
     public function fetchPolicyDetail($id,Request $request)
     {
+
         $data = DB::table('policy_detail')->select(['policy_detail.id as policy_id', 'insurance_ctg_id', 'customers.id','policy_number',DB::raw('DATE_FORMAT(start_date, "%d-%m-%Y") as start_date'),DB::raw('DATE_FORMAT(end_date, "%d-%m-%Y") as end_date'),'insurance_ctg_id','provider_id','first_name'])
         ->leftJoin('customers','policy_detail.customer_id','=','customers.id')
         ->where('customer_id',$id)
@@ -216,13 +219,15 @@ class CustomerController extends Controller
             $family = DB::table('customer_policy_member')->select(['family_member_id'])
                             ->where('policy_detail_id',$data->policy_id)
                             ->get();
-            $familyArr = [];
+            $familyArr = $data->family = [];
             foreach ($family as $key => $value) {
                 $familyArr[] = $value->family_member_id;
             }
             $data->family =  $familyArr;
         }
+        if($data)
         return response()->json($data, 200);
+        return response()->json('Not found any data', 404);
     }
 
     public function savePolicy($id,Request $request)
@@ -233,23 +238,32 @@ class CustomerController extends Controller
         ->where('provider_id',$request->provider_id)
         ->first();
         if(!empty($check)){
-            
             $data['insurance_ctg_id'] = $request->insurance_ctg_id;
             $data['provider_id'] = $request->provider_id;
+            $data['customer_id'] = $id;
             $data['policy_number'] = $request->policy_number;
             $data['start_date'] = date('Y-m-d',strtotime( $request->start_date));
             $data['end_date'] = date('Y-m-d',strtotime($request->end_date));
-            dd($data);
-            DB::table('policy_detail')->whereId($check->policy_id)->update($data);
-            
+            if($request->family){
+                customerpolicymember::where('policy_detail_id','=',$check->policy_id)->delete();
+                foreach ($request->family as $key => $value) {
+                   customerpolicymember::create(['policy_detail_id'=>$check->policy_id,'family_member_id'=>$value]);
+                }
+            }  
         }else{
             $data['insurance_ctg_id'] = $request->insurance_ctg_id;
             $data['provider_id'] = $request->provider_id;
+            $data['customer_id'] = $id;
             $data['policy_number'] = $request->policy_number;
             $data['start_date'] = date('Y-m-d',strtotime( $request->start_date));
             $data['end_date'] = date('Y-m-d',strtotime($request->end_date));
-            dd($data);
-            DB::table('policy_detail')->create($data);
+            $policy_id = policydetail::create($data);
+            if($request->family){
+                customerpolicymember::where('policy_detail_id','=',$policy_id)->delete();
+                foreach ($request->family as $key => $value) {
+                   customerpolicymember::create(['policy_detail_id'=>$policy_id,'family_member_id'=>$value]);
+                }
+            }
         }
     }
 

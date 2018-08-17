@@ -784,11 +784,14 @@
                           <div class="form-group col-sm-12">
                             <label for="policy_number">Choose Family Members</label>
                             <div>
-                              <span class="fmlyChk"  v-for="(val, index) in customer.family"> 
-                                <input type="checkbox"  v-bind:value="val.id"     :checked="checkIndex(insurancedata.family,val.id)" > <% val.first_name %> <% val.last_name %>
-                              </span>
-                             </div>
-
+                              <!-- <label class="fmlyChk"  v-for="(val, index) in customer.family"> 
+                                <input type="checkbox" v-model="insurancedata.family[index]" v-bind:value="val.id"> <% val.first_name %> <% val.last_name %> <% insurancedata.family[index] %>
+                              </label> -->
+                              </div>
+                              <select class="form-control selectJSFamily" id="selectJSFamily"  multiple width="100%">
+                                <option v-for="(val, index) in customer.family" v-bind:value="val.id"><% val.first_name %> <% val.last_name %></option>
+                              </select>
+                            
                           </div>
                         </div>
                     </div>
@@ -849,6 +852,7 @@
 </div>
 @stop
 @section('js')
+
 <script src="{!! asset('js/customer-app.js') !!}"></script>
 <script>
  $(document).ready(function() {
