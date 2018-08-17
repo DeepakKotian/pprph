@@ -56,13 +56,13 @@ class CustomerController extends Controller
     $jnQry='';
     $strArr = [];
     $insuranceCtg = DB::table('massparameter')->where('type','category')->get();
-    foreach ($insuranceCtg as $key => $value) {
+    foreach ($insuranceCtg as $key => $value) { //Dynamic queries 
         $jnQry .= " LEFT JOIN massparameter ctg{$key} ON pd.insurance_ctg_id= ctg{$key}.id  AND ctg{$key}.id=$value->id AND ctg{$key}.type='category' ";
         $name = preg_replace('/\s+/', '_', $value->name);
         $strArr[$key] = "(COUNT(IF(pd.insurance_ctg_id = ctg{$key}.id,1,NULL))) ctg{$key}";
     }
     $addQry =  implode(',',$strArr);
-
+    $count = $insuranceCtg->count();
     $selectQry =  "SELECT c.id, c.first_name, c.last_name, c.email,c.city,c.nationality,c.zip, {$addQry} FROM customers c LEFT JOIN policy_detail pd ON pd.customer_id = c.id {$jnQry} WHERE c.is_family=0 GROUP BY c.id, c.first_name, c.last_name, c.email,c.city,c.nationality,c.zip ";      
     $customer =  DB::select(DB::raw($selectQry));
 
@@ -78,6 +78,13 @@ class CustomerController extends Controller
                          return $row['id'] == $request->get('name') ? true : false;
                     });
                 }
+               //To get the product search dynamically
+                if ($request->has('ctg')&& $request->ctg!=null) { 
+                    $instance->collection = $instance->collection->filter(function ($row) use ($request) {
+                            return $row['ctg'.$request->ctg] > 0 ? true : false;
+                    });
+                }
+
                 if ($request->has('searchTerm')&& $request->searchTerm!=null) {
                     $instance->collection = $instance->collection->filter(function ($row) use ($request) {
                         return (Str::contains($row['zip'], $request->get('searchTerm')) || Str::contains($row['city'], $request->get('searchTerm')) 

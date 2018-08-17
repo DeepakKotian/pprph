@@ -385,7 +385,6 @@
                     <div class="modal-body">
                  <div class="row">
                     <div class="form-group col-sm-4">
-                             
                                 <label for="first_name_family">Provider Name*</label>
                                 <select sty="width:100%;" class="form-control" name="provider" id="providerSlct" v-model="$v.insurancedata.provider_id.$model" v-on:change="fetchPolicyDetail(event)">
                                   <option value="">Please Select</option>
@@ -418,9 +417,26 @@
                         <h4 class="modal-title" id="exampleModalLabel"> Vertrag </h4>
                     </div>
                     <div class="modal-body">
-                      <div style="text-align: center;">
-                        <embed src="{{ url('/uploads/antrag/5b765506d86091534481670.pdf')}}" frameborder="0" width="100%" height="400px">
+                    <div class="row">
+                      <div class="form-group col-sm-4">
+                          <label for="first_name_family">Provider Name*</label>
+                          <select sty="width:100%;" class="form-control" name="provider" id="providerSlct" v-model="$v.insurancedata.provider_id.$model">
+                            <option value="">Please Select</option>
+                            <option v-for="(prd, index) in providerslist" v-bind:value="prd.provider_id"  >  <% prd.providerName %></option>
+                          </select>
                       </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group col-sm-4">
+                        <label for="uploadDoc">Upload Document: </label> 
+                        <div class="input-group">
+                          <div class="input-group-btn">
+                            <button type="button" id="uploadFile" class="btn btn-primary">Choose file</button>
+                          </div> 
+                          <input type="file" id="document" class="filestyle" style="display: none;">
+                        </div>
+                      </div>
+                    </div>
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>

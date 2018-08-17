@@ -56,6 +56,15 @@ Customers List
                            @endforeach
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label for="id">Product</label>
+                        <select class="form-control selectJS" name="ctg">
+                           <option value="">------</option>
+                           @foreach($insuranceCtg as $ky=> $rwCtg)
+                           <option value="{{ $ky }}">{{ $rwCtg->name }}</option>
+                           @endforeach
+                        </select>
+                    </div>
                 
                    
                 </form>
@@ -123,6 +132,7 @@ Customers List
             data: function (d) {
                 d.id = $('select[name=id]').val();
                 d.name = $('select[name=name]').val();
+                d.ctg = $('select[name=ctg]').val();
                 d.searchTerm = $('input[name=searchTerm]').val();
             }
         },
