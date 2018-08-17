@@ -232,6 +232,7 @@ class CustomerController extends Controller
 
     public function savePolicy($id,Request $request)
     {
+        dd($request);
         $check = DB::table('policy_detail')->select(['policy_detail.id as policy_id', 'policy_number',DB::raw('DATE_FORMAT(start_date, "%d-%m-%Y") as start_date'),DB::raw('DATE_FORMAT(end_date, "%d-%m-%Y") as end_date'),'insurance_ctg_id','provider_id'])
         ->where('customer_id',$id)
         ->where('insurance_ctg_id',$request->insurance_ctg_id)

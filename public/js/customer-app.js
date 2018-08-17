@@ -28,6 +28,7 @@ var app = new Vue({
       currentId:"",
       statusText:"",
       statusId:"",
+      countries:null,
       customer:{
         id:null,
         gender:null,
@@ -137,6 +138,13 @@ var app = new Vue({
     created: function(){
         this.currentId = $('#currentId').val();
         this.family.parent_id = this.currentId;
+
+        var self = this;
+        $.getJSON('/js/countries.json', function (countries) {
+            self.countries = countries.data;
+            console.log(self.countries);
+            
+        });
     }, 
     mounted: function(){
         if(this.currentId)
