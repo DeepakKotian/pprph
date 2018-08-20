@@ -146,12 +146,12 @@ Documents List
  
      $('#customerTable tbody').on('click', '.btn-view', function (e) {
         var data = oTable.row( $(this).parents('tr') ).data();
-        
+        var document_id = data.document_id;
         $.ajax({
             url:'{{ url("admin/document-detail") }}',
             type:'POST',
             dataType:'json',
-            data:{id:data.customer_id},
+            data:{id:data.customer_id,document_id:document_id},
             success:function(response){
                $('#loadDocument').modal('show');
                $('#loadDocument .modal-body').html(response.data);
