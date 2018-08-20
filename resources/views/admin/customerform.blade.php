@@ -185,7 +185,7 @@
                               </thead>
                               <tbody>
                                 <tr v-for="(item, index) in customer.family">
-                                   <td> <% item.first_name %></td>
+                                    <td> <% item.first_name %></td>
                                     <td> <% item.last_name %></td>
                                     <td> <% item.dob %></td>
                                     <td> <% item.mobile %></td>
@@ -210,7 +210,7 @@
            
               <!-- /.box-body -->
               <div class="box-footer text-center">
-                <button type="reset" class="btn btn-info">Reset</button>
+                
                 @if(!empty($data))
               
                   <button type="button" class="btn btn-primary" v-on:click="updateCustomer">Update</button>
@@ -220,6 +220,7 @@
                     <button  type="button" class="btn" data-toggle="modal" data-target="#statusModal" class="btn btn-default" v-on:click="onStatus(0)"  v-bind:class="{'btn-primary':customer.status==0,'btn-default':customer.status==1}">DEACTIVE</button>
                   </div>
                 @else
+                  <button type="reset" class="btn btn-info">Reset</button>
                   <button type="button" class="btn btn-primary" v-on:click="addNewCustomer">Save</button>
                 @endif
                 

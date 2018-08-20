@@ -78,6 +78,10 @@ Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     Route::get('/documents', 'Admin\documentsController@index');
     Route::get('/document-filter-data', 'Admin\documentsController@getDocFilterData');
     Route::post('/document-detail', 'Admin\documentsController@show');
+
+    //task management
+    Route::post('fetchtasklist', 'Admin\taskController@fetchTaskList');
+    Route::resource('task-list', 'Admin\taskController');
     
   
 });

@@ -57,51 +57,71 @@
                 <div class="navbar-custom-menu">
 
                     <ul class="nav navbar-nav">
-
+                       <li class="dropdown notifications-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class=" bell fa fa-bell-o"></i>
+                            <span class="label label-warning">10</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                            <li class="header">You have 10 notifications</li>
+                            <li>
+                                <!-- inner menu: contains the actual data -->
+                                <ul class="menu">
+                                <li>
+                                    <a href="#">
+                                    <i class="fa fa-users text-aqua"></i> 5 new members joined today
+                                    </a>
+                                </li>
+                               
+                                </ul>
+                            </li>
+                            <li class="footer"><a href="#">View all</a></li>
+                            </ul>
+                        </li>
                         <li class="dropdown user user-menu">
                             @if(config('adminlte.logout_method') == 'GET' || !config('adminlte.logout_method') && version_compare(\Illuminate\Foundation\Application::VERSION, '5.3.0', '<'))
                                 <a href="{{ url(config('adminlte.logout_url', 'auth/logout')) }}">
                                     <i class="fa fa-fw fa-power-off"></i> {{ trans('adminlte::adminlte.log_out') }}
                                 </a>
                             @else
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
                                  <span class="img-circle img-responsive-drop user-image" style="background-image:url({!! asset('uploads/userphoto/'. Auth::user()->photo) !!})"> </span>
                                 <span class="hidden-xs">    {{ Auth::user()->first_name }}  {{ Auth::user()->last_name }}</span>
                             </a>
-             <ul class="dropdown-menu">
-              <!-- User image -->
-              <li class="user-header">
-                  <span class="img-circle img-responsive-drop" style="background-image:url({!! asset('uploads/userphoto/'. Auth::user()->photo) !!})"> </span>
-               
-                <p>
-                 {{ Auth::user()->first_name }}  {{ Auth::user()->last_name }}
-                
-                </p>
-              </li>
-              <!-- Menu Body -->
-              
-              <!-- Menu Footer-->
-              <li class="user-footer">
-                <div class="pull-left">
-                  <a href="{{url('/admin/profile/')}}" class="btn btn-default btn-flat">Profile</a>
-                </div>
-                <div class="pull-right">
-                        <a href="#" class="btn btn-default btn-flat"
-                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                        >
-                            <i class="fa fa-fw fa-power-off"></i> {{ trans('adminlte::adminlte.log_out') }}
-                        </a>
-                        <form id="logout-form" action="{{ url(config('adminlte.logout_url', 'auth/logout')) }}" method="POST" style="display: none;">
-                            @if(config('adminlte.logout_method'))
-                                {{ method_field(config('adminlte.logout_method')) }}
-                            @endif
-                            {{ csrf_field() }}
-                        </form>
-                    @endif
-                </div>
-              </li>
-            </ul>
-                             
+                                <ul class="dropdown-menu">
+                                    <!-- User image -->
+                                    <li class="user-header">
+                                        <span class="img-circle img-responsive-drop" style="background-image:url({!! asset('uploads/userphoto/'. Auth::user()->photo) !!})"> </span>
+                                    
+                                        <p>
+                                        {{ Auth::user()->first_name }}  {{ Auth::user()->last_name }}
+                                        
+                                        </p>
+                                    </li>
+                                    <!-- Menu Body -->
+                                    
+                                    <!-- Menu Footer-->
+                                    <li class="user-footer">
+                                        <div class="pull-left">
+                                        <a href="{{url('/admin/profile/')}}" class="btn btn-default btn-flat">Profile</a>
+                                        </div>
+                                        <div class="pull-right">
+                                                <a href="#" class="btn btn-default btn-flat"
+                                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                                                >
+                                                    <i class="fa fa-fw fa-power-off"></i> {{ trans('adminlte::adminlte.log_out') }}
+                                                </a>
+                                                <form id="logout-form" action="{{ url(config('adminlte.logout_url', 'auth/logout')) }}" method="POST" style="display: none;">
+                                                    @if(config('adminlte.logout_method'))
+                                                        {{ method_field(config('adminlte.logout_method')) }}
+                                                    @endif
+                                                    {{ csrf_field() }}
+                                                </form>
+                                            @endif
+                                        </div>
+                                    </li>
+                                </ul>
+                                                
                         </li>
                     </ul>
                 </div>
