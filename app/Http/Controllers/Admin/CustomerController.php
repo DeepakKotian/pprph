@@ -272,6 +272,7 @@ class CustomerController extends Controller
                 }
             }
         }
+        return response()->json('Successfully saved',200);
     }
 
     /**
@@ -349,6 +350,64 @@ class CustomerController extends Controller
         return response()->json('Successfully '.$request->statusText.'ed', 200);
     }
     
+    public function fetchDocuments(Request $request)
+    {
+
+        $data = policydetail::select(['policy_detail.id as policy_id', 'insurance_ctg_id','document_name', 'customers.id','policy_number',DB::raw('DATE_FORMAT(start_date, "%d-%m-%Y") as start_date'),DB::raw('DATE_FORMAT(end_date, "%d-%m-%Y") as end_date'),'insurance_ctg_id','provider_id','first_name'])
+        ->leftJoin('customers','policy_detail.customer_id','=','customers.id')
+        ->where('customer_id',$request->customer_id)
+        ->where('insurance_ctg_id',$request->insurance_ctg_id)
+        ->where('provider_id',$request->provider_id)
+        ->first();
+        if(!empty($data)){
+            $addQry = ''; $docIds = [];
+            $pDoc = DB::table('policy_documents')
+            ->select('*')
+            ->leftJoin('documents','document_id','=','documents.id')
+            ->where('policy_detail_id', $data->policy_id)->get();
+            foreach ($pDoc as $key => $value) {
+                $docIds[] =  $value->document_id;
+            }
+            if(!empty($docIds)){
+                $addQry = " id NOT IN (".implode(',',$docIds).") AND ";
+            }
+            $data->policyDocs = $pDoc;
+            $allDocs = DB::table('documents')
+            ->select('*')
+            ->whereRaw(DB::raw( $addQry." customer_id=".$request->customer_id))->get();
+            $data->allDocs = $allDocs;
+        }
+        if($data)
+        return response()->json($data, 200);
+    }
+
+    public function uploadDocuments(Request $request)
+    {
+        if($request->documnetType!=0){
+            if(empty($request->document_id)){
+                    if(!empty($request->file('documentData'))){
+                        $file = $request->file('documentData');
+                        $docName = $file->getClientOriginalName();
+                        $documentId = DB::table('documents')->insertGetId(['document_name'=>$docName,'customer_id'=>$request->customer_id]);
+                        $destinationPath = public_path('/uploads/vertrag');
+                        $file->move($destinationPath, $docName);
+                        DB::table('policy_documents')->insert(['document_id'=>$documentId, 'policy_detail_id'=>$request->policy_id]);
+                    }
+                }else{
+                    DB::table('policy_documents')->insert(['document_id'=>$request->document_id,'policy_detail_id'=>$request->policy_id]);
+                }
+            return response()->json('Successfully updated document',200);
+        }else{
+            if($request->hasFile('documentData')){
+                $file = $request->file('documentData');
+                $docName = $file->getClientOriginalName();
+                $destinationPath = public_path('/uploads/vertrag');
+                $file->move($destinationPath, $docName);
+                policydetail::whereId($request->policy_id)->update(['document_name'=>$docName ]);
+                return response()->json('Successfully updated document',200);
+            }
+       }
+     }
 
     /**
      * Remove the specified resource from storage.

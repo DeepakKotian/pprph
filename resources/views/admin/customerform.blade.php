@@ -423,30 +423,86 @@
                         <h4 class="modal-title" id="exampleModalLabel"> Vertrag </h4>
                     </div>
                     <div class="modal-body">
-                    <div class="row">
-                      <div class="form-group col-sm-4">
-                          <label for="first_name_family">Provider Name*</label>
-                          <select sty="width:100%;" class="form-control" name="provider" id="providerSlct" v-model="$v.insurancedata.provider_id.$model">
-                            <option value="">Please Select</option>
-                            <option v-for="(prd, index) in providerslist" v-bind:value="prd.provider_id"  >  <% prd.providerName %></option>
-                          </select>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="form-group col-sm-4">
-                        <label for="uploadDoc">Upload Document: </label> 
-                        <div class="input-group">
-                          <div class="input-group-btn">
-                            <button type="button" id="uploadFile" class="btn btn-primary">Choose file</button>
-                          </div> 
-                          <input type="file" id="document" class="filestyle" style="display: none;">
+                      <div class="row">
+                        <div class="form-group col-sm-4">
+                            <label for="first_name_family">Provider Name*</label>
+                            <select sty="width:100%;" class="form-control" name="provider" id="vertragProviderSlct" v-model="$v.insurancedata.provider_id.$model" v-on:change="loadDocuments(event.target.value)" >
+                              <option value="">Please Select</option>
+                              <option v-for="(prd, index) in providerslist" v-bind:value="prd.provider_id"  >  <% prd.providerName %></option>
+                            </select>
                         </div>
                       </div>
-                    </div>
+                      
+                      <div class="row">
+                        <div class="form-group col-sm-12" v-if="vertrag">
+                          <div class="table table-responsive"  v-show="vertrag.policyDocs!='' || vertrag.document_name!=''">
+                            <table class="table table-bordered">
+                              <thead>
+                                <tr>
+                                  <th>File Name</th>
+                                  <th>Actions</th>
+                                </tr>
+                                <tbody>
+                                <tr>
+                                    <td> <% vertrag.document_name %> </td>
+                                    <td> <a class="fa fa-eye" v-bind:hre="'test/'"> </a> 
+                                    <a class="fa fa-download" v-bind:hre="'test/'"> </a> </td>
+                                  </tr>
+                                  <tr v-for="(item, index) in vertrag.policyDocs">
+                                    <td> <% item.document_name %> </td>
+                                    <td> <a class="fa fa-eye" v-bind:hre="'test/'+item.id"> </a> 
+                                    <a class="fa fa-download" v-bind:hre="'test/'+item.id"> </a> </td>
+                                  </tr>
+                                 
+                                </tbody>
+                              </thead>
+                            </table>
+                            
+                          </div>
+                          <div class="form-group col-sm-12" >
+                            <div class="pull-right">
+                                <button type="button" class="btn btn-sm fa fa-plus" v-on:click="$('.documentAdd').show()">  </button>
+                            </div>
+                          </div>
+                          <div class="documentAdd" style="display:none;">
+                           <div class="row">
+                            <div class="form-group col-sm-6">
+                                <label for="">Choose Document Type</label>
+                                <select class="form-control" name="documentType" id="documentType" v-on:change="checkDocumentType">
+                                  <option value="">Please Select </option>
+                                  <option value="0">Contract Form</option>
+                                  <option value="1">Policy Documents</option>
+                                </select>
+                            </div>
+                              <div class="form-group col-sm-6 otherdocs">
+                                <label for="">Choose from Documents</label>
+                                <select class="form-control" name="otherDocuments" id="otherDocuments" v-on:change="checkDocument">
+                                    <option value=""></option>
+                                    <option v-for="(item, index) in vertrag.allDocs" v-bind:value="item.id"> <% item.document_name %>  </option>
+                                </select>
+                              </div>
+                                <div class="form-group col-sm-12 uploadDoc" >
+                                  <label for="uploadDoc">Upload Document: </label> 
+                                  <div class="input-group">
+                                    <div class="input-group-btn">
+                                      <button type="button" id="uploadFile"  v-on:click="$('#document').click()"  class="btn btn-primary">Choose file</button>
+                                    </div> 
+                                    <input type="text"  readonly class="form-control input-rounded" v-model="currentVertragDoc"   id="editDocumentfile"  >
+                                    <input type="file" id="document" class="filestyle" v-on:change="uploadFile" style="display: none;">
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-12" v-else="vertrag">
+                            <h5>No Policy Added</h5>
+                        </div>
+                      </div>
+                      
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                        <button class="btn btn-primary" data-dismiss="modal"  type="button">Yes</a>
+                        <button class="btn btn-primary" v-on:click="uploadDocument"  type="button">Save</a>
                     </div>
             </div>
 
@@ -461,6 +517,10 @@
 <script>
  $(document).ready(function() {
        $('.selectJS').select2();
+      
   });
+ 
+
+
 </script>
 @stop

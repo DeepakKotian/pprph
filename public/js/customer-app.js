@@ -50,6 +50,7 @@ var app = new Vue({
        
       },
       customerData:[],
+      currentVertragDoc:'',
       errors:[],
       family:{
         first_name_family:null,
@@ -68,6 +69,10 @@ var app = new Vue({
           insurance_ctg_id:'',
           provider_id:''
       },
+      vertrag:null,
+      vertragData:{
+        
+     },
     },
     validations:{
         customer:{
@@ -385,16 +390,75 @@ var app = new Vue({
         //antrag section
         loadAntragModal:function(item){
             this.fetchProvidersData(item.id);
+            
         },
         loadVertragModal:function(item){
            if(this.customer.policyArr.indexOf(item.id)>=0){
                 $('#vertragModal').modal('show');
+                $('#vertragModal').find(".modal-body #vertragProviderSlct").val("");
+                $('#vertragModal').find(".modal-body #vertragProviderSlct").trigger('change');
                 this.fetchProvidersData(item.id);
+                this.insurancedata.insurance_ctg_id = item.id;
            }
         },
-     
+        loadDocuments:function(item){
+           this.insurancedata.provider_id = parseInt(item);
+           this.$http.post(this.urlPrefix+'fetchdocuments/', { insurance_ctg_id:this.insurancedata.insurance_ctg_id, provider_id:this.insurancedata.provider_id, customer_id:this.currentId }).then(function(response){
+                this.vertrag = response.data;
+             //console.log(this.providerslist.document_name);
+             
+          });
+        },
+        uploadFile: function(){
+         this.currentVertragDoc = $('#document')[0].files[0].name;
+        },
+        checkDocumentType:function(event){
+            if(event.target.value==0){
+                $('.otherdocs').hide();
+            }else{
+                $('.otherdocs').show();
+            }
+        },
+        checkDocument:function(event){
+            if(event.target.value!=''){
+                $('.uploadDoc').hide();
+            }else{
+                $('.uploadDoc').show();
+            }
+        },
+        uploadDocument:function(){
+            this.vertragData.document = $('#document')[0].files[0];
+            let formData= new FormData();
+            formData.append('policy_id',this.vertrag.policy_id);
+            formData.append('documentData',this.vertragData.document);
+            formData.append('documnetType',$('#documentType').val());
+            formData.append('customer_id',this.currentId);
+            if($('#documentType').val()!=0){
+                formData.append('document_id',$('#otherDocuments').val());
+            }
+            this.$http.post(this.urlPrefix+'upload-document',formData,{
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+                }).then(
+                function(response){
+                    this.$toaster.success(response.data);
+                    this.loadDocuments($('#vertragProviderSlct').val());
+                }
+            ).catch(function(response){
+               if(response.data){
+                this.$toaster.error(response.data);
+               }
+               else{
+                let self = this;
+                $.each(response.data.errors, function(key, value){
+                    self.$toaster.error(value[0]);
+                });
+               }
+                
+            });
+        },
       },
-    
      
     delimiters: ["<%","%>"]
   })
