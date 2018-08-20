@@ -415,6 +415,7 @@ var app = new Vue({
         checkDocumentType:function(event){
             if(event.target.value==0){
                 $('.otherdocs').hide();
+                $('.uploadDoc').show();
             }else{
                 $('.otherdocs').show();
             }
