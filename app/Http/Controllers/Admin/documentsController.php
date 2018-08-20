@@ -81,6 +81,8 @@ class documentsController extends Controller
         ->leftJoin('massparameter as inc','inc.id','=','policy_detail.insurance_ctg_id')
         ->leftJoin('massparameter as prd','prd.id','=','policy_detail.provider_id')
         ->where('customers.id','=', $request->id)
+        ->where('documents.id','=', $request->document_id)
+        ->groupBy('policy_detail.provider_id')
         ->get();
         foreach ($document  as $key => $value) {
             $document->docName = $value->document_name;

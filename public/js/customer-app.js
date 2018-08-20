@@ -353,6 +353,7 @@ var app = new Vue({
              this.insurancedata.family =   $('#insuranceModal .modal-body .row').find('#selectJSFamily').val();
              this.$http.post(this.urlPrefix+'savepolicy/'+this.currentId,  this.insurancedata).then(function(response){
                this.getCustomerData();
+               this.$toaster.success(response.data);
            });
           }
         },
