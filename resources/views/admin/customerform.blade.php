@@ -436,7 +436,15 @@
                       
                       <div class="row">
                         <div class="form-group col-sm-12" v-if="vertrag">
-                          <div class="table table-responsive"  v-show="vertrag.policyDocs!='' || vertrag.document_name!=''">
+
+                          <div v-show="vertrag.document_name!==null">
+                            <label for="">Contract Form: </label>  <% vertrag.document_name %> 
+                          </div>
+                          <div v-if="vertrag.document_name==null">
+                            <span class="text-danger">Please upload contract form</span>
+                          </div>
+                          <h4>Documents Uploaded to Policy</h4>
+                          <div class="table table-responsive"  v-show="vertrag.policyDocs!=''">
                             <table class="table table-bordered">
                               <thead>
                                 <tr>
@@ -444,11 +452,6 @@
                                   <th>Actions</th>
                                 </tr>
                                 <tbody>
-                                <tr>
-                                    <td> <% vertrag.document_name %> </td>
-                                    <td> <a class="fa fa-eye" v-bind:hre="'test/'"> </a> 
-                                    <a class="fa fa-download" v-bind:hre="'test/'"> </a> </td>
-                                  </tr>
                                   <tr v-for="(item, index) in vertrag.policyDocs">
                                     <td> <% item.document_name %> </td>
                                     <td> <a class="fa fa-eye" v-bind:hre="'test/'+item.id"> </a> 
