@@ -186,6 +186,13 @@ var app = new Vue({
      },
 
     methods: {
+        resetForm() {
+            var self = this; 
+            Object.keys(this.customer).forEach(function(key,index) {
+              self.customer[key] = '';
+            });
+          },
+
         addNewCustomer: function () {
             console.log(this.customer.nationality);
             console.log(this.$v.customer.nationality);

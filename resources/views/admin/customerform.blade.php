@@ -18,7 +18,7 @@
 @stop
 @section('content')
 <div class="row" id="customer-app">
-<form class="form-vertical" action="" method="post">
+
  <div class="col-md-12">
           <!-- general form elements -->
           <div class="box box-primary">
@@ -37,6 +37,7 @@
               </div>
               <div class="col-sm-5">
               <div class="row">
+              <form class="form-vertical" action="" method="post">
                     @if($data)
                     <div class="form-group col-sm-4">
                       <label for="id">Customer Id</label>
@@ -72,7 +73,7 @@
                   <div class="row">
                     <div class="form-group col-sm-6" :class="{ 'has-error': $v.customer.dob.$error }">
                       <label for="dob">Date of Birth*</label> 
-                      <input type="text" class="form-control datepicker" name="dob"  id="dob" placeholder="DOB" v-model="$v.customer.dob.$model">
+                      <input readonly type="text" class="form-control datepicker" name="dob"  id="dob" placeholder="DOB" v-model="$v.customer.dob.$model">
                     </div>
                     <div class="form-group col-sm-6">
                       <label for="company">Company*</label>
@@ -221,12 +222,12 @@
                     <button  type="button" class="btn" data-toggle="modal" data-target="#statusModal" class="btn btn-default" v-on:click="onStatus(0)"  v-bind:class="{'btn-primary':customer.status==0,'btn-default':customer.status==1}">DEACTIVE</button>
                   </div>
                 @else
-                  <button type="reset" class="btn btn-info">Reset</button>
+                  <button type="reset" v-on:click="resetForm" class="btn btn-info">Reset</button>
                   <button type="button" class="btn btn-primary" v-on:click="addNewCustomer">Save</button>
                 @endif
                 
               </div>
-       
+              </form>
             <div class="modal fade" id="familyModal" tabindex="-1" role="dialog" aria-labelledby="familyModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                   <div class="modal-content">
@@ -350,7 +351,7 @@
                </div>
           </div>
 
-        </form>
+     
         <!-- /.box -->
       </div>
 <!-- Status Modal -->
