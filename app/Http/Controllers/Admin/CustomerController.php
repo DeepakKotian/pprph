@@ -383,6 +383,14 @@ class CustomerController extends Controller
 
     public function uploadDocuments(Request $request)
     {
+        $validate = $this->validate(request(),[
+            'policy_id' => 'required',
+            'document_name' => 'required', 
+        ],
+        [
+            'document_name.required'=>'Document needs to be uploaded or selected from the options'
+        ]
+        );
         if($request->documnetType!=0){
             if(empty($request->document_id)){
                     if(!empty($request->file('documentData'))){
@@ -407,6 +415,7 @@ class CustomerController extends Controller
                 return response()->json('Successfully updated document',200);
             }
        }
+       //return redirect()->back()->withErrors($validate->errors());
      }
 
     /**
