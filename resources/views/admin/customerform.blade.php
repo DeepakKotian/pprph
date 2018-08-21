@@ -18,6 +18,7 @@
 @stop
 @section('content')
 <div class="row" id="customer-app">
+<form class="form-vertical" action="" method="post">
  <div class="col-md-12">
           <!-- general form elements -->
           <div class="box box-primary">
@@ -26,7 +27,7 @@
             </div>
             <!-- /.box-header -->
             <!-- form start -->
-            <form class="form-vertical" action="" method="post">
+            
               @if($data)
               <input type="hidden" name="currentId" id="currentId" value="{{ $data->id }}">
               @endif
@@ -225,7 +226,7 @@
                 @endif
                 
               </div>
-            </form>
+       
             <div class="modal fade" id="familyModal" tabindex="-1" role="dialog" aria-labelledby="familyModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                   <div class="modal-content">
@@ -349,7 +350,7 @@
                </div>
           </div>
 
-          
+        </form>
         <!-- /.box -->
       </div>
 <!-- Status Modal -->
