@@ -63,13 +63,13 @@ var app = new Vue({
       modalAction:'',
       insurancedata:{
           policy_number:'',
-          start_date:'',
-          end_date:'',
+          start_date:null,
+          end_date:null,
           family:[],
           insurance_ctg_id:'',
           provider_id:''
       },
-      vertrag:null,
+      vertrag:'',
       vertragData:{
         
      },
@@ -158,19 +158,27 @@ var app = new Vue({
     mounted: function(){
         if(this.currentId)
         this.getCustomerData();
-        $('#dob').datepicker().on(
-            'changeDate', function() { this.customer.dob = $('#dob').val() }
-          )
-        $('#dob_family').datepicker().on(
-        'changeDate',  function() { this.family.dob_family = $('#dob_family').val() }
-        )
-        $('#start_date').datepicker().on(
-            'changeDate',  function() { this.insurancedata.start_date = $('#start_date').val() }
-        )
-        $('#end_date').datepicker().on(
-            'changeDate',  function() { this.insurancedata.end_date = $('#end_date').val() }
-        )
         let self = this;
+        $('#dob').datepicker({
+            format:'dd-mm-yyyy',
+        }).on(
+            'changeDate', function() { self.customer.dob = $('#dob').val() }
+          )
+        $('#dob_family').datepicker({
+            format:'dd-mm-yyyy',
+        }).on(
+        'changeDate',  function() { self.family.dob_family = $('#dob_family').val() }
+        )
+        $('#end_date').datepicker({
+            format:'dd-mm-yyyy',
+        }).on(
+            'changeDate',  function() { self.insurancedata.end_date = $('#end_date').val();  }
+        )
+        $('#start_date').datepicker({
+            format:'dd-mm-yyyy',
+        }).on(
+            'changeDate',  function() { self.insurancedata.start_date =  $('#start_date').val(); }
+        )
         $('#nationality').on('change',function(){
               self.customer.nationality = $(this).val();
         })
@@ -359,7 +367,7 @@ var app = new Vue({
         },
 
         fetchProvidersData:function(insureId){
-            this.$http.post(this.urlPrefix+'fetchproviderslist/', {insureId:insureId}).then(function(response){
+            this.$http.post(this.urlPrefix+'fetchproviderslist', {insureId:insureId}).then(function(response){
               this.providerslist=response.data;
             
                //console.log(this.providerslist.document_name);
@@ -402,11 +410,11 @@ var app = new Vue({
                 this.insurancedata.insurance_ctg_id = item.id;
            }
         },
-        loadDocuments:function(item){
-           this.insurancedata.provider_id = parseInt(item);
-           this.$http.post(this.urlPrefix+'fetchdocuments/', { insurance_ctg_id:this.insurancedata.insurance_ctg_id, provider_id:this.insurancedata.provider_id, customer_id:this.currentId }).then(function(response){
+        loadDocuments:function(val){
+            console.log(val);
+           this.insurancedata.provider_id = parseInt(val);
+           this.$http.post(this.urlPrefix+'fetchdocuments', { insurance_ctg_id:this.insurancedata.insurance_ctg_id, provider_id:this.insurancedata.provider_id, customer_id:this.currentId }).then(function(response){
                 this.vertrag = response.data;
-             //console.log(this.providerslist.document_name);
              
           });
         },
@@ -449,9 +457,10 @@ var app = new Vue({
                 }
             ).catch(function(response){
                 let self = this;
-                $.each(response.data.errors, function(key, value){
-                    self.$toaster.error(value[0]);
-                });
+                self.$toaster.error(response.data);
+                // $.each(response.data.errors, function(key, value){
+                //     self.$toaster.error(value[0]);
+                // });
                 
             });
         },

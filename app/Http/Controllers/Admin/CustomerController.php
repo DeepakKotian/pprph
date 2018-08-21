@@ -249,8 +249,9 @@ class CustomerController extends Controller
             $data['provider_id'] = $request->provider_id;
             $data['customer_id'] = $id;
             $data['policy_number'] = $request->policy_number;
-            $data['start_date'] = date('Y-m-d',strtotime( $request->start_date));
+            $data['start_date'] = date('Y-m-d',strtotime($request->start_date));
             $data['end_date'] = date('Y-m-d',strtotime($request->end_date));
+            policydetail::whereId($check->policy_id)->update($data);
             if($request->family){
                 customerpolicymember::where('policy_detail_id','=',$check->policy_id)->delete();
                 foreach ($request->family as $key => $value) {
@@ -264,6 +265,7 @@ class CustomerController extends Controller
             $data['policy_number'] = $request->policy_number;
             $data['start_date'] = date('Y-m-d',strtotime( $request->start_date));
             $data['end_date'] = date('Y-m-d',strtotime($request->end_date));
+           
             $policy = policydetail::create($data);
             if($request->family){
                 // customerpolicymember::where('policy_detail_id','=',$policy->id)->delete();
@@ -383,14 +385,7 @@ class CustomerController extends Controller
 
     public function uploadDocuments(Request $request)
     {
-        $validate = $this->validate(request(),[
-            'policy_id' => 'required',
-            'document_name' => 'required', 
-        ],
-        [
-            'document_name.required'=>'Document needs to be uploaded or selected from the options'
-        ]
-        );
+        
         if($request->documnetType!=0){
             if(empty($request->document_id)){
                     if(!empty($request->file('documentData'))){
@@ -400,6 +395,8 @@ class CustomerController extends Controller
                         $destinationPath = public_path('/uploads/vertrag');
                         $file->move($destinationPath, $docName);
                         DB::table('policy_documents')->insert(['document_id'=>$documentId, 'policy_detail_id'=>$request->policy_id]);
+                    }else{
+                        return response()->json('Document not selected',404);
                     }
                 }else{
                     DB::table('policy_documents')->insert(['document_id'=>$request->document_id,'policy_detail_id'=>$request->policy_id]);
@@ -413,6 +410,10 @@ class CustomerController extends Controller
                 $file->move($destinationPath, $docName);
                 policydetail::whereId($request->policy_id)->update(['document_name'=>$docName ]);
                 return response()->json('Successfully updated document',200);
+            }else{
+                
+                    return response()->json('Document not selected',404);
+                
             }
        }
        //return redirect()->back()->withErrors($validate->errors());
