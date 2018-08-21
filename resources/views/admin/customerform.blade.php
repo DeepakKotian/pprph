@@ -150,7 +150,7 @@
                                 </td>
                                 <td>
                                   <button  v-on:click="loadAntragModal(item)"  data-toggle="modal" data-target="#antragModal"  type="button" class="btn btn-default btn-sm">
-                                  <i class="fa fa-square " :class="{'text-green':customer.policyArr.indexOf(item.id)>=0, 'text-red':customer.policyArr.indexOf(item.id)<0}" ></i></button>
+                                  <i class="fa fa-square "  :class="'text-green'" ></i></button>
                                 </td>
                                 <td>
                                 <button  type="button" class="btn btn-default btn-sm" v-on:click="loadVertragModal(item)">
@@ -184,14 +184,14 @@
                                 </tr>
                               </thead>
                               <tbody>
-                                <tr v-for="(item, index) in customer.family">
-                                    <td> <% item.first_name %></td>
-                                    <td> <% item.last_name %></td>
-                                    <td> <% item.dob %></td>
-                                    <td> <% item.mobile %></td>
+                                <tr v-for="(fmly, index) in customer.family">
+                                    <td> <% fmly.first_name %></td>
+                                    <td> <% fmly.last_name %></td>
+                                    <td> <% fmly.dob %></td>
+                                    <td> <% fmly.mobile %></td>
                                     <td>
-                                      <a type="button" class="btn btn-default" data-toggle="modal" data-target="#familyModal" v-on:click="loadFamily(item)"><i class="fa fa-edit"></i></a> 
-                                      <a type="button" data-toggle="modal" data-target="#deleteFamilyModal" v-on:click="loadFamily(item)" class="btn btn-default"><i class="fa fa-trash"></i></a>
+                                      <a type="button" class="btn btn-default" data-toggle="modal" data-target="#familyModal" v-on:click="loadFamily(fmly)"><i class="fa fa-edit"></i></a> 
+                                      <a type="button" data-toggle="modal" data-target="#deleteFamilyModal" v-on:click="loadFamily(fmly)" class="btn btn-default"><i class="fa fa-trash"></i></a>
                                     </td>
                                 </tr>
                               </tbody>
@@ -285,7 +285,7 @@
                               <input type="hidden" name="insurance_ctg_id" id="insurance_ctg_id" v:bind:value="insurancedata.insurance_ctg_id" v-model="insurancedata.insurance_ctg_id">
                                 <label for="first_name_family">Provider Name*</label>
                                 <select sty="width:100%;" class="form-control" name="provider" id="providerSlct" v-model="$v.insurancedata.provider_id.$model" v-on:change="fetchPolicyDetail(event)">
-                                  <option value="">Please Select</option>
+                                  <option value="0">Please Select</option>
                                   <option v-for="(vl, index) in providerslist" v-bind:value="vl.provider_id"  >  <% vl.providerName %></option>
                                 </select>
                             </div>
@@ -388,7 +388,7 @@
                     <div class="form-group col-sm-4">
                                 <label for="first_name_family">Provider Name*</label>
                                 <select sty="width:100%;" class="form-control" name="provider" id="providerSlct" v-model="$v.insurancedata.provider_id.$model" v-on:change="loadAntragForm(event)">
-                                  <option value="">Please Select</option>
+                                  <option value="0">Please Select</option>
                                   <option v-for="(prd, index) in providerslist" v-bind:value="prd.provider_id"  >  <% prd.providerName %></option>
                                 </select>
                             </div>
@@ -436,14 +436,13 @@
                       
                       <div class="row">
                         <div class="form-group col-sm-12" v-if="vertrag">
-
                           <div v-show="vertrag.document_name!==null">
-                            <label for="">Contract Form: </label> <a class="fa fa-eye" target="_blank" v-bind:href="urlPrefix+'../uploads/vertrag/'+item.document_name"> <% vertrag.document_name %> </a>
+                            <label for="">Contract Form: </label> <a target="_blank" v-bind:href="urlPrefix+'../uploads/vertrag/'+vertrag.document_name"> <% vertrag.document_name %> </a>
                           </div>
                           <div v-if="vertrag.document_name==null">
-                            <span class="text-danger">Please upload contract form</span>
+                            <span class="text-danger">Click on ADD DOCUMENT to upload contract form</span>
                           </div>
-                          <h4>Documents Uploaded to Policy</h4>
+                          <h4 v-show="vertrag.policyDocs!=''">Documents Uploaded to Policy</h4>
                           <div class="table table-responsive"  v-show="vertrag.policyDocs!=''">
                             <table class="table table-bordered">
                               <thead>
@@ -452,10 +451,10 @@
                                   <th>Actions</th>
                                 </tr>
                                 <tbody>
-                                  <tr v-for="(item, index) in vertrag.policyDocs">
-                                    <td> <% item.document_name %> </td>
-                                    <td> <a class="fa fa-eye" target="_blank" v-bind:href="urlPrefix+'../uploads/vertrag/'+item.document_name"></a> 
-                                    <a class="fa fa-download" download v-bind:href="urlPrefix+'../uploads/vertrag/'+item.document_name"> </a> </td>
+                                  <tr v-for="(doc, index) in vertrag.policyDocs">
+                                    <td> <% doc.document_name %> </td>
+                                    <td> <a class="fa fa-eye" target="_blank" v-bind:href="urlPrefix+'../uploads/vertrag/'+doc.document_name"></a> 
+                                    <a class="fa fa-download" download v-bind:href="urlPrefix+'../uploads/vertrag/'+doc.document_name"> </a> </td>
                                   </tr>
                                 </tbody>
                               </thead>
@@ -463,7 +462,7 @@
                           </div>
                           <div class="form-group col-sm-12" >
                             <div class="pull-right">
-                                <button type="button" class="btn btn-sm btn-primary" v-on:click="$('.documentAdd').toggle()"> ADD MORE DOCUMENTS </button>
+                                <button type="button" class="btn btn-sm btn-primary" v-on:click="$('.documentAdd').toggle()"> ADD DOCUMENTS </button>
                             </div>
                           </div>
                           <div class="documentAdd" style="display:none;">
@@ -479,9 +478,10 @@
                               <div class="form-group col-sm-6 otherdocs">
                                 <label for="">Choose from Documents</label>
                                 <select class="form-control" name="otherDocuments" id="otherDocuments" v-on:change="checkDocument">
-                                    <option value=""></option>
-                                    <option v-for="(item, index) in vertrag.allDocs" v-bind:value="item.id"> <% item.document_name %>  </option>
+                                    <option value="">Please Select</option>
+                                    <option v-for="(rw, index) in vertrag.allDocs" v-bind:value="rw.id"> <% rw.document_name %>  </option>
                                 </select>
+                                <span class="text-danger" v-show="vertrag.allDocs==''">No policy documents exist to add, Please upload a new file</span>
                               </div>
                                 <div class="form-group col-sm-12 uploadDoc" >
                                   <label for="uploadDoc">Upload Document: </label> 
