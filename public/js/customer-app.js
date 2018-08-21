@@ -404,8 +404,9 @@ var app = new Vue({
         loadVertragModal:function(item){
            if(this.customer.policyArr.indexOf(item.id)>=0){
                 $('#vertragModal').modal('show');
-                $('#vertragModal').find(".modal-body #vertragProviderSlct").val("");
+                $('#vertragModal').find(".modal-body #vertragProviderSlct").val(0);
                 $('#vertragModal').find(".modal-body #vertragProviderSlct").trigger('change');
+                this.vertrag = '';
                 this.fetchProvidersData(item.id);
                 this.insurancedata.insurance_ctg_id = item.id;
            }

@@ -285,7 +285,7 @@
                               <input type="hidden" name="insurance_ctg_id" id="insurance_ctg_id" v:bind:value="insurancedata.insurance_ctg_id" v-model="insurancedata.insurance_ctg_id">
                                 <label for="first_name_family">Provider Name*</label>
                                 <select sty="width:100%;" class="form-control" name="provider" id="providerSlct" v-model="$v.insurancedata.provider_id.$model" v-on:change="fetchPolicyDetail(event)">
-                                  <option value="">Please Select</option>
+                                  <option value="0">Please Select</option>
                                   <option v-for="(vl, index) in providerslist" v-bind:value="vl.provider_id"  >  <% vl.providerName %></option>
                                 </select>
                             </div>
@@ -388,7 +388,7 @@
                     <div class="form-group col-sm-4">
                                 <label for="first_name_family">Provider Name*</label>
                                 <select sty="width:100%;" class="form-control" name="provider" id="providerSlct" v-model="$v.insurancedata.provider_id.$model" v-on:change="loadAntragForm(event)">
-                                  <option value="">Please Select</option>
+                                  <option value="0">Please Select</option>
                                   <option v-for="(prd, index) in providerslist" v-bind:value="prd.provider_id"  >  <% prd.providerName %></option>
                                 </select>
                             </div>
@@ -440,9 +440,9 @@
                             <label for="">Contract Form: </label> <a target="_blank" v-bind:href="urlPrefix+'../uploads/vertrag/'+vertrag.document_name"> <% vertrag.document_name %> </a>
                           </div>
                           <div v-if="vertrag.document_name==null">
-                            <span class="text-danger">Please upload contract form</span>
+                            <span class="text-danger">Click on ADD DOCUMENT to upload contract form</span>
                           </div>
-                          <h4>Documents Uploaded to Policy</h4>
+                          <h4 v-show="vertrag.policyDocs!=''">Documents Uploaded to Policy</h4>
                           <div class="table table-responsive"  v-show="vertrag.policyDocs!=''">
                             <table class="table table-bordered">
                               <thead>
@@ -462,7 +462,7 @@
                           </div>
                           <div class="form-group col-sm-12" >
                             <div class="pull-right">
-                                <button type="button" class="btn btn-sm btn-primary" v-on:click="$('.documentAdd').toggle()"> ADD MORE DOCUMENTS </button>
+                                <button type="button" class="btn btn-sm btn-primary" v-on:click="$('.documentAdd').toggle()"> ADD DOCUMENTS </button>
                             </div>
                           </div>
                           <div class="documentAdd" style="display:none;">
@@ -481,6 +481,7 @@
                                     <option value="">Please Select</option>
                                     <option v-for="(rw, index) in vertrag.allDocs" v-bind:value="rw.id"> <% rw.document_name %>  </option>
                                 </select>
+                                <span class="text-danger" v-show="vertrag.allDocs==''">No policy documents exist to add, Please upload a new file</span>
                               </div>
                                 <div class="form-group col-sm-12 uploadDoc" >
                                   <label for="uploadDoc">Upload Document: </label> 
