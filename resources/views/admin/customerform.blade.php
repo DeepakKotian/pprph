@@ -438,7 +438,7 @@
                         <div class="form-group col-sm-12" v-if="vertrag">
 
                           <div v-show="vertrag.document_name!==null">
-                            <label for="">Contract Form: </label>  <% vertrag.document_name %> 
+                            <label for="">Contract Form: </label> <a class="fa fa-eye" target="_blank" v-bind:href="urlPrefix+'../uploads/vertrag/'+item.document_name"> <% vertrag.document_name %> </a>
                           </div>
                           <div v-if="vertrag.document_name==null">
                             <span class="text-danger">Please upload contract form</span>
@@ -454,8 +454,8 @@
                                 <tbody>
                                   <tr v-for="(item, index) in vertrag.policyDocs">
                                     <td> <% item.document_name %> </td>
-                                    <td> <a class="fa fa-eye" target="_blank" v-bind:href="'/uploads/vertrag/'+item.document_name"></a> 
-                                    <a class="fa fa-download" download v-bind:href="'/uploads/vertrag/'+item.document_name"> </a> </td>
+                                    <td> <a class="fa fa-eye" target="_blank" v-bind:href="urlPrefix+'../uploads/vertrag/'+item.document_name"></a> 
+                                    <a class="fa fa-download" download v-bind:href="urlPrefix+'../uploads/vertrag/'+item.document_name"> </a> </td>
                                   </tr>
                                 </tbody>
                               </thead>
