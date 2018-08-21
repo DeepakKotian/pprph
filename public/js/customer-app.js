@@ -150,7 +150,7 @@ var app = new Vue({
         this.family.parent_id = this.currentId;
 
         var self = this;
-        $.getJSON('/js/countries.json', function (countries) {
+        $.getJSON(urlPrefix+'../js/countries.json', function (countries) {
             self.countries = countries.data;
            
         });
@@ -359,7 +359,7 @@ var app = new Vue({
         },
 
         fetchProvidersData:function(insureId){
-            this.$http.post(this.urlPrefix+'fetchproviderslist/', {insureId:insureId}).then(function(response){
+            this.$http.post(this.urlPrefix+'fetchproviderslist', {insureId:insureId}).then(function(response){
               this.providerslist=response.data;
             
                //console.log(this.providerslist.document_name);
@@ -404,7 +404,7 @@ var app = new Vue({
         },
         loadDocuments:function(item){
            this.insurancedata.provider_id = parseInt(item);
-           this.$http.post(this.urlPrefix+'fetchdocuments/', { insurance_ctg_id:this.insurancedata.insurance_ctg_id, provider_id:this.insurancedata.provider_id, customer_id:this.currentId }).then(function(response){
+           this.$http.post(this.urlPrefix+'fetchdocuments', { insurance_ctg_id:this.insurancedata.insurance_ctg_id, provider_id:this.insurancedata.provider_id, customer_id:this.currentId }).then(function(response){
                 this.vertrag = response.data;
              //console.log(this.providerslist.document_name);
              

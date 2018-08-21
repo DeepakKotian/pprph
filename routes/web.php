@@ -71,7 +71,7 @@ Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     Route::post('/fetchinsurance', 'Admin\insuranceController@fetchInsurance');
     Route::resource('insurance-list', 'Admin\insuranceController');
     Route::post('/fetchprovider', 'Admin\providersController@fetchProvider');
-    Route::post('/fetchproviderslist', 'Admin\insuranceController@fetchProvidersList'); //list the data by insure id
+    Route::post('/fetchproviderslist', 'Admin\providersController@fetchProvidersList'); //list the data by insure id
     Route::resource('providers-list', 'Admin\providersController');
     
     //Document management
