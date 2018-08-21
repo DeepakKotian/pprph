@@ -38,7 +38,7 @@
                      <td><% row.email %></td>
                      <td><% row.role | role-type %>  </td>
                      <td>
-                        <a type="button"  v-bind:href="'/admin/user-form/'+ row.id" class="btn btn-default"><i class="fa fa-edit"></i></a>
+                        <a type="button"  v-bind:href="urlPrefix+'user-form/'+ row.id" class="btn btn-default"><i class="fa fa-edit"></i></a>
                         <a type="button" data-toggle="modal" data-target="#deleteModal" class="btn btn-default" v-on:click="onDelete(row)"><i class="fa fa-trash"></i></a>
                      </td>
                   </tr>
