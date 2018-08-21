@@ -436,7 +436,15 @@
                       
                       <div class="row">
                         <div class="form-group col-sm-12" v-if="vertrag">
-                          <div class="table table-responsive"  v-show="vertrag.policyDocs!='' || vertrag.document_name!=''">
+
+                          <div v-show="vertrag.document_name!==null">
+                            <label for="">Contract Form: </label>  <% vertrag.document_name %> 
+                          </div>
+                          <div v-if="vertrag.document_name==null">
+                            <span class="text-danger">Please upload contract form</span>
+                          </div>
+                          <h4>Documents Uploaded to Policy</h4>
+                          <div class="table table-responsive"  v-show="vertrag.policyDocs!=''">
                             <table class="table table-bordered">
                               <thead>
                                 <tr>
@@ -444,25 +452,18 @@
                                   <th>Actions</th>
                                 </tr>
                                 <tbody>
-                                <tr>
-                                    <td> <% vertrag.document_name %> </td>
-                                    <td> <a class="fa fa-eye" v-bind:hre="'test/'"> </a> 
-                                    <a class="fa fa-download" v-bind:hre="'test/'"> </a> </td>
-                                  </tr>
                                   <tr v-for="(item, index) in vertrag.policyDocs">
                                     <td> <% item.document_name %> </td>
-                                    <td> <a class="fa fa-eye" v-bind:hre="'test/'+item.id"> </a> 
-                                    <a class="fa fa-download" v-bind:hre="'test/'+item.id"> </a> </td>
+                                    <td> <a class="fa fa-eye" target="_blank" v-bind:href="'/uploads/vertrag/'+item.document_name"></a> 
+                                    <a class="fa fa-download" download v-bind:href="'/uploads/vertrag/'+item.document_name"> </a> </td>
                                   </tr>
-                                 
                                 </tbody>
                               </thead>
                             </table>
-                            
                           </div>
                           <div class="form-group col-sm-12" >
                             <div class="pull-right">
-                                <button type="button" class="btn btn-sm fa fa-plus" v-on:click="$('.documentAdd').show()">  </button>
+                                <button type="button" class="btn btn-sm btn-primary" v-on:click="$('.documentAdd').toggle()"> ADD MORE DOCUMENTS </button>
                             </div>
                           </div>
                           <div class="documentAdd" style="display:none;">
@@ -503,7 +504,7 @@
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                        <button class="btn btn-primary" v-on:click="uploadDocument"  type="button">Save</a>
+                        <button class="btn btn-primary documentAdd" style="display:none;" v-on:click="uploadDocument"  type="button">Save</a>
                     </div>
             </div>
 

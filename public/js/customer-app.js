@@ -448,15 +448,10 @@ var app = new Vue({
                     this.loadDocuments($('#vertragProviderSlct').val());
                 }
             ).catch(function(response){
-               if(response.data){
-                this.$toaster.error(response.data);
-               }
-               else{
                 let self = this;
                 $.each(response.data.errors, function(key, value){
                     self.$toaster.error(value[0]);
                 });
-               }
                 
             });
         },
