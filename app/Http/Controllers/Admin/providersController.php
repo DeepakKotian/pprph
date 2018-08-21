@@ -5,6 +5,8 @@ namespace App\Http\Controllers\admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\massparameter;
+use App\insurancemapped;
+
 use DataTables;
 use Auth;
 use Gate;
@@ -17,13 +19,22 @@ class providersController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
     
     public function index()
     {
         //
         return view('admin.providerslist');
+    }
+
+    public function fetchProvidersList(Request $request){
+       
+       // SELECT provider_id,name FROM `insurance_mapped` left join massparameter on provider_id=massparameter.id WHERE insurance_ctg_id= 1
+        $providerList=insurancemapped::leftjoin('massparameter as ms','ms.id','=','provider_id')->select('provider_id','ms.name as providerName','document_name')->where('insurance_ctg_id','=',$request->insureId)
+        ->groupBy('provider_id')
+        ->get();
+        return response()->json($providerList,200);
     }
 
     public function fetchProvider()

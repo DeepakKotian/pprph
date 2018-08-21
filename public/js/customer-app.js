@@ -150,7 +150,7 @@ var app = new Vue({
         this.family.parent_id = this.currentId;
 
         var self = this;
-        $.getJSON('/js/countries.json', function (countries) {
+        $.getJSON(urlPrefix+'../js/countries.json', function (countries) {
             self.countries = countries.data;
            
         });
