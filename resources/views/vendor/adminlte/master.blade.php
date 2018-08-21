@@ -66,14 +66,38 @@
     <!-- ChartJS -->
     <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.min.js"></script>
 @endif
-<script>
-    var urlPrefix = "/admin/";
-</script>
+
 <script src="{!! asset('js/validators.min.js') !!}"></script>
 <script src="{!! asset('js/vuelidate.min.js') !!}"></script>
 <script src="{!! asset('js/vue.js') !!}"></script>
 <script src="{!! asset('js/vue-resource.js') !!}"></script>
 <script src="{!! asset('js/v-toaster.js') !!}"></script>
+<script>
+    var urlPrefix = "/admin/";
+
+    let token = document.head.querySelector('meta[name="csrf-token"]');
+    if (token) {
+        Vue.http.interceptors.push(function(request, next) {
+            request.headers.set('X-CSRF-TOKEN', token.content)
+            next()
+        })
+    } 
+    var tokenDt = token.content;
+    Vue.use(window.vuelidate.default)
+    Vue.use(VToaster, {timeout: 5000})
+
+    var required     = window.validators.required,
+    sameAs          = window.validators.sameAs,
+    regexhelpers    = window.validators.helpers.regex,
+    email           = window.validators.email,
+    minLength       = window.validators.minLength,
+    numeric         = window.validators.numeric,
+    url             = window.validators.url,
+    pwdRegx = regexhelpers('pwdRegx', /^(?=.[a-z])(?=.[A-Z])(?=.\d)(?=.[$@$!%*?&])[A-Za-z\d$@$!%*?&]{6,}/),
+    phoneRegx = regexhelpers('phoneRegx',/^[+]?[0-9]\d{9,}$/);
+</script>
+<script src="{!! asset('js/notification-app.js') !!}"></script>
+
 @yield('adminlte_js')
 
 </body>
