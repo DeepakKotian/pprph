@@ -134,6 +134,7 @@ var app = new Vue({
         });
     }, 
     mounted: function(){
+       
         if(this.currentId)
         this.getCustomerData();
         let self = this;
@@ -257,6 +258,7 @@ var app = new Vue({
                 function(response){
                     this.$toaster.success(response.data);
                     this.getCustomerData();
+                    this.family=[];
                 }
             ).catch(function(response){
                 let self = this;

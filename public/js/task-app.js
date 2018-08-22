@@ -20,7 +20,13 @@ var taskapp = new Vue({
 
     validations:{
         tasks:{
-            name:{
+            task_name:{
+                required:required,
+             },
+             assigned_id:{
+                required:required,
+             },
+             due_date:{
                 required:required,
              },
         },
@@ -56,6 +62,10 @@ var taskapp = new Vue({
         },
 
         addTask:function(){
+            if (this.$v.tasks.$invalid) {
+                this.$v.tasks.$touch()
+               }
+              else{
             this.$http.post(this.urlPrefix+'task-list',this.tasks).then(
                 function(response){
                     this.$toaster.success(response.data);
@@ -63,6 +73,7 @@ var taskapp = new Vue({
                     this.loadAllTasks();
                 }
             )
+        }
         },
 
         loadTaskUser:function(){

@@ -10,27 +10,33 @@
          </div>
          <div class="modal-body">
          <div class="box-body">
-            <div class="form-group" :class="">
+            <div class="form-group" :class="{ 'has-error': $v.tasks.task_name.$error }">
               <label for="exampleInputEmail1">Task Name *</label>
-              <input type="text" class="form-control" v-model="tasks.task_name" id="exampleInputEmail1" placeholder="Enter Insurance Name">
+              <input type="text" class="form-control" v-model="$v.tasks.task_name.$model" id="exampleInputEmail1" placeholder="Enter Task Name">
             </div>
-            <div class="form-group" :class="">
+            <div class="form-group" >
             
               <label for="exampleInputEmail1">Task Detail </label>
-             <textarea name="" id="" v-model="tasks.task_detail" class="form-control" cols="30" rows="3"></textarea>
+             <textarea name="" id="" v-model="tasks.task_detail" class="form-control" placeholder="Enter Task detail" cols="30" rows="3"></textarea>
             </div>
-            <div class="form-group" :class="">
+            <div class="form-group" :class="{ 'has-error': $v.tasks.assigned_id.$error }">
              
               <label for="exampleInputEmail1">Task Users </label>
             
-            <select class="form-control"  name="" v-model="tasks.assigned_id" id="">
+            <select class="form-control"  name="" v-model="$v.tasks.assigned_id.$model" id="">
             <option value="">Please Selct</option>
             <option v-for="taskuser in taskUsers" :value="taskuser.id"> <% taskuser.first_name%> <% taskuser.last_name%></option>
             </select>
             </div>
-            <div class="form-group" :class="">
+            <div class="form-group" :class="{ 'has-error': $v.tasks.due_date.$error }">
               <label for="exampleInputEmail1">Due Date </label>
-               <input readonly type="text" v-model="tasks.due_date" class="form-control"  name="" id="due_date">
+              <div class="input-group">
+              <div class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                  </div>
+                  
+               <input readonly type="text" v-model="$v.tasks.due_date.$model" class="form-control"  name="" id="due_date">
+               </div>
             </div>
          </div>
          </div>

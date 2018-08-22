@@ -73,7 +73,12 @@
                   <div class="row">
                     <div class="form-group col-sm-6" :class="{ 'has-error': $v.customer.dob.$error }">
                       <label for="dob">Date of Birth*</label> 
+                      <div class="input-group">
+                      <div class="input-group-addon">
+                      <i class="fa fa-calendar"></i>
+                      </div>
                       <input readonly type="text" class="form-control datepicker" name="dob"  id="dob" placeholder="DOB" v-model="$v.customer.dob.$model">
+                      </div>
                     </div>
                     <div class="form-group col-sm-6">
                       <label for="company">Company*</label>
@@ -112,7 +117,7 @@
 
                     <div class="form-group col-sm-6" :class="{ 'has-error': $v.customer.mobile.$error }">
                       <label for="telephone">Mobile</label>
-                      <input type="text" class="form-control" name="mobile"  id="mobile" placeholder="Mobile" v-model="$v.customer.mobile.$model">
+                      <input type="text" class="form-control" name="mobile" id="mobile" placeholder="Mobile" v-model="$v.customer.mobile.$model">
                     </div>
                   </div>
                   <div class="row">
@@ -172,7 +177,7 @@
                     <div class="form-group col-sm-5">
                       <div class="box box-info">
                           <div class="box-header with-border">
-                            <h3 class="box-title">Add Family</h3>
+                            <h3 class="box-title familyToggle" >Add Family</h3>
                           </div>
                           <div class="box-body">
                             <table class="table table-bordered">
@@ -253,7 +258,12 @@
                         </div>
                         <div class="form-group " :class="{ 'has-error': $v.family.dob_family.$error }">
                           <label for="dob_family">DOB*</label>
-                          <input type="text" class="form-control datepicker" name="dob_family"  id="dob_family"  v-model="$v.family.dob_family.$model" placeholder="DOB" >
+                          <div class="input-group">
+                                <div class="input-group-addon">
+                                 <i class="fa fa-calendar"></i>
+                                </div>
+                          <input readonly type="text" class="form-control datepicker" name="dob_family"  id="dob_family"  v-model="$v.family.dob_family.$model" placeholder="DOB" >
+                          </div>
                         </div>
                         <!-- <div class="form-group " :class="{ 'has-error': $v.family.nationality_family.$error }">
                           <label for="nationality_family">Nationality*</label>
@@ -303,11 +313,21 @@
                         <div class="row">
                           <div class="form-group col-sm-6" :class="{ 'has-error': $v.insurancedata.start_date.$error }">
                               <label for="policy_number">Start Date</label>
-                              <input type="text" class="form-control" name="start_date"  id="start_date"   v-model="$v.insurancedata.start_date.$model"   placeholder="Start Date">
+                              <div class="input-group">
+                                <div class="input-group-addon">
+                                 <i class="fa fa-calendar"></i>
+                                </div>
+                              <input readonly type="text" class="form-control" name="start_date"  id="start_date"   v-model="$v.insurancedata.start_date.$model"   placeholder="Start Date">
+                          </div>
                           </div>
                           <div class="form-group col-sm-6" :class="{ 'has-error': $v.insurancedata.end_date.$error }">
                               <label for="policy_number">End Date</label>
-                              <input type="text" class="form-control" name="end_date"  id="end_date"  v-model="$v.insurancedata.end_date.$model"  placeholder="End Date">
+                              <div class="input-group">
+                                <div class="input-group-addon">
+                                 <i class="fa fa-calendar"></i>
+                                </div>
+                              <input readonly type="text" class="form-control" name="end_date"  id="end_date"  v-model="$v.insurancedata.end_date.$model"  placeholder="End Date">
+                            </div>
                           </div>
                         </div>
                         <div class="row">
@@ -348,7 +368,7 @@
                     </div>
                     <div class="modal-footer">
                       <button class="btn btn-secondary" type="button"  data-dismiss="modal">Cancel</button>
-                      <button class="btn btn-primary"  type="button"  v-on:click="deleteFamily">Delete</button>
+                      <button class="btn btn-primary"  type="button" data-dismiss="modal"  v-on:click="deleteFamily">Delete</button>
                     </div>
                  </div>
                 </div>
