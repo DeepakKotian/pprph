@@ -58,6 +58,7 @@
                 @if(!empty($data))
                         <input type="hidden" name="currentUserId" id="currentUserId"  value="{{ $data->id }}">
                 @endif
+            
             <div class="form-group" :class="{ 'has-error': $v.user.first_name.$error }">
               <label for="inputName" class="col-sm-2 control-label">First Name *</label>
 
