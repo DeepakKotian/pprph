@@ -80,6 +80,8 @@ Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     Route::post('/document-detail', 'Admin\documentsController@show');
 
     //task management
+    
+    Route::get('fetchtaskusers', 'Admin\taskController@fetchTaskUsers');
     Route::post('fetchtasklist', 'Admin\taskController@fetchTaskList');
     Route::resource('task-list', 'Admin\taskController');
     

@@ -8,7 +8,7 @@
         "php": ">=7.0.0",
         "barryvdh/laravel-cors": "^0.11.0",
         "barryvdh/laravel-dompdf": "^0.8.2",
-        "darkaonline/l5-swagger": "5.5.",
+        "darkaonline/l5-swagger": "5.5.*",
         "fideloper/proxy": "^4.0",
         "jeroennoten/laravel-adminlte": "^1.23",
         "laravel/framework": "5.5.",

@@ -191,7 +191,7 @@ return [
 
         [
             'text'    => 'Insurance Management',
-            'icon'    => 'user-circle',
+            'icon'    => 'shield',
             'can'  => 'manage-admin',
             'submenu' => [
                 [
