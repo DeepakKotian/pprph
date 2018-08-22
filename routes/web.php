@@ -84,4 +84,5 @@ Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     Route::resource('task-list', 'Admin\taskController');
     
     Route::get('/fetchnotification', 'Admin\AdminController@fetchNotification');
+    Route::get('/appointment', 'Admin\AppointmentController@index');
 });
