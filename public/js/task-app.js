@@ -1,6 +1,4 @@
-
-
-var app = new Vue({
+var taskapp = new Vue({
     el: '#task-app',
     data: {
       urlPrefix:urlPrefix,
@@ -10,8 +8,11 @@ var app = new Vue({
         task_name:null,
         task_detail:null,
         assigned_id:null,
+        taskid:null,
+        customerid:null,
       },
       taskUsers:{},
+      mytaskData:[],
       taskData:[],
       errors:[],
 
@@ -34,7 +35,12 @@ var app = new Vue({
             this.loadAllTasks();
 
         }
+        if($('#mytaskTable').length>0){
+            this.fetchMyTaskList();
 
+        }
+        
+        this.loadTaskUser();
         this.loadDatepicker();
        
      },
@@ -48,6 +54,7 @@ var app = new Vue({
                 'changeDate',  function() { self.tasks.due_date = $('#due_date').val();  }
             )
         },
+
         addTask:function(){
             this.$http.post(this.urlPrefix+'task-list',this.tasks).then(
                 function(response){
@@ -57,27 +64,43 @@ var app = new Vue({
                 }
             )
         },
+
         loadTaskUser:function(){
             this.$http.get(this.urlPrefix+'fetchtaskusers').then(
                 function(response){
                     this.taskUsers  = response.data;
-                    console.log(this.taskUsers);
-                    
+                  
                 }
             )
         },
-        loadTaskDetail:function(item){
+        loadTaskDetail:function(item,cutomerId){
+            console.log(cutomerId);
+            
             this.loadTaskUser();
             this.modalAction='add';
-            this.tasks.name="";
-            
+            this.tasks.task_name="";
+            this.tasks.task_detail="";
+            this.tasks.due_date="";
+            this.tasks.assigned_id="";
+            this.tasks.taskid="";
+            if(cutomerId!=null){
+                this.tasks.customerid=cutomerId;
+            }
+            else{
+                this.tasks.customerid="";
+            }
+           
             if(item !== null){
                 this.modalAction='edit';
-                this.tasks.name=item.name;
-                this.tasks.id=item.id;
+                this.tasks.task_name=item.task_name;
+                this.tasks.task_detail=item.task_detail;
+                this.tasks.due_date=item.due_date;
+                this.tasks.assigned_id=item.assigned_id;
+                this.tasks.taskid=item.taskid;
             }
             this.$v.tasks.$reset();  
         },
+
         loadAllTasks:function(){
             let self = this;
             this.$http.post(this.urlPrefix+'fetchtasklist').then(
@@ -88,9 +111,20 @@ var app = new Vue({
             self.loadDataTable();
         },
 
+        fetchMyTaskList:function(){
+            let self = this;
+            this.$http.post(this.urlPrefix+'fetchmytasklist').then(
+                function(response){
+                    self.mytaskData  = response.data.data;
+                }
+            )
+            self.loadDataTable();
+        },
+
         loadDataTable:function(){
           setTimeout( function(){ $('#taskTable').DataTable(); },500)
-        
+          setTimeout( function(){ $('#mytaskTable').DataTable(); },500)
+          
         }
 
      },

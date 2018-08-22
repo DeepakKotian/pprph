@@ -208,22 +208,21 @@ return [
                 ],
             ],
         ],
-        // [
-        //     'text'    => 'Task Management',
-        //     'icon'    => 'tasks',
-        //     'can'  => 'manage-admin',
-        //     'submenu' => [
-        //         [
-        //             'text' => 'All Tasks',
-        //             'url'  => 'admin/task-list',
-        //         ],
-        //         [
-        //             'text' => 'My Tasks',
-        //             'url'  => 'admin/task-list',
-        //         ],
+        [
+            'text'    => 'Task Management',
+            'icon'    => 'tasks',
+            'submenu' => [
+                [
+                    'text' => 'All Tasks',
+                    'url'  => 'admin/task-list',
+                ],
+                [
+                    'text' => 'My Tasks',
+                    'url'  => 'admin/mytask-list',
+                ],
                
-        //     ],
-        // ],
+            ],
+        ],
         
         // 'LOGOUT',
         // [

@@ -82,7 +82,11 @@ Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     //task management
     
     Route::get('fetchtaskusers', 'Admin\taskController@fetchTaskUsers');
+    Route::get('/mytask-list', function () {
+        return view('admin.mytasks');
+    });
     Route::post('fetchtasklist', 'Admin\taskController@fetchTaskList');
+    Route::post('fetchmytasklist', 'Admin\taskController@fetchMyTaskList');
     Route::resource('task-list', 'Admin\taskController');
     
     Route::get('/fetchnotification', 'Admin\AdminController@fetchNotification');

@@ -26,19 +26,24 @@
    <div class="box-body">
       <div class="col-12">
          <div class="table table-responsive">
-            <table class="table table-bordered" id="taskTable">
+            <table class="table table-bordered" id="mytaskTable">
                <thead>
                   <th>Id</th>
                   <th>Name</th>
                   <th>Description</th>
-                  
+                  <th>Assigned By</th>
+                  <th>Status</th>
+                  <th>Due Date</th>
                   <th>Options</th>
                </thead>
                <tbody>
-                  <tr v-for="row in taskData">
+                  <tr v-for="row in mytaskData">
                      <td><% row.taskid %></td>
                      <td><% row.task_name %> </td>
                      <td><% row.task_detail %> </td>
+                     <td><% row.first_name %> <% row.last_name %> </td>
+                     <td><% row.status %> </td>
+                     <td><% row.due_date %> </td>
                      <td>
                         <a type="button" data-toggle="modal"  data-target="#addTask"  v-on:click="loadTaskDetail(row)" class="btn btn-default"><i class="fa fa-edit"></i></a>
                      </td>
@@ -48,27 +53,7 @@
          </div>
       </div>
    </div>
-
-<!-- Delete Modal-->
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
-   <div class="modal-dialog" role="document">
-      <div class="modal-content">
-         <div class="modal-header">
-            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-            </button>
-            <h4 class="modal-title" id="exampleModalLabel">Delete?</h4>
-         </div>
-         <div class="modal-body">Are you sure you want to delete <b>   </b> ?</div>
-         <div class="modal-footer">
-            <button class="btn btn-secondary" type="button"  data-dismiss="modal">Cancel</button>
-            <button class="btn btn-primary"   v-on:click="deleteUser(currentUserId)" type="button">Yes</a>
-         </div>
-      </div>
-   </div>
-</div>
- <!-- Add insurance -->
- @include('admin.taskmodal')
+   @include('admin.taskmodal')
 </div>
 </div>
 </div>
