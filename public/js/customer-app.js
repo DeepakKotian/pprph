@@ -339,10 +339,11 @@ var app = new Vue({
                     this.insurancedata.start_date = response.data.start_date;
                     this.insurancedata.end_date = response.data.end_date;
                     this.insurancedata.policy_number = response.data.policy_number;
- 
-            }).catch(function(response){
+             }).catch(function(response){
                 let self = this;
                 self.$toaster.error(response.data);
+                $('#insuranceModal').find('.modal-body #selectJSFamily').val('');
+                $('#insuranceModal').find('.modal-body #selectJSFamily').trigger('change');
            });
         },
 
