@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\User;
+use App\policydetail;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
@@ -193,6 +194,16 @@ class AdminController extends Controller
         return response()->json('Successfully Deleted', 200);
     }
 
+    public function fetchNotification()
+    {
+       $data = policydetail::select('c.first_name','c.last_name','inc.name as ctgName','prd.name as providerName',DB::raw('DATE_FORMAT(end_date, "%d %M") as end_date'))
+        ->leftJoin('customers as c','customer_id','=','c.id')
+        ->leftJoin('massparameter as inc','inc.id','=','policy_detail.insurance_ctg_id')
+        ->leftJoin('massparameter as prd','prd.id','=','policy_detail.provider_id')
+        ->whereRaw('CURDATE() >= DATE_SUB(end_date, INTERVAL 20 DAY) AND CURDATE()<end_date')
+        ->get();
+        return response()->json($data, 200);
+    }
     
 }
 

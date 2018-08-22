@@ -216,6 +216,7 @@
                 @if(!empty($data))
               
                   <button type="button" class="btn btn-primary" v-on:click="updateCustomer">Update</button>
+                  <a target="_blank" href="{{ url('/admin/printcustomer/'.$data->id) }}" class="btn btn-primary" >Print</a>
   &nbsp;
                     <div class="btn-group btn-toggle"> 
                     <button type="button" class="btn"  data-toggle="modal" data-target="#statusModal" class="btn btn-default" v-on:click="onStatus(1)"  v-bind:class="{'btn-primary':customer.status==1,'btn-default':customer.status==0}" >ACTIVE</button>

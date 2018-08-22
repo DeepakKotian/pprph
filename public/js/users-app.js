@@ -1,25 +1,25 @@
-let token = document.head.querySelector('meta[name="csrf-token"]');
+// let token = document.head.querySelector('meta[name="csrf-token"]');
 
-if (token) {
-    Vue.http.interceptors.push(function(request, next) {
-        request.headers.set('X-CSRF-TOKEN', token.content)
-        next()
-      })
-} 
+// if (token) {
+//     Vue.http.interceptors.push(function(request, next) {
+//         request.headers.set('X-CSRF-TOKEN', token.content)
+//         next()
+//       })
+// } 
 
-var tokenDt = token.content;
-Vue.use(window.vuelidate.default)
-Vue.use(VToaster, {timeout: 5000})
+// var tokenDt = token.content;
+// Vue.use(window.vuelidate.default)
+// Vue.use(VToaster, {timeout: 5000})
 
-var required     = window.validators.required,
- sameAs          = window.validators.sameAs,
- regexhelpers    = window.validators.helpers.regex,
- email           = window.validators.email,
- minLength       = window.validators.minLength,
- numeric         = window.validators.numeric,
- url             = window.validators.url,
- pwdRegx = regexhelpers('pwdRegx', /^(?=.[a-z])(?=.[A-Z])(?=.\d)(?=.[$@$!%*?&])[A-Za-z\d$@$!%*?&]{6,}/),
- phoneRegx = regexhelpers('phoneRegx',/^[+]?[0-9]\d{9,}$/);
+// var required     = window.validators.required,
+//  sameAs          = window.validators.sameAs,
+//  regexhelpers    = window.validators.helpers.regex,
+//  email           = window.validators.email,
+//  minLength       = window.validators.minLength,
+//  numeric         = window.validators.numeric,
+//  url             = window.validators.url,
+//  pwdRegx = regexhelpers('pwdRegx', /^(?=.[a-z])(?=.[A-Z])(?=.\d)(?=.[$@$!%*?&])[A-Za-z\d$@$!%*?&]{6,}/),
+//  phoneRegx = regexhelpers('phoneRegx',/^[+]?[0-9]\d{9,}$/);
 
 var app = new Vue({
     el: '#users-app',
@@ -29,21 +29,13 @@ var app = new Vue({
       user:{
         email:null,
         first_name:null,
-        last_name:"",
+        last_name:null,
         role:'',
-        phone:'',
+        phone:null,
         password:null,
         photo:'userdefault.jpg',
       },
-      profile:{   
-        email:null,
-        first_name:null,
-        last_name:'',
-        role:'',
-        phone:'',
-        password:null,
-        photo:'userdefault.jpg'
-      },
+      profile:{ },
       usersData:[],
       errors:[],
 
@@ -81,6 +73,7 @@ var app = new Vue({
             },
          
             phone:{
+ 
                 phoneRegx:phoneRegx,
             }
           }
@@ -107,9 +100,9 @@ var app = new Vue({
             this.user.photo= $('#user_photo')[0].files[0];
             let formData= new FormData();
             formData.append('first_name',this.user.first_name);
-            formData.append('last_name',this.user.last_name ? this.user.last_name:"");
+            formData.append('last_name',this.user.last_name);
             formData.append('email',this.user.email);
-            formData.append('phone',this.user.phone ? this.user.phone:"");
+            formData.append('phone',this.user.phone);
             if(this.user.photo===undefined){
                 this.user.photo = 'userdefault.jpg';  
             }
@@ -145,12 +138,13 @@ var app = new Vue({
       userData: function () {
         this.$http.get(this.urlPrefix+'userdata/').then(function(response){
         this.profile=response.data;
-       // console.log(this.profile);
+       
         });
       }, 
 
       updateUser: function (event) {
-     
+      
+
         if($('#user_photo')[0].files[0])
         {
             this.user.photo= $('#user_photo')[0].files[0];
@@ -158,9 +152,9 @@ var app = new Vue({
        
         let formData= new FormData();
         formData.append('first_name',this.user.first_name);
-        formData.append('last_name',this.user.last_name ? this.user.last_name:"");
+        formData.append('last_name',this.user.last_name);
         formData.append('email',this.user.email);
-        formData.append('phone',this.user.phone ? this.user.phone:"");
+        formData.append('phone',this.user.phone);
         formData.append('photo',this.user.photo);
         formData.append('role',this.user.role);
         if (this.$v.user.$invalid) {
@@ -182,21 +176,19 @@ var app = new Vue({
       },
 
       updateProfile: function (event) {
-       
         if($('#user_photo')[0].files[0])
         {
             this.profile.photo= $('#user_photo')[0].files[0];
         }
        
         let formData= new FormData();
-        
         formData.append('first_name',this.profile.first_name);
-        formData.append("last_name", this.profile.last_name ? this.profile.last_name :"");
+        formData.append('last_name',this.profile.last_name);
         formData.append('email',this.profile.email);
-        formData.append('phone',this.profile.phone ? this.profile.phone:"");
+        formData.append('phone',this.profile.phone);
         formData.append('photo',this.profile.photo);
         formData.append('role',this.profile.role);
-       // console.log(formData);
+     
         if (this.$v.profile.$invalid) {
             this.$v.profile.$touch()
         }
@@ -216,6 +208,7 @@ var app = new Vue({
       },
       
       onDelete:function(data){
+        
          this.currentUserId = data.id;
          this.user.first_name = data.first_name;
          this.user.last_name = data.last_name;
@@ -238,7 +231,7 @@ var app = new Vue({
             this.$http.post(this.urlPrefix+'userdatatable').then(
                 function(response){
                     self.usersData  = response.data.data;
-                  
+               
                 }
             )
             self.loadDataTable();

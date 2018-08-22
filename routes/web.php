@@ -61,7 +61,7 @@ Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     Route::post('/statusupdate', 'Admin\CustomerController@statusUpdate');
     Route::post('/fetchdocuments', 'Admin\CustomerController@fetchDocuments');
     Route::post('/upload-document', 'Admin\CustomerController@uploadDocuments');
-    
+    Route::get('/printcustomer/{id}', 'Admin\CustomerController@printCustomer');
     
     // insurance management
     Route::get('/policy-mapping', 'Admin\insuranceController@policyMapping');
@@ -85,5 +85,5 @@ Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     Route::post('fetchtasklist', 'Admin\taskController@fetchTaskList');
     Route::resource('task-list', 'Admin\taskController');
     
-  
+    Route::get('/fetchnotification', 'Admin\AdminController@fetchNotification');
 });
