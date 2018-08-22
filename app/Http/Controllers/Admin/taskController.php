@@ -26,19 +26,28 @@ class taskController extends Controller
     public function fetchTaskList()
     {
         $taskList = [];
-        $taskList = DataTables::of(task::leftjoin('users as u','u.id','=','tasks.user_id')->select('tasks.*',DB::raw('DATE_FORMAT(tasks.due_date,"%d-%m-%Y") as due_date'),'u.id','u.first_name','u.last_name'))->toJson();
+        $taskList = DataTables::of(task::leftjoin('users as u','u.id','=','tasks.user_id')->select('tasks.*',DB::raw('DATE_FORMAT(tasks.due_date,"%d-%m-%Y") as due_date'),DB::raw('tasks.id as taskid' ),'u.id','u.first_name','u.last_name'))->toJson();
         if($taskList)
           return $taskList;
     
     }
+    
+    public function mytask()
+    {
+      
+        return view('admin.mytasks');
+      
+    }
+    
     public function fetchMyTaskList()
     {
-        $taskList = [];
-        $taskList = DataTables::of(task::leftjoin('users as u','u.id','=','tasks.user_id')->select('tasks.*',DB::raw('DATE_FORMAT(tasks.due_date,"%d-%m-%Y") as due_date'),'u.id','u.first_name','u.last_name')->where('assigned_id','=',Auth::user()->id))->toJson();
-        if($taskList)
-          return $taskList;
+        $mytaskList = [];
+        $mytaskList = DataTables::of(task::leftjoin('users as u','u.id','=','tasks.user_id')->select('tasks.*',DB::raw('DATE_FORMAT(tasks.due_date,"%d-%m-%Y") as due_date'),'u.id','u.first_name','u.last_name',DB::raw('tasks.id as taskid' ))->where('assigned_id','=',Auth::user()->id))->toJson();
+        if($mytaskList)
+          return $mytaskList;
     
     }
+
     public function fetchTaskUsers()
     {
         $userList = User::where('role','<>',1)->get();
@@ -78,7 +87,7 @@ class taskController extends Controller
             'task_name' => $request['task_name'],
             'task_detail' => $request['task_detail'],
             'status' => 'Pending',
-            'user_id'=>Auth::user()->id,
+            'user_id'=> Auth::user()->id,
             'due_date'=> date('Y-m-d',strtotime($request['due_date'])),
             'assigned_id' => $request['assigned_id'],
         ]);

@@ -214,17 +214,20 @@
               <div class="box-footer text-center">
                 
                 @if(!empty($data))
-              
+                <button  class="btn btn-primary  " data-toggle="modal" v-on:click="taskapp.loadTaskDetail(null,currentId)" data-target="#addTask" >Add Task</button>
                   <button type="button" class="btn btn-primary" v-on:click="updateCustomer">Update</button>
                   <a target="_blank" href="{{ url('/admin/printcustomer/'.$data->id) }}" class="btn btn-primary" >Print</a>
   &nbsp;
                     <div class="btn-group btn-toggle"> 
                     <button type="button" class="btn"  data-toggle="modal" data-target="#statusModal" class="btn btn-default" v-on:click="onStatus(1)"  v-bind:class="{'btn-primary':customer.status==1,'btn-default':customer.status==0}" >ACTIVE</button>
                     <button  type="button" class="btn" data-toggle="modal" data-target="#statusModal" class="btn btn-default" v-on:click="onStatus(0)"  v-bind:class="{'btn-primary':customer.status==0,'btn-default':customer.status==1}">DEACTIVE</button>
+                
+                 
                   </div>
                 @else
                   <button type="reset" v-on:click="resetForm" class="btn btn-info">Reset</button>
                   <button type="button" class="btn btn-primary" v-on:click="addNewCustomer">Save</button>
+                 
                 @endif
                 
               </div>
@@ -437,6 +440,7 @@
                         </div>
                       </div>
                       
+
                       <div class="row">
                         <div class="form-group col-sm-12" v-if="vertrag">
                           <div v-show="vertrag.document_name!==null">
@@ -515,9 +519,13 @@
       </div>
  <!-- Vertrag Modal End -->
 </div>
+<div id="task-app">
+  @include('admin.taskmodal')
+</div>
+
 @stop
 @section('js')
-
+<script src="{!! asset('js/task-app.js') !!}"></script>
 <script src="{!! asset('js/customer-app.js') !!}"></script>
 <script>
  $(document).ready(function() {
