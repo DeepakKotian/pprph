@@ -60,10 +60,10 @@
                        <li class="dropdown notifications-menu" id="notification-app">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <i class=" bell fa fa-bell-o"></i>
-                            <span class="label label-warning">10</span>
+                            <span class="label label-warning"><% countNotify %></span>
                             </a>
                             <ul class="dropdown-menu">
-                            <li class="header">You have 10 notifications</li>
+                            <li class="header">You have <% countNotify %> notifications</li>
                             <li>
                                 <!-- inner menu: contains the actual data -->
                                 <ul class="menu">

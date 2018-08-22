@@ -6,6 +6,7 @@ var app = new Vue({
       policyNotification:{
      
       },
+      countNotify:'',
     },
   
     created: function(){
@@ -20,6 +21,7 @@ var app = new Vue({
             this.$http.get(this.urlPrefix+'fetchnotification').then(
                 function(response){
                     this.policyNotification  = response.data;
+                    this.countNotify =  response.data.length;
                 }
             )
         },

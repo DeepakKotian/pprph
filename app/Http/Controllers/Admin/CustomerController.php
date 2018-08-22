@@ -12,6 +12,7 @@ use App\policydetail;
 use DB;
 use Auth;
 use DataTables;
+use PDF;
 
 class CustomerController extends Controller
 {
@@ -428,5 +429,13 @@ class CustomerController extends Controller
     public function destroy(customer $customer)
     {
         //
+    }
+
+    public function printCustomer($id)
+    {
+        $data = customer::select('*')->where('customers.id',$id)->where('customers.is_family','0')->first();
+        $pdf = PDF::loadView('admin.printcustomer', ['data' => $data]);
+        return $pdf->stream($data->first_name.'-'.$data->first_name.'-detail.pdf');
+        //return $pdf->download('customer'.$id.'.pdf'); //To download 
     }
 }
