@@ -2,7 +2,7 @@ var calenderapp = new Vue({
     el: '#calender-app',
     data: {
       urlPrefix:urlPrefix,
-      modalAction:"",
+      action:"",
       appointment:{
         start_date:null,
         end_date:null,
@@ -118,6 +118,15 @@ var calenderapp = new Vue({
                     week : 'week',
                     day  : 'day'
                 },
+                eventClick: function(calEvent, jsEvent, view) {
+                    self.appointment.title = calEvent.title;
+                    self.appointment.description = calEvent.description;
+                    self.appointment.start_date = moment(calEvent.start).format('d-m-Y');
+                    self.appointment.end_date = moment(calEvent.end).format('d-m-Y');
+                    self.appointment.start_time = moment(calEvent.start).format('HH')+':'+ moment(calEvent.start).format('mm');
+                    self.appointment.end_time =  moment(calEvent.end).format('HH')+':'+ moment(calEvent.end).format('mm');
+                    self.action = 'edit';
+                 },
                 events    : self.events,
                 eventRender: function(eventObj, $el) {
                     var t = moment(eventObj.start).format('HH') + ":" + moment(eventObj.start).format('mm') + " - " + moment(eventObj.end).format('HH') + ":" + moment(eventObj.end).format('mm')
