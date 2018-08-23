@@ -223,6 +223,11 @@ return [
                
             ],
         ],
+        [
+            'text'    => 'Calendar',
+            'icon'    => 'calendar',
+            'url'  => 'admin/appointment',
+        ],
         
         // 'LOGOUT',
         // [
