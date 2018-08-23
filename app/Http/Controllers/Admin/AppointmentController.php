@@ -18,7 +18,7 @@ class AppointmentController extends Controller
     public function fetchAppointments()
     {
         $data = task::leftjoin('users as u','u.id','=','tasks.user_id')
-                ->select('tasks.task_name as title', 'u.first_name','u.last_name','tasks.task_detail as description',DB::raw('tasks.due_date as end, tasks.start_date as start '),
+                ->select('tasks.task_name as title', 'u.first_name','u.last_name','tasks.assigned_id','tasks.task_detail as description',DB::raw('tasks.due_date as end, tasks.start_date as start '),
                                  DB::raw('tasks.id as id' ))
                 ->where('type','=','appointment')
                 ->get();
@@ -53,7 +53,7 @@ class AppointmentController extends Controller
 
         if($insertData){
             $response = task::leftjoin('users as u','u.id','=','tasks.user_id')
-            ->select('tasks.task_name as title', 'u.first_name','u.last_name','tasks.task_detail as description',DB::raw('tasks.due_date as end, tasks.start_date as start '),
+            ->select('tasks.task_name as title', 'u.first_name','u.last_name','tasks.assigned_id', 'tasks.task_detail as description',DB::raw('tasks.due_date as end, tasks.start_date as start '),
                              DB::raw('tasks.id as id' ))
             ->where('type','=','appointment')
             ->where('tasks.id','=',$insertData->id)

@@ -121,6 +121,7 @@ var calenderapp = new Vue({
                 eventClick: function(calEvent, jsEvent, view) {
                     self.appointment.title = calEvent.title;
                     self.appointment.description = calEvent.description;
+                    self.appointment.assigned_id = calEvent.assigned_id;
                     self.appointment.start_date = moment(calEvent.start).format('d-m-Y');
                     self.appointment.end_date = moment(calEvent.end).format('d-m-Y');
                     self.appointment.start_time = moment(calEvent.start).format('HH')+':'+ moment(calEvent.start).format('mm');
