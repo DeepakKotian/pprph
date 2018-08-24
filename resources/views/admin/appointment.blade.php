@@ -16,44 +16,65 @@
 @section('content')
 <div class="row" id="calender-app">
         <div class="col-md-3">
-          
-          <div class="box box-solid">
+          <form action="" method="post">
+          <div class="box box-primary">
             <div class="box-header with-border">
               <h3 class="box-title">Create Event</h3>
             </div>
             <div class="box-body">
-              <!-- <div class="btn-group" style="width: 100%; margin-bottom: 10px;">
-
-                <ul class="fc-color-picker" id="color-chooser">
-                  <li><a class="text-aqua" href="#"><i class="fa fa-square"></i></a></li>
-                  <li><a class="text-blue" href="#"><i class="fa fa-square"></i></a></li>
-                  <li><a class="text-light-blue" href="#"><i class="fa fa-square"></i></a></li>
-                  <li><a class="text-teal" href="#"><i class="fa fa-square"></i></a></li>
-                  <li><a class="text-yellow" href="#"><i class="fa fa-square"></i></a></li>
-                  <li><a class="text-orange" href="#"><i class="fa fa-square"></i></a></li>
-                  <li><a class="text-green" href="#"><i class="fa fa-square"></i></a></li>
-                  <li><a class="text-lime" href="#"><i class="fa fa-square"></i></a></li>
-                  <li><a class="text-red" href="#"><i class="fa fa-square"></i></a></li>
-                  <li><a class="text-purple" href="#"><i class="fa fa-square"></i></a></li>
-                  <li><a class="text-fuchsia" href="#"><i class="fa fa-square"></i></a></li>
-                  <li><a class="text-muted" href="#"><i class="fa fa-square"></i></a></li>
-                  <li><a class="text-navy" href="#"><i class="fa fa-square"></i></a></li>
-                </ul>
-              </div> -->
-              <!-- /btn-group -->
-              <div class="input-group">
-                <input id="new-event" type="text" class="form-control" placeholder="Event Title">
-
-                <div class="input-group-btn">
-                  <button id="add-new-event" type="button" class="btn btn-primary btn-flat">Add</button>
-                </div>
-                <!-- /btn-group -->
+              <div class="form-group" :class="{ 'has-error': $v.appointment.title.$error }">
+                <label for="title">Title</label>
+                <input id="title" name="title" type="text" v-model="$v.appointment.title.$model" class="form-control" placeholder="Event Title">
               </div>
-              <!-- /input-group -->
+              <div class="form-group" :class="{ 'has-error': $v.appointment.title.$error }">
+                <label for="description">Description</label>
+                <textarea class="form-control" name="description" v-model="$v.appointment.description.$model" id="description" rows="5"></textarea>
+              </div>
+              <div class="form-group" :class="{ 'has-error': $v.appointment.assigned_id.$error }">
+                  <label for="exampleInputEmail1">With </label>
+                  <select class="form-control"  name="assigned_id" v-model="$v.appointment.assigned_id.$model">
+                    <option>Please Selct</option>
+                    <option v-for="usr in users" :value="usr.id"> <% usr.first_name%> <% usr.last_name%></option>
+                  </select>
+              </div>
+              <div class="form-group" :class="{ 'has-error': $v.appointment.start_date.$error }">
+                <label for="start_date">Start Date &amp; Time </label>
+                <div class="input-group">
+                  <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                      </div>
+                  <input readonly type="text" class="form-control"  name="start_date" id="start_date" v-model="$v.appointment.start_date.$model">
+                  <div class="input-group-addon">
+                        <i class="fa fa-clock-o"></i>
+                  </div>
+                  <input readonly type="text" class="form-control"  name="start_time" id="start_time" v-model="appointment.start_time">
+                </div>
+              </div>
+              <div class="form-group" :class="{ 'has-error': $v.appointment.end_date.$error }">
+                <label for="end_date">End Date &amp; Time </label>
+                <div class="input-group">
+                  <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                  </div>
+                  <input readonly type="text" class="form-control" v-model="$v.appointment.end_date.$model"  name="" id="end_date">
+              
+                <div class="input-group-addon">
+                        <i class="fa fa-clock-o"></i>
+                  </div>
+                <input readonly type="text" class="form-control"  name="end_time" id="end_time" v-model="appointment.end_time">
+                </div>
+              </div>
+            </div>
+            <div class="box-footer text-center">
+               <button class="btn btn-info" type="button" v-on:click="appointment=[]; action=''">CLEAR</button>
+               <button class="btn btn-primary" v-show="action!='edit'" type="button" v-on:click="addAppointment">ADD</button>
+               <button class="btn btn-primary" v-show="action=='edit'" type="button">UPDATE</button>
+               <button class="btn btn-danger" v-show="action=='edit'" type="button">DELETE</button>
             </div>
           </div>
-    
+          </form>
         </div>
+
         <!-- /.col -->
         <div class="col-md-9">
           <div class="box box-primary">

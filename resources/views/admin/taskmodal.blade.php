@@ -46,15 +46,14 @@
               <div class="input-group-addon">
                     <i class="fa fa-calendar"></i>
                   </div>
-                  
                <input readonly type="text" v-model="$v.tasks.due_date.$model" class="form-control"  name="" id="due_date">
                </div>
             </div>
          </div>
          </div>
          <div class="modal-footer">
-            <button class="btn btn-primary" v-if="modalAction=='edit'" v-on:click="updatetasks()" type="button">Save</a>
-            <button class="btn btn-primary" v-if="modalAction=='add'" v-on:click="addTask()" type="button">Save</a>
+            <button class="btn btn-primary" v-if="modalAction=='edit'" v-on:click="updatetasks()" type="button">Save</button>
+            <button class="btn btn-primary" v-if="modalAction=='add'" v-on:click="addTask()" type="button">Save</button>
          </div>
       </div>
    </div>

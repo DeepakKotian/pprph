@@ -2,147 +2,161 @@ var calenderapp = new Vue({
     el: '#calender-app',
     data: {
       urlPrefix:urlPrefix,
-      modalAction:"",
+      action:"",
       appointment:{
-      
+        start_date:null,
+        end_date:null,
+        assigned_id:'',
+        title:null,
+        description:null,
+        start_time:null,
+        end_time:null,
       },
-      appointmentData:{
+      users:{
 
       },
-     
-
+      events:[],
+      date:null,
+      d : null,
+      m  : null,
+      y : null,
     },
-
-   
+    validations:{
+        appointment:{
+          start_date:{
+            required:required,
+          },
+          end_date:{
+            required:required,
+          },
+          assigned_id:{
+            required:required,
+          },
+          title:{
+            required:required,
+          },
+          description:{
+            required:required,
+          }
+        }
+    },
     created: function(){
     
     }, 
     mounted: function(){
-       this.loadCalender();
-       this.loadAppointments();
+        this.date = new Date();
+        this.d = this.date.getDate();
+        this.m  = this.date.getMonth();
+        this.y = this.date.getFullYear();
+        this.loadUsers();
+        this.loadAppointments();
+        let self = this;
+        $('#start_time').timepicker({
+            minuteStep: 1,
+            showSeconds: false,
+            showMeridian: false,
+            defaultTime: false
+        }).on('changeTime.timepicker',function(selected){
+            self.appointment.start_time = $('#start_time').val(); 
+        });
+        $('#end_time').timepicker({
+            minuteStep: 1,
+            showSeconds: false,
+            showMeridian: false,
+            defaultTime: false
+        }).on('changeTime.timepicker',function(selected){
+            self.appointment.end_time = $('#end_time').val(); 
+        });
+        $('#end_date').datepicker({
+            format:'dd-mm-yyyy',
+        }).on(
+            'changeDate',  function(selected) { self.appointment.end_date = $('#end_date').val(); 
+            var maxDate = new Date(selected.date.valueOf());
+            $('#start_date').datepicker('setEndDate', maxDate);
+        })
+        $('#start_date').datepicker({
+            format:'dd-mm-yyyy',
+        }).on(
+            'changeDate',  function(selected) {
+                var minDate = new Date(selected.date.valueOf());
+                $('#end_date').datepicker('setStartDate', minDate);
+                self.appointment.start_date =  $('#start_date').val(); 
+        })
      },
 
     methods: {
       loadAppointments:function(){
-        this.$http.post(this.urlPrefix+'fetchtasklist').then(
+        this.$http.get(this.urlPrefix+'fetchappointments').then(
             function(response){
-                this.appointmentData  = response.data.data;
-                console.log(this.appointmentData );
-                
+             this.events = response.data;
+             this.loadCalender();  
             }
         )
       },
+      loadUsers:function(){
+        this.$http.get(this.urlPrefix+'fetchtaskusers').then(
+            function(response){
+                this.users  = response.data;
+            }
+        )
+      },
+
       loadCalender:function(){ 
-            var start_date= '2018-08-11 04:12:07';
-            var start_date = new Date(start_date);
-
-            var start_d    = start_date.getDate(),
-                start_m    = start_date.getMonth(),
-                start_y    = start_date.getFullYear();
-
-            var end_date= '2018-08-13 04:12:07';
-            var end_date = new Date(end_date);
-
-            var end_d    = end_date.getDate(),
-                end_m    = end_date.getMonth(),
-                end_y    = end_date.getFullYear();
-
-            var date = new Date()
-            console.log(date);
-            
-            var d    = date.getDate(),
-                m    = date.getMonth(),
-                y    = date.getFullYear();
-
+            console.log('dfdf');
+            self = this;
             $('#calendar').fullCalendar({
                 header    : {
-                left  : 'prev,next today',
-                center: 'title',
-                right : 'month,agendaWeek,agendaDay'
+                    left  : 'prev,next today',
+                    center: 'title',
+                    right : 'month,agendaWeek,agendaDay'
                 },
                 buttonText: {
-                today: 'today',
-                month: 'month',
-                week : 'week',
-                day  : 'day'
+                    today: 'today',
+                    month: 'month',
+                    week : 'week',
+                    day  : 'day'
                 },
-                //Random default events
-                events    : [
-                {
-                    title          : 'All Day Event',
-                    start          : new Date(start_y, start_m, start_d ),
-                    end            : new Date(end_y, end_m, end_d),
-                    backgroundColor: '#f56954', //red
-                    borderColor    : '#f56954' //red
-                },
-                // {
-                //     title          : 'Long Event',
-                //     start          : new Date(y, m, d - 5),
-                //     end            : new Date(y, m, d - 2),
-                //     backgroundColor: '#f39c12', //yellow
-                //     borderColor    : '#f39c12' //yellow
-                // },
-                // {
-                //     title          : 'Meeting',
-                //     start          : new Date(y, m, d, 10, 30),
-                //     allDay         : false,
-                //     backgroundColor: '#0073b7', //Blue
-                //     borderColor    : '#0073b7' //Blue
-                // },
-                // {
-                //     title          : 'Lunch',
-                //     start          : new Date(y, m, d, 12, 0),
-                //     end            : new Date(y, m, d, 14, 0),
-                //     allDay         : false,
-                //     backgroundColor: '#00c0ef', //Info (aqua)
-                //     borderColor    : '#00c0ef' //Info (aqua)
-                // },
-                // {
-                //     title          : 'Birthday Party',
-                //     start          : new Date(y, m, d + 1, 19, 0),
-                //     end            : new Date(y, m, d + 1, 22, 30),
-                //     allDay         : false,
-                //     backgroundColor: '#00a65a', //Success (green)
-                //     borderColor    : '#00a65a' //Success (green)
-                // },
-                // {
-                //     title          : 'Click for Google',
-                //     start          : new Date(y, m, 28),
-                //     end            : new Date(y, m, 29),
-                //     url            : 'http://google.com/',
-                //     backgroundColor: '#3c8dbc', //Primary (light-blue)
-                //     borderColor    : '#3c8dbc' //Primary (light-blue)
-                // }
-                ],
-                editable  : true,
-                droppable : true, // this allows things to be dropped onto the calendar !!!
-                drop      : function (date, allDay) { // this function is called when something is dropped
-
-                // retrieve the dropped element's stored Event Object
-                var originalEventObject = $(this).data('eventObject')
-
-                // we need to copy it, so that multiple events don't have a reference to the same object
-                var copiedEventObject = $.extend({}, originalEventObject)
-
-                // assign it the date that was reported
-                copiedEventObject.start           = date
-                copiedEventObject.allDay          = allDay
-                copiedEventObject.backgroundColor = $(this).css('background-color')
-                copiedEventObject.borderColor     = $(this).css('border-color')
-
-                // render the event on the calendar
-                // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
-                $('#calendar').fullCalendar('renderEvent', copiedEventObject, true)
-
-                // is the "remove after drop" checkbox checked?
-                if ($('#drop-remove').is(':checked')) {
-                    // if so, remove the element from the "Draggable Events" list
-                    $(this).remove()
-                }
-
-                }
+                eventClick: function(calEvent, jsEvent, view) {
+                    self.appointment.title = calEvent.title;
+                    self.appointment.description = calEvent.description;
+                    self.appointment.assigned_id = calEvent.assigned_id;
+                    self.appointment.start_date = moment(calEvent.start).format('d-m-Y');
+                    self.appointment.end_date = moment(calEvent.end).format('d-m-Y');
+                    self.appointment.start_time = moment(calEvent.start).format('HH')+':'+ moment(calEvent.start).format('mm');
+                    self.appointment.end_time =  moment(calEvent.end).format('HH')+':'+ moment(calEvent.end).format('mm');
+                    self.action = 'edit';
+                 },
+                events    : self.events,
+                eventRender: function(eventObj, $el) {
+                    var t = moment(eventObj.start).format('HH') + ":" + moment(eventObj.start).format('mm') + " - " + moment(eventObj.end).format('HH') + ":" + moment(eventObj.end).format('mm')
+                    $el.popover({
+                      title: eventObj.title +' Time- ' +t + ', With:' + eventObj.first_name+' '+ eventObj.last_name,
+                      content: eventObj.description,
+                      trigger: 'hover',
+                      placement: 'top',
+                      container: 'body'
+                    });
+                  },
             })
+            $('#calendar').fullCalendar( 'removeEventSource', self.events )
+            $('#calendar').fullCalendar( 'addEventSource', self.events )
+        },
+        addAppointment:function(){
+            if(this.$v.appointment.$invalid){
+                this.$v.appointment.$touch();
+            }else{
+                this.$http.post(this.urlPrefix+'add-appointment',this.appointment).then( 
+                function(response){
+                    this.events = response.data;
+                    this.loadCalender();
+                    this.appointment = [];
+                    this.$toaster.success('Added Successfully');
+                }).catch(function(response){
+                    this.$toaster.error(response.data);
+                });
             }
+        
+        },
      },
      
     delimiters: ["<%","%>"]

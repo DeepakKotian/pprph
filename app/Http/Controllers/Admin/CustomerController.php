@@ -117,9 +117,9 @@ class CustomerController extends Controller
 
         $validate = $this->validate(request(),[
             'first_name' => 'required|min:3',
-            'email' => 'required|email|unique:customers', 
+            //'email' => 'required|email|unique:customers', 
             'gender' => 'required',
-            'language' => 'required',
+            //'language' => 'required',
             ]
         );
         $insertData = customer::create([
