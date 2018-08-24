@@ -168,6 +168,10 @@ var app = new Vue({
                 }).then(
                 function(response){
                     this.$toaster.success(response.data);
+                    setTimeout(function(){
+                        window.location.href = this.urlPrefix+'users'
+                    },1000)
+                    
                 }
                 ).catch(function(response){
                     this.$toaster.error(response.data);

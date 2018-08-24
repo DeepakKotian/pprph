@@ -44,9 +44,9 @@
                       <input type="text" class="form-control" v-model="customer.id"  id="id"  placeholder="Customer Id" readonly>
                     </div>
                     @endif
-                    <div class="form-group col-sm-4"  :class="{ 'has-error': $v.customer.language.$error }">
-                      <label for="language">Language*</label>
-                      <select class="form-control" name="language" id="language" v-model="$v.customer.language.$model">
+                    <div class="form-group col-sm-4"> 
+                      <label for="language">Language</label>
+                      <select class="form-control" name="language" id="language" v-model="customer.language">
                         <option value="DE">DE</option>
                         <option value="EN">EN</option>
                         <option value="FR">FR</option>
@@ -71,23 +71,23 @@
                     </div>
                   </div>
                   <div class="row">
-                    <div class="form-group col-sm-6" :class="{ 'has-error': $v.customer.dob.$error }">
-                      <label for="dob">Date of Birth*</label> 
+                    <div class="form-group col-sm-6">
+                      <label for="dob">Date of Birth</label> 
                       <div class="input-group">
                       <div class="input-group-addon">
                       <i class="fa fa-calendar"></i>
                       </div>
-                      <input readonly type="text" class="form-control datepicker" name="dob"  id="dob" placeholder="DOB" v-model="$v.customer.dob.$model">
+                      <input type="text" class="form-control datepicker" name="dob"  id="dob" placeholder="DOB" v-model="customer.dob">
                       </div>
                     </div>
                     <div class="form-group col-sm-6">
-                      <label for="company">Company*</label>
+                      <label for="company">Company</label>
                       <input type="text" class="form-control" name="company"  id="company" placeholder="Company" v-model="customer.company">
                     </div>
                   </div>
-                  <div class="form-group" :class="{ 'has-error': $v.customer.language.$error }">
-                    <label for="address">Address*</label>
-                    <textarea class="form-control" name="address" id="address" cols="10" rows="2" v-model="$v.customer.address.$model"></textarea>
+                  <div class="form-group">
+                    <label for="address">Address</label>
+                    <textarea class="form-control" name="address" id="address" cols="10" rows="2"></textarea>
                   </div>
                   <div class="row">
                     <div class="form-group col-sm-4" :class="{ 'has-error': $v.customer.zip.$error }">
@@ -98,10 +98,10 @@
                       <label for="city">City</label>
                       <input type="text" class="form-control" name="city"  id="city" placeholder="City" v-model="customer.city">
                     </div>
-                    <div class="form-group col-sm-4" :class="{ 'has-error': $v.customer.nationality.$error }">
-                      <label for="nationality">Nationality* </label>
+                    <div class="form-group col-sm-4">
+                      <label for="nationality">Nationality</label>
                       
-                      <select  class="form-control selectJS" id="nationality" placeholder="Nationality" v-model="$v.customer.nationality.$model">
+                      <select  class="form-control selectJS" id="nationality" placeholder="Nationality" v-model="customer.nationality">
                      
                       <option v-for="country in countries" v-bind:value="country.name"> <% country.name %> </option>
                         
@@ -111,7 +111,7 @@
                   </div>
                   <div class="row">
                     <div class="form-group col-sm-6" :class="{ 'has-error': $v.customer.telephone.$error }">
-                      <label for="telephone">Telephone*</label>
+                      <label for="telephone">Telephone</label>
                       <input type="text" class="form-control" name="telephone"  id="telephone" placeholder="Telephone" v-model="$v.customer.telephone.$model">
                     </div>
 
@@ -122,16 +122,15 @@
                   </div>
                   <div class="row">
                     <div class="form-group col-sm-6" :class="{ 'has-error': $v.customer.email.$error }">
-                      <label for="email">Email*</label>
+                      <label for="email">Email</label>
                       <input type="email" class="form-control" name="email"  id="email" placeholder="Email" v-model="$v.customer.email.$model">
                     </div>
                     <div class="form-group col-sm-6" :class="{ 'has-error': $v.customer.email_office.$error }">
                       <label for="telephone">Email office</label>
                       <input type="email" class="form-control" name="email_office"  id="email_office" placeholder="Emai Office" v-model="$v.customer.email_office.$model">
                     </div>
-                    
                   </div>
-               
+  
                  
                 </div>
                <div class="col-sm-7">
@@ -219,9 +218,9 @@
               <div class="box-footer text-center">
                 
                 @if(!empty($data))
-                <button  class="btn btn-primary  " data-toggle="modal" v-on:click="taskapp.loadTaskDetail(null,currentId)" data-target="#addTask" >Add Task</button>
+                <!-- <button  class="btn btn-primary  " data-toggle="modal" v-on:click="taskapp.loadTaskDetail(null,currentId)" data-target="#addTask" >Add Task</button> -->
                   <button type="button" class="btn btn-primary" v-on:click="updateCustomer">Update</button>
-                  <a target="_blank" href="{{ url('/admin/printcustomer/'.$data->id) }}" class="btn btn-primary" >Print</a>
+                  <!-- <a target="_blank" href="{{ url('/admin/printcustomer/'.$data->id) }}" class="btn btn-primary" >Print</a> -->
   &nbsp;
                     <div class="btn-group btn-toggle"> 
                     <button type="button" class="btn"  data-toggle="modal" data-target="#statusModal" class="btn btn-default" v-on:click="onStatus(1)"  v-bind:class="{'btn-primary':customer.status==1,'btn-default':customer.status==0}" >ACTIVE</button>
@@ -256,13 +255,13 @@
                             <label for="last_name_family">Last Name</label>
                             <input type="text" class="form-control" name="last_name_family"  id="last_name_family"  v-model="family.last_name_family" placeholder="Last Name">
                         </div>
-                        <div class="form-group " :class="{ 'has-error': $v.family.dob_family.$error }">
-                          <label for="dob_family">DOB*</label>
+                        <div class="form-group ">
+                          <label for="dob_family">DOB</label>
                           <div class="input-group">
                                 <div class="input-group-addon">
                                  <i class="fa fa-calendar"></i>
                                 </div>
-                          <input readonly type="text" class="form-control datepicker" name="dob_family"  id="dob_family"  v-model="$v.family.dob_family.$model" placeholder="DOB" >
+                          <input type="text" class="form-control datepicker" name="dob_family"  id="dob_family"  v-model="family.dob_family" placeholder="DOB" >
                           </div>
                         </div>
                         <!-- <div class="form-group " :class="{ 'has-error': $v.family.nationality_family.$error }">
@@ -317,16 +316,16 @@
                                 <div class="input-group-addon">
                                  <i class="fa fa-calendar"></i>
                                 </div>
-                              <input readonly type="text" class="form-control" name="start_date"  id="start_date"   v-model="$v.insurancedata.start_date.$model"   placeholder="Start Date">
+                              <input type="text" class="form-control" name="start_date"  id="start_date"   v-model="$v.insurancedata.start_date.$model"   placeholder="Start Date">
                           </div>
                           </div>
-                          <div class="form-group col-sm-6" :class="{ 'has-error': $v.insurancedata.end_date.$error }">
+                          <div class="form-group col-sm-6" >
                               <label for="policy_number">End Date</label>
                               <div class="input-group">
                                 <div class="input-group-addon">
                                  <i class="fa fa-calendar"></i>
                                 </div>
-                              <input readonly type="text" class="form-control" name="end_date"  id="end_date"  v-model="$v.insurancedata.end_date.$model"  placeholder="End Date">
+                              <input type="text" class="form-control" name="end_date"  id="end_date"  v-model="insurancedata.end_date"  placeholder="End Date">
                             </div>
                           </div>
                         </div>

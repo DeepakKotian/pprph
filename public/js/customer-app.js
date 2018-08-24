@@ -55,28 +55,15 @@ var app = new Vue({
     validations:{
         customer:{
           email:{
-              required:required,
               email:email,
           },
-          dob:{
-            required:required,
-          },
-          email_office:{
+         email_office:{
             email:email,
          },
           zip:{
             required:required,
           },
-          nationality:{
-            required:required,
-          },
           gender:{
-            required:required,
-          },
-          language:{
-            required:required,
-          },
-          address:{
             required:required,
           },
           first_name:{
@@ -86,7 +73,6 @@ var app = new Vue({
             required:required,
           },
           telephone:{
-            required:required,
             phoneRegx:phoneRegx,
           },
           mobile:{
@@ -103,10 +89,7 @@ var app = new Vue({
         },
         first_name_family:{
             required:required,
-          },
-        dob_family:{
-            required:required,
-        }
+          }
       },
       insurancedata:{
           provider_id:{
@@ -114,9 +97,6 @@ var app = new Vue({
           },
           start_date:{
               required:required,
-          },
-          end_date:{
-            required:required,
           },
           policy_number:{
             required:required,
@@ -140,29 +120,35 @@ var app = new Vue({
         let self = this;
         $('#dob').datepicker({
             format:'dd-mm-yyyy',
+            todayHighlight: true
         }).on(
-            'changeDate', function() { self.customer.dob = $('#dob').val() }
+            'changeDate', function() { self.customer.dob = $('#dob').val();  $('#dob').datepicker('hide'); }
           )
         $('#dob_family').datepicker({
             format:'dd-mm-yyyy',
+            todayHighlight: true
         }).on(
-        'changeDate',  function() { self.family.dob_family = $('#dob_family').val() }
+        'changeDate',  function() { self.family.dob_family = $('#dob_family').val();  $('#dob_family').datepicker('hide');  }
         )
         $('#end_date').datepicker({
             format:'dd-mm-yyyy',
+            todayHighlight: true
         }).on(
             'changeDate',  function(selected) { self.insurancedata.end_date = $('#end_date').val(); 
             var maxDate = new Date(selected.date.valueOf());
-            $('#start_date').datepicker('setEndDate', maxDate);
+            $('#start_date').datepicker('setEndDate', maxDate);  $('#end_date').datepicker('hide'); 
           }
         )
         $('#start_date').datepicker({
             format:'dd-mm-yyyy',
+            todayHighlight: true
         }).on(
             'changeDate',  function(selected) {
                 var minDate = new Date(selected.date.valueOf());
                 $('#end_date').datepicker('setStartDate', minDate);
-                self.insurancedata.start_date =  $('#start_date').val(); }
+                self.insurancedata.start_date =  $('#start_date').val(); 
+                $('#start_date').datepicker('hide'); 
+            }
         )
         $('#nationality').on('change',function(){
               self.customer.nationality = $(this).val();
@@ -179,7 +165,7 @@ var app = new Vue({
 
         addNewCustomer: function () {
             console.log(this.customer.nationality);
-            console.log(this.$v.customer.nationality);
+            console.log(this.$v.customer);
         if (this.$v.customer.$invalid) {
             this.$v.customer.$touch();
         }else{
@@ -187,7 +173,7 @@ var app = new Vue({
                 function(response){
                     this.$toaster.success(response.data);
                     setTimeout(function(){
-                        window.location.href = '/admin/customers'
+                        window.location.href = urlPrefix+'customers';
                     },2000)
                 }
             ).catch(function(response){
@@ -259,6 +245,7 @@ var app = new Vue({
                     this.$toaster.success(response.data);
                     this.getCustomerData();
                     this.family=[];
+                    $('#familyModal').modal('hide');
                 }
             ).catch(function(response){
                 let self = this;
@@ -279,6 +266,7 @@ var app = new Vue({
                 function(response){
                     this.$toaster.success(response.data);
                     this.getCustomerData();
+                    $('#familyModal').modal('hide');
                 }
             ).catch(function(response){
                 let self = this;
@@ -355,6 +343,7 @@ var app = new Vue({
              this.$http.post(this.urlPrefix+'savepolicy/'+this.currentId,  this.insurancedata).then(function(response){
                this.getCustomerData();
                this.$toaster.success(response.data);
+               $('#insuranceModal').modal('hide');
            });
           }
         },

@@ -17,7 +17,7 @@
 <div class="row" id="calender-app">
         <div class="col-md-3">
           <form action="" method="post">
-          <div class="box box-solid">
+          <div class="box box-primary">
             <div class="box-header with-border">
               <h3 class="box-title">Create Event</h3>
             </div>

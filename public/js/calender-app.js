@@ -20,8 +20,6 @@ var calenderapp = new Vue({
       d : null,
       m  : null,
       y : null,
-     
-
     },
     validations:{
         appointment:{
@@ -157,7 +155,6 @@ var calenderapp = new Vue({
                     this.$toaster.error(response.data);
                 });
             }
-          
         
         },
      },
