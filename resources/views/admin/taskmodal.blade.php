@@ -19,15 +19,27 @@
               <label for="exampleInputEmail1">Task Detail </label>
              <textarea name="" id="" v-model="tasks.task_detail" class="form-control" placeholder="Enter Task detail" cols="30" rows="3"></textarea>
             </div>
+            <div class="form-group" :class="{ 'has-error': $v.tasks.priority.$error }">
+              <label for="exampleInputEmail1">Priority *</label>
+              <select class="form-control"  name="" v-model="$v.tasks.priority.$model" id="">
+                <option value="">------</option>
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+      
+            </select>
+            </div>
+            
             <div class="form-group" :class="{ 'has-error': $v.tasks.assigned_id.$error }">
              
-              <label for="exampleInputEmail1">Task Users </label>
+              <label for="exampleInputEmail1">Assign to </label>
             
             <select class="form-control"  name="" v-model="$v.tasks.assigned_id.$model" id="">
-            <option value="">Please Selct</option>
+            <option value="">-------</option>
             <option v-for="taskuser in taskUsers" :value="taskuser.id"> <% taskuser.first_name%> <% taskuser.last_name%></option>
             </select>
             </div>
+
             <div class="form-group" :class="{ 'has-error': $v.tasks.due_date.$error }">
               <label for="exampleInputEmail1">Due Date </label>
               <div class="input-group">

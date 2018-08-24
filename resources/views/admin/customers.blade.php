@@ -17,29 +17,27 @@ Customers List
 
 @section('content')
 
-            
             <!-- /.box-header -->
             
             <div class="box box-primary" id="users-app">
   
         <!-- Breadcrumbs-->
         <div class="box-header">
-              <h3 class="box-title">       View Customers List</h3>
-         
+              <h3 class="box-title">View Customers List </h3>
               <div class="box-tools">
-                <a class="btn btn-primary btn-md pull-right" href="{{ url('admin/user-form') }}">Add New</a>
-            </div>
+                <a class="btn btn-primary btn-md pull-right" href="{{ url('admin/customer-form') }}">Add New</a>
+              </div>
         </div>
     <div class="box-body">
             <div class="form-group">
                <form method="POST" id="search-form" class="form-inline" role="form">
                     <div class="form-group">
-                        <label for="searchTerm"></label>
+                        
                         <input type="text" class="form-control" name="searchTerm" id="searchTerm" placeholder="Quick Search">
                     </div>
                     <button type="submit" class="btn btn-primary">Search</button>
                    <div class="form-group">
-                        <label for="id">Name Search</label>
+                        <label class="left-15" for="id">Name Search</label>
                         <select class="form-control selectJS" name="name">
                            <option value="">------</option>
                            @foreach($customer as $key=> $row)
@@ -48,7 +46,7 @@ Customers List
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="id">Customer ID</label>
+                        <label class="left-15" for="id">Customer ID</label>
                         <select class="form-control selectJS" name="id">
                            <option value="">------</option>
                            @foreach($customer as $key=> $row)
@@ -57,7 +55,7 @@ Customers List
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="id">Product</label>
+                        <label class="left-15" for="id">Product</label>
                         <select class="form-control selectJS" name="ctg">
                            <option value="">------</option>
                            @foreach($insuranceCtg as $ky=> $rwCtg)

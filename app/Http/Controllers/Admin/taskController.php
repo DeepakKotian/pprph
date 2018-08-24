@@ -26,7 +26,7 @@ class taskController extends Controller
     public function fetchTaskList()
     {
         $taskList = [];
-        $taskList = DataTables::of(task::leftjoin('users as u','u.id','=','tasks.user_id')->select('tasks.*',DB::raw('DATE_FORMAT(tasks.due_date,"%d-%m-%Y") as due_date'),DB::raw('tasks.id as taskid' ),'u.id','u.first_name','u.last_name'))->toJson();
+        $taskList = DataTables::of(task::leftjoin('users as u','u.id','=','tasks.user_id')->select('tasks.*',DB::raw('DATE_FORMAT(tasks.due_date,"%d-%m-%Y") as due_date'),DB::raw('DATE_FORMAT(tasks.created_at,"%d-%m-%Y") as assigned_on'),DB::raw('tasks.id as taskid' ),'u.id','u.first_name','u.last_name'))->toJson();
         if($taskList)
           return $taskList;
     
@@ -42,7 +42,7 @@ class taskController extends Controller
     public function fetchMyTaskList()
     {
         $mytaskList = [];
-        $mytaskList = DataTables::of(task::leftjoin('users as u','u.id','=','tasks.user_id')->select('tasks.*',DB::raw('DATE_FORMAT(tasks.due_date,"%d-%m-%Y") as due_date'),'u.id','u.first_name','u.last_name',DB::raw('tasks.id as taskid' ))->where('assigned_id','=',Auth::user()->id))->toJson();
+        $mytaskList = DataTables::of(task::leftjoin('users as u','u.id','=','tasks.user_id')->select('tasks.*',DB::raw('DATE_FORMAT(tasks.due_date,"%d-%m-%Y") as due_date'),DB::raw('DATE_FORMAT(tasks.created_at,"%d-%m-%Y") as assigned_on'),'u.id','u.first_name','u.last_name',DB::raw('tasks.id as taskid' ))->where('assigned_id','=',Auth::user()->id))->toJson();
         if($mytaskList)
           return $mytaskList;
     
@@ -90,6 +90,7 @@ class taskController extends Controller
             'user_id'=> Auth::user()->id,
             'due_date'=> date('Y-m-d',strtotime($request['due_date'])),
             'assigned_id' => $request['assigned_id'],
+            'priority' =>$request['priority'],
         ]);
         if($insertData)
         return response()->json('Successfully created',200);
@@ -102,9 +103,11 @@ class taskController extends Controller
      * @param  \App\cr  $cr
      * @return \Illuminate\Http\Response
      */
-    public function show(cr $cr)
+    public function show($id)
     {
         //
+        $task=task::leftjoin('users as u','u.id','=','tasks.user_id')->select('tasks.*',DB::raw('DATE_FORMAT(tasks.due_date,"%d-%m-%Y") as due_date'),DB::raw('DATE_FORMAT(tasks.created_at,"%d-%m-%Y") as assigned_on'),'u.id','u.first_name','u.last_name',DB::raw('tasks.id as taskid' ))->findorfail($id);
+        return view('admin.taskshow',compact('task'));
     }
 
     /**

@@ -87,6 +87,7 @@ var app = new Vue({
         this.getUserData();
 
         if($('#userTable').length>0){
+           
             this.loadAllUsers();
         }
      },
@@ -231,13 +232,14 @@ var app = new Vue({
             this.$http.post(this.urlPrefix+'userdatatable').then(
                 function(response){
                     self.usersData  = response.data.data;
-               
+                    $('#userTable').DataTable().destroy();
                 }
             )
             self.loadDataTable();
         },
 
         loadDataTable:function(){
+        
             setTimeout( function(){ $('#userTable').DataTable(); },500)
         }
 

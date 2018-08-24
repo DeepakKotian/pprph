@@ -140,6 +140,7 @@ var app = new Vue({
         let self = this;
         $('#dob').datepicker({
             format:'dd-mm-yyyy',
+            todayHighlight: true,
         }).on(
             'changeDate', function() { self.customer.dob = $('#dob').val() }
           )

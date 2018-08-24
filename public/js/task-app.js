@@ -8,8 +8,10 @@ var taskapp = new Vue({
         task_name:null,
         task_detail:null,
         assigned_id:null,
+        assigned_on:null,
         taskid:null,
         customerid:null,
+        priority:null,
       },
       taskUsers:{},
       mytaskData:[],
@@ -27,6 +29,9 @@ var taskapp = new Vue({
                 required:required,
              },
              due_date:{
+                required:required,
+             },
+             priority:{
                 required:required,
              },
         },
@@ -84,9 +89,9 @@ var taskapp = new Vue({
                 }
             )
         },
+        
         loadTaskDetail:function(item,cutomerId){
-            console.log(cutomerId);
-            
+          
             this.loadTaskUser();
             this.modalAction='add';
             this.tasks.task_name="";
@@ -94,6 +99,8 @@ var taskapp = new Vue({
             this.tasks.due_date="";
             this.tasks.assigned_id="";
             this.tasks.taskid="";
+            this.tasks.priority="";
+            
             if(cutomerId!=null){
                 this.tasks.customerid=cutomerId;
             }

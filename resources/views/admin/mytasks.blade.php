@@ -33,6 +33,7 @@
                   <th>Description</th>
                   <th>Assigned By</th>
                   <th>Status</th>
+                  <th>Assigned On</th>
                   <th>Due Date</th>
                   <th>Options</th>
                </thead>
@@ -43,9 +44,12 @@
                      <td><% row.task_detail %> </td>
                      <td><% row.first_name %> <% row.last_name %> </td>
                      <td><% row.status %> </td>
+                     <td><% row.assigned_on %> </td>
                      <td><% row.due_date %> </td>
                      <td>
-                        <a type="button" data-toggle="modal"  data-target="#addTask"  v-on:click="loadTaskDetail(row)" class="btn btn-default"><i class="fa fa-edit"></i></a>
+                       
+                        <a type="button" v-bind:href="urlPrefix+'task-list/'+ row.id" class="btn btn-default"><i class="glyphicon glyphicon-eye-open"></i></a>
+                        
                      </td>
                   </tr>
                </tbody>

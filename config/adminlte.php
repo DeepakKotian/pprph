@@ -208,26 +208,26 @@ return [
                 ],
             ],
         ],
-        [
-            'text'    => 'Task Management',
-            'icon'    => 'tasks',
-            'submenu' => [
-                [
-                    'text' => 'All Tasks',
-                    'url'  => 'admin/task-list',
-                ],
-                [
-                    'text' => 'My Tasks',
-                    'url'  => 'admin/mytask-list',
-                ],
+        // [
+        //     'text'    => 'Task Management',
+        //     'icon'    => 'tasks',
+        //     'submenu' => [
+        //         [
+        //             'text' => 'All Tasks',
+        //             'url'  => 'admin/task-list',
+        //         ],
+        //         [
+        //             'text' => 'My Tasks',
+        //             'url'  => 'admin/mytask-list',
+        //         ],
                
-            ],
-        ],
-        [
-            'text'    => 'Calendar',
-            'icon'    => 'calendar',
-            'url'  => 'admin/appointment',
-        ],
+        //     ],
+        // ],
+        // [
+        //     'text'    => 'Calendar',
+        //     'icon'    => 'calendar',
+        //     'url'  => 'admin/appointment',
+        // ],
         
         // 'LOGOUT',
         // [

@@ -235,7 +235,7 @@ class CustomerController extends Controller
         }
         if($data)
         return response()->json($data, 200);
-        return response()->json('Not found any data', 404);
+        return response()->json('Policy details not found', 404);
     }
 
     public function savePolicy($id,Request $request)
@@ -285,6 +285,7 @@ class CustomerController extends Controller
      * @param  \App\customer  $customer
      * @return \Illuminate\Http\Response
      */
+    
     public function update(Request $request, customer $customer)
     {
         $user = DB::table('customers');

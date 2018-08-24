@@ -157,3 +157,10 @@
     43% { transform: rotate(0); }
     100% { transform: rotate(0); }
   }
+
+  .left-15{
+      margin-left: 15px;
+      margin-right: 5px;
+  }
+
+  

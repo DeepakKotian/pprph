@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTasksTable extends Migration
+class CreateTaskhistoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,18 @@ class CreateTasksTable extends Migration
      */
     public function up()
     {
-        Schema::create('tasks', function (Blueprint $table) {
+        Schema::create('taskhistories', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('task_id')->nullable();
             $table->integer('user_id')->nullable();
             $table->string('type')->nullable();
             $table->integer('assigned_id')->nullable();
             $table->string('status')->nullable();
             $table->string('task_name')->nullable();
             $table->string('task_detail')->nullable();
-            $table->timestamp('start_date')->nullable();
             $table->timestamp('due_date')->nullable();
             $table->string('priority')->nullable();
+            $table->string('comment')->nullable();
             $table->timestamps();
         });
     }
@@ -35,6 +36,6 @@ class CreateTasksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tasks');
+        Schema::dropIfExists('taskhistories');
     }
 }
