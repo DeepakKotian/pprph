@@ -163,4 +163,4 @@
       margin-right: 5px;
   }
 
-  
+  [v-cloak] {display: none}

@@ -1,25 +1,4 @@
-// let token = document.head.querySelector('meta[name="csrf-token"]');
 
-// if (token) {
-//     Vue.http.interceptors.push(function(request, next) {
-//         request.headers.set('X-CSRF-TOKEN', token.content)
-//         next()
-//       })
-// } 
-
-// var tokenDt = token.content;
-// Vue.use(window.vuelidate.default)
-// Vue.use(VToaster, {timeout: 5000})
-
-// var required     = window.validators.required,
-//  sameAs          = window.validators.sameAs,
-//  regexhelpers    = window.validators.helpers.regex,
-//  email           = window.validators.email,
-//  minLength       = window.validators.minLength,
-//  numeric         = window.validators.numeric,
-//  url             = window.validators.url,
-//  pwdRegx = regexhelpers('pwdRegx', /^(?=.[a-z])(?=.[A-Z])(?=.\d)(?=.[$@$!%*?&])[A-Za-z\d$@$!%*?&]{6,}/),
-//  phoneRegx = regexhelpers('phoneRegx',/^[+]?[0-9]\d{9,}$/);
 
 var app = new Vue({
     el: '#users-app',
@@ -31,7 +10,7 @@ var app = new Vue({
         first_name:null,
         last_name:null,
         role:'',
-        phone:null,
+        phone:'',
         password:null,
         photo:'userdefault.jpg',
       },
@@ -137,7 +116,7 @@ var app = new Vue({
       }, 
 
       userData: function () {
-        this.$http.get(this.urlPrefix+'userdata/').then(function(response){
+        this.$http.get(this.urlPrefix+'userdata').then(function(response){
         this.profile=response.data;
        
         });
@@ -153,9 +132,9 @@ var app = new Vue({
        
         let formData= new FormData();
         formData.append('first_name',this.user.first_name);
-        formData.append('last_name',this.user.last_name);
-        formData.append('email',this.user.email);
-        formData.append('phone',this.user.phone);
+        formData.append('last_name',this.user.last_name?this.user.last_name:"");
+        formData.append('email',this.user.email?this.user.email:"");
+        formData.append('phone',this.user.phone?this.user.phone :"");
         formData.append('photo',this.user.photo);
         formData.append('role',this.user.role);
         if (this.$v.user.$invalid) {
@@ -198,7 +177,7 @@ var app = new Vue({
             this.$v.profile.$touch()
         }
         else{
-            this.$http.post(this.urlPrefix+'updateprofile/',formData,{
+            this.$http.post(this.urlPrefix+'updateprofile',formData,{
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }

@@ -299,7 +299,7 @@
                           <div class="form-group col-sm-6" :class="{ 'has-error': $v.insurancedata.provider_id.$error }">
                               <input type="hidden" name="insurance_ctg_id" id="insurance_ctg_id" v:bind:value="insurancedata.insurance_ctg_id" v-model="insurancedata.insurance_ctg_id">
                                 <label for="first_name_family">Provider Name*</label>
-                                <select sty="width:100%;" class="form-control" name="provider" id="providerSlct" v-model="$v.insurancedata.provider_id.$model" v-on:change="fetchPolicyDetail(event)">
+                                <select sty="width:100%;" class="form-control" name="provider" id="providerSlct" v-model="$v.insurancedata.provider_id.$model" v-on:change="fetchPolicyList(event)">
                                   <option value="0">Please Select</option>
                                   <option v-for="(vl, index) in providerslist" v-bind:value="vl.provider_id"  >  <% vl.providerName %></option>
                                 </select>
@@ -343,10 +343,34 @@
                             
                           </div>
                         </div>
+                        <div class="row" v-show="policylist!=''">
+                            <div class="form-group col-sm-12">
+                              <table class="table table-bordered">
+                                <thead>
+                                  <tr>
+                                    <th>Policy Number</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Action</th>
+                                  </tr>
+                                </thead>
+                                <tr v-for="(policyRow,index) in policylist">
+                                  <td> <% policyRow.policy_number %> </td>
+                                  <td><% policyRow.start_date %></td>
+                                  <td><% policyRow.end_date %></td>
+                                  <td>
+                                    <a href="javascript:void(0)" v-on:click="fetchPolicyDetail(policyRow.policy_id)" class="fa fa-edit"></a>
+                                  </td>
+                                </tr>
+                              </table>
+                            </div>
+          
+                         </div>
                     </div>
                     <div class="modal-footer">
-                      <button class="btn btn-secondary" type="button"  data-dismiss="modal">Cancel</button>
-                      <button class="btn btn-primary" type="button" v-on:click="savePolicy()">Save</button>
+                        <button class="btn btn-secondary" type="button"  data-dismiss="modal">Cancel</button>
+                        <button v-show="policyAction=='edit'"  class="btn btn-primary" type="button" v-on:click="savePolicy()">UPDATE </button>
+                        <button v-show="policyAction==''" class="btn btn-primary" type="button" v-on:click="addNewPolicy()">ADD</button>
                     </div>
                  </div>
                 </div>
@@ -452,9 +476,16 @@
                       <div class="row">
                         <div class="form-group col-sm-4">
                             <label for="first_name_family">Provider Name*</label>
-                            <select sty="width:100%;" class="form-control" name="provider" id="vertragProviderSlct" v-model="$v.insurancedata.provider_id.$model" v-on:change="loadDocuments(event.target.value)" >
+                            <select sty="width:100%;" class="form-control" name="provider" id="vertragProviderSlct" v-model="$v.insurancedata.provider_id.$model" v-on:change="loadVertragPolicyList(event)" >
                               <option value="">Please Select</option>
                               <option v-for="(prd, index) in providerslist" v-bind:value="prd.provider_id"  >  <% prd.providerName %></option>
+                            </select>
+                        </div>
+                        <div  class="form-group col-sm-4">
+                          <label for="first_name_family">Policy Number*</label>
+                           <select sty="width:100%;" class="form-control" name="policy_id"  id="policy_id" v-on:change="loadDocuments(event.target.value)" >
+                              <option value="">Please Select</option>
+                              <option v-for="(pRow,index) in policylist" v-bind:value="pRow.policy_id"  >  <% pRow.policy_number %></option>
                             </select>
                         </div>
                       </div>
@@ -538,9 +569,9 @@
       </div>
  <!-- Vertrag Modal End -->
 </div>
-<div id="task-app">
+<!-- <div id="task-app">
   @include('admin.taskmodal')
-</div>
+</div> -->
 
 @stop
 @section('js')
