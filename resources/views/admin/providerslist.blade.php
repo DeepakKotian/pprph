@@ -72,7 +72,7 @@ Providers List <small>View list of Providers</small>
          </div>
          <div class="modal-footer">
           <button class="btn btn-primary" v-if="modalAction=='edit'" v-on:click="updateProvider()" data-dismiss="modal" type="button">Save</a>
-            <button class="btn btn-primary" v-if="modalAction=='add'" v-on:click="addNewProvider()" data-dismiss="modal" type="button">Save</a>
+            <button class="btn btn-primary" v-if="modalAction=='add'" v-on:click="addNewProvider()"  type="button">Save</a>
          </div>
       </div>
    </div>

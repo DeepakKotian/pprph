@@ -73,8 +73,6 @@ class insuranceController extends Controller
            
         ]);
        
-
-      
         if($insertData->wasRecentlyCreated == true){
             return response()->json('Successfully created',200);
         }
@@ -118,9 +116,19 @@ class insuranceController extends Controller
     public function update(Request $request, $id)
     {
         //
-        $data['name'] = $request->name;
-        if(massparameter::whereId($id)->update($data));
-        return response()->json('Successfully updated',200);
+        $data['name'] = preg_replace('!\s+!', ' ',$request->name);
+        $exist=massparameter::where('id','<>',$id)->where('name','=',$data['name'])->first();
+        if($exist)
+        {
+            return response()->json('Provider Exists',400);
+        }
+        else{
+            if(massparameter::whereId($id)->update($data))
+            return response()->json('Successfully updated',200);
+        }
+          
+       
+
     }
 
     /**

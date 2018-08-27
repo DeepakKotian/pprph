@@ -13,6 +13,8 @@ var taskapp = new Vue({
         customerid:null,
         priority:null,
         comment:null,
+        status:null,
+        
       },
       taskUsers:{},
       mytaskData:[],
@@ -33,6 +35,9 @@ var taskapp = new Vue({
              },
              priority:{
                 required:required,
+             },
+             status:{
+                status:required,
              },
         },
       
@@ -82,14 +87,34 @@ var taskapp = new Vue({
                 this.$v.tasks.$touch()
                }
               else{
-            this.$http.post(this.urlPrefix+'task-list',this.tasks).then(
-                function(response){
-                    this.$toaster.success(response.data);
-                    $('#taskTable').DataTable().destroy();
-                    this.loadAllTasks();
-                }
+                this.$http.post(this.urlPrefix+'task-list',this.tasks).then(
+                    function(response){
+                        this.$toaster.success(response.data);
+                        $('#taskTable').DataTable().destroy();
+                        this.loadAllTasks();
+                    }
             )
-        }
+          }
+        },
+
+        updatetasks:function(){
+            if (this.$v.tasks.$invalid) {
+                this.$v.tasks.$touch()
+               }
+              else{
+                this.$http.put(this.urlPrefix+'task-list/'+ this.tasks.taskid ,this.tasks).then(
+                    function(response){
+                        this.$toaster.success(response.data);
+                        this.loadAllProviders();
+                        
+                    }
+                ).catch(function(response){
+                    let self = this;
+                    $.each(response.data.errors, function(key, value){
+                        self.$toaster.error(value[0]);
+                    });
+                });
+          }
         },
 
         loadTaskUser:function(){
@@ -131,6 +156,7 @@ var taskapp = new Vue({
                 this.tasks.assigned_id=item.assigned_id;
                 this.tasks.taskid=item.taskid;
                 this.tasks.priority=item.priority;
+                this.tasks.status=item.status;
                 
             }
             this.$v.tasks.$reset();  

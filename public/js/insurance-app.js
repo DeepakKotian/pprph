@@ -103,6 +103,7 @@ var app = new Vue({
        
 
         addNewInsurance: function () {
+            
           if (this.$v.insurance.$invalid) {
             this.$v.insurance.$touch()
            }
@@ -116,7 +117,9 @@ var app = new Vue({
                     }
                 ).catch(function(response){
                     if(response.data){
-                     this.$toaster.error(response.data);
+                       $(document).find('body .v-toaster .v-toast-error').remove();
+                       this.$toaster.error(response.data);
+                 
                     }
                     else{
                      let self = this;
@@ -141,11 +144,18 @@ var app = new Vue({
                         $('#addInsurance').modal('hide');
                     }
                 ).catch(function(response){
-                    let self = this;
-                    $.each(response.data.errors, function(key, value){
-                        self.$toaster.error(value[0]);
-                    });
-                });
+                    if(response.data){
+                     $(document).find('body .v-toaster .v-toast-error').remove();
+                     this.$toaster.error(response.data);
+                    }
+                    else{
+                     let self = this;
+                     $.each(response.data.errors, function(key, value){
+                         self.$toaster.error(value[0]);
+                     });
+                    }
+                     
+                 });
             } 
         },
 
@@ -170,10 +180,11 @@ var app = new Vue({
                         this.$toaster.success(response.data);
                         $('#providersTable').DataTable().destroy();
                         this.loadAllProviders();
-                        
+                        $('#addproviders').modal('hide'); 
                     }
                 ).catch(function(response){
                     if(response.data){
+                     $(document).find('body .v-toaster .v-toast-error').remove();
                      this.$toaster.error(response.data);
                     }
                     else{
@@ -195,15 +206,23 @@ var app = new Vue({
                 this.$http.put(this.urlPrefix+'providers-list/'+ this.providers.id ,this.providers).then(
                     function(response){
                         this.$toaster.success(response.data);
+                       
                         this.loadAllProviders();
                         
                     }
                 ).catch(function(response){
-                    let self = this;
-                    $.each(response.data.errors, function(key, value){
-                        self.$toaster.error(value[0]);
-                    });
-                });
+                    if(response.data){
+                     $(document).find('body .v-toaster .v-toast-error').remove();
+                     this.$toaster.error(response.data);
+                    }
+                    else{
+                     let self = this;
+                     $.each(response.data.errors, function(key, value){
+                         self.$toaster.error(value[0]);
+                     });
+                    }
+                     
+                 });
             } 
         },
 
@@ -211,6 +230,8 @@ var app = new Vue({
             this.modalAction='add';
             this.policyMappings.insure_id="";
             this.policyMappings.plcy_id="";
+            this.policyMappings.mappingId="";
+            this.policyMappings.ducumentData = "";
             this.loadDropDowninsurance();
             this.loadDropDownproviders();
             if(item !== null){

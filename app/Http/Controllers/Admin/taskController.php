@@ -60,7 +60,7 @@ class taskController extends Controller
      $datatask=[
         'task_name' => $request['task_name'],
         'task_detail' => $request['task_detail'],
-        'status' => 'Pending',
+        'status' => 'New',
         'user_id'=> Auth::user()->id,
         'due_date'=> date('Y-m-d',strtotime($request['due_date'])),
         'assigned_id' => $request['assigned_id'],
@@ -108,7 +108,7 @@ class taskController extends Controller
         $insertData = task::create([
             'task_name' => $request['task_name'],
             'task_detail' => $request['task_detail'],
-            'status' => 'Pending',
+            'status' => 'New',
             'user_id'=> Auth::user()->id,
             'due_date'=> date('Y-m-d',strtotime($request['due_date'])),
             'assigned_id' => $request['assigned_id'],
@@ -150,9 +150,17 @@ class taskController extends Controller
      * @param  \App\cr  $cr
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, cr $cr)
+    public function update(Request $request, $id)
     {
         //
+        $data['task_name'] = $request->task_name;
+        $data['task_detail'] = $request->task_detail;
+        $data['status'] = $request->task_detail;
+        $data['due_date'] =  date('Y-m-d',strtotime($request->due_date));
+        $data['assigned_id'] = $request->assigned_id;
+        $data['priority'] = $request->priority;
+        if(massparameter::whereId($id)->update($data));
+        return response()->json('Successfully updated',200);
     }
 
     /**

@@ -15,9 +15,8 @@
               <input type="text" class="form-control" v-model="$v.tasks.task_name.$model" id="exampleInputEmail1" placeholder="Enter Task Name">
             </div>
             <div class="form-group" >
-            
               <label for="exampleInputEmail1">Task Detail </label>
-             <textarea name="" id="" v-model="tasks.task_detail" class="form-control" placeholder="Enter Task detail" cols="30" rows="3"></textarea>
+              <textarea name="" id="" v-model="tasks.task_detail" class="form-control" placeholder="Enter Task detail" cols="30" rows="3"></textarea>
             </div>
             <div class="form-group" :class="{ 'has-error': $v.tasks.priority.$error }">
               <label for="exampleInputEmail1">Priority *</label>
@@ -29,10 +28,20 @@
       
             </select>
             </div>
+
+            <div class="form-group" :class="{ 'has-error': $v.tasks.status.$error }">
+              <label for="exampleInputEmail1">Priority *</label>
+              <select class="form-control"  name="" v-model="$v.tasks.status.$model" id="">
+                <option value="">------</option>
+                <option value="In progress">In progress</option>
+                <option value="On Hold">on Hold</option>
+                <option value="Completed">Completed</option>
+            </select>
+            </div>
             
             <div class="form-group" :class="{ 'has-error': $v.tasks.assigned_id.$error }">
              
-              <label for="exampleInputEmail1">Assign to </label>
+              <label for="exampleInputEmail1">Assign to * </label>
             
             <select class="form-control"  name="" v-model="$v.tasks.assigned_id.$model" id="">
             <option value="">-------</option>
