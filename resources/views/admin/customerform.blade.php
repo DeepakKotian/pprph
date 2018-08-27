@@ -271,7 +271,7 @@
                       </select>
                         </div>    -->
                         <div class="form-group " :class="{ 'has-error': $v.family.mobile_family.$error }">
-                            <label for="mobile_family">Mobile Number</label>
+                            <label for="mobile_family">Mobile Number*</label>
                             <input type="text" class="form-control" name="mobile_family"  id="mobile_family"  v-model="family.mobile_family" placeholder="Mobile Number">
                         </div>
                     </div>

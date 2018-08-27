@@ -64,7 +64,7 @@ class CustomerController extends Controller
     }
     $addQry =  implode(',',$strArr);
     $count = $insuranceCtg->count();
-    $selectQry =  "SELECT c.id, c.first_name, c.last_name, c.email,c.city,c.nationality,c.zip, {$addQry} FROM customers c LEFT JOIN policy_detail pd ON pd.customer_id = c.id {$jnQry} WHERE c.is_family=0 GROUP BY c.id, c.first_name, c.last_name, c.email,c.city,c.nationality,c.zip ";      
+    $selectQry =  "SELECT c.id, c.first_name, c.last_name,c.status, c.email,c.city,c.nationality,c.zip, {$addQry} FROM customers c LEFT JOIN policy_detail pd ON pd.customer_id = c.id {$jnQry} WHERE c.is_family=0 GROUP BY c.id, c.first_name, c.last_name ";      
     $customer =  DB::select(DB::raw($selectQry));
 
         return Datatables::of($customer)
@@ -72,6 +72,11 @@ class CustomerController extends Controller
                 if ($request->has('id')&& $request->id!=null) {
                     $instance->collection = $instance->collection->filter(function ($row) use ($request) {
                          return $row['id'] == $request->get('id') ? true : false;
+                    });
+                }
+                if ($request->has('status')&& $request->status!=null) {
+                    $instance->collection = $instance->collection->filter(function ($row) use ($request) {
+                         return $row['status'] == $request->get('status') ? true : false;
                     });
                 }
                 if ($request->has('name')&& $request->name!=null) {
@@ -88,7 +93,7 @@ class CustomerController extends Controller
 
                 if ($request->has('searchTerm')&& $request->searchTerm!=null) {
                     $instance->collection = $instance->collection->filter(function ($row) use ($request) {
-                        return (Str::contains($row['zip'], $request->get('searchTerm')) || Str::contains($row['city'], $request->get('searchTerm')) 
+                        return (Str::contains($row['zip'], $request->get('searchTerm')) || Str::contains($row['email'], $request->get('searchTerm')) || Str::contains($row['city'], $request->get('searchTerm')) 
                         || Str::contains($row['first_name'], $request->get('searchTerm')) || Str::contains($row['last_name'], $request->get('searchTerm')) ) ? true : false;
                     });
                 }
@@ -119,6 +124,7 @@ class CustomerController extends Controller
             'first_name' => 'required|min:3',
             //'email' => 'required|email|unique:customers', 
             'gender' => 'required',
+            'dob'=>'required|date',
             //'language' => 'required',
             ]
         );

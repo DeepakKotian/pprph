@@ -123,6 +123,7 @@ var app = new Vue({
         let self = this;
         $('#dob').datepicker({
             format:'dd-mm-yyyy',
+            startDate:'-50y',
             endDate:'0',
             todayHighlight: true,
 
@@ -131,6 +132,7 @@ var app = new Vue({
           )
         $('#dob_family').datepicker({
             format:'dd-mm-yyyy',
+            startDate:'-50y',
             endDate:'0',
             todayHighlight: true
         }).on(
@@ -148,7 +150,8 @@ var app = new Vue({
         )
         $('#start_date').datepicker({
             format:'dd-mm-yyyy',
-            todayHighlight: true
+            todayHighlight: true,
+            startDate:'-5y',
         }).on(
             'changeDate',  function(selected) {
                 var minDate = new Date(selected.date.valueOf());
@@ -213,6 +216,9 @@ var app = new Vue({
                 function(response){
                     this.$toaster.success(response.data);
                     this.getCustomerData();
+                    setTimeout(function(){
+                        window.location.href = urlPrefix+'customers';
+                    },2000)
                 }
             ).catch(function(response){
                 this.$toaster.error(response.data);

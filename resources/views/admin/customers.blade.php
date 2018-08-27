@@ -55,7 +55,7 @@ Customers List
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="left-15" for="id">Product</label>
+                        <label class="left-15" for="selectJS">Product</label>
                         <select class="form-control selectJS" name="ctg">
                            <option value="">------</option>
                            @foreach($insuranceCtg as $ky=> $rwCtg)
@@ -63,7 +63,14 @@ Customers List
                            @endforeach
                         </select>
                     </div>
-                
+                    <div class="form-group">
+                        <label class="left-15" for="status">Status</label>
+                        <select class="form-control selectJS" name="status">
+                           <option value="">------</option>
+                           <option value="0">Inactive</option>
+                           <option value="1">Active</option>
+                        </select>
+                    </div>
                    
                 </form>
             </div>
@@ -132,6 +139,7 @@ Customers List
                 d.id = $('select[name=id]').val();
                 d.name = $('select[name=name]').val();
                 d.ctg = $('select[name=ctg]').val();
+                d.status = $('select[name=status]').val();
                 d.searchTerm = $('input[name=searchTerm]').val();
             }
         },
