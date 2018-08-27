@@ -17,7 +17,7 @@ Documents List
 @section('content')
        
 <!-- /.box-header -->
-<div class="box box-primary" id="documents-app" v-cloak>
+<div class="box box-primary" id="documents-app" >
        <!-- Breadcrumbs-->
         <div class="box-header">
               <h3 class="box-title">       View Customers List</h3>

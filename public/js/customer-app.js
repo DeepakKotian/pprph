@@ -358,8 +358,8 @@ var app = new Vue({
                 $('#insuranceModal').find('.modal-body #selectJSFamily').trigger('change');
            });
         },
-        fetchPolicyList :function(item){
-            this.insurancedata.provider_id = parseInt(item.target.value);
+        fetchPolicyList :function(){
+            this.insurancedata.provider_id = $('#providerSlct')[0].value;
             this.insurancedata.start_date = '';
             this.insurancedata.family = [];
             this.insurancedata.end_date = '';
@@ -379,7 +379,7 @@ var app = new Vue({
              this.$http.post(this.urlPrefix+'savepolicy/'+this.currentId,  this.insurancedata).then(function(response){
                this.getCustomerData();
                this.$toaster.success(response.data);
-               $('#insuranceModal').modal('hide');
+               this.fetchPolicyList();
            });
           }
         },
@@ -391,7 +391,7 @@ var app = new Vue({
               this.$http.post(this.urlPrefix+'addnewpolicy/'+this.currentId,  this.insurancedata).then(function(response){
                 this.getCustomerData();
                 this.$toaster.success(response.data);
-                $('#insuranceModal').modal('hide');
+                this.fetchPolicyList();
             });
            }
         },
