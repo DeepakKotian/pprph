@@ -25,6 +25,7 @@ var app = new Vue({
         gender:null,
         is_family:null,
         telephone:null,
+        mobile:null,
         parent_id:null,
         nationality:'',
        
@@ -174,8 +175,7 @@ var app = new Vue({
           },
 
         addNewCustomer: function () {
-            console.log(this.customer.nationality);
-            console.log(this.$v.customer);
+            console.log(this.$v.customer.mobile);
         if (this.$v.customer.$invalid) {
             this.$v.customer.$touch();
         }else{
@@ -257,7 +257,7 @@ var app = new Vue({
                 function(response){
                     this.$toaster.success(response.data);
                     this.getCustomerData();
-                    this.family=[];
+                    this.$v.family.$reset();
                     $('#familyModal').modal('hide');
                 }
             ).catch(function(response){
@@ -440,16 +440,19 @@ var app = new Vue({
                 this.insurancedata.insurance_ctg_id = item.id;
            }
         },
-        loadDocuments:function(val){
-           this.insurancedata.policy_id = parseInt(val);
+        loadDocuments:function(){
+           this.insurancedata.policy_id = $('#policy_id')[0].value;
            this.$http.post(this.urlPrefix+'fetchdocuments', { policy_id:this.insurancedata.policy_id, provider_id:this.insurancedata.provider_id, customer_id:this.currentId }).then(function(response){
                 this.vertrag = response.data;
           });
         },
         loadVertragPolicyList:function(item){
+          
             this.insurancedata.provider_id = parseInt(item.target.value);
             this.$http.post(this.urlPrefix+'fetchpolicylist/'+this.currentId,  this.insurancedata).then(function(response){  
                 this.policylist =  response.data;
+                $('#policy_id').val(''); $('#policy_id').trigger('change');
+                this.loadDocuments();
             })
         },
         uploadFile: function(){
