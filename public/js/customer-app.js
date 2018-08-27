@@ -442,6 +442,7 @@ var app = new Vue({
         },
         loadDocuments:function(){
            this.insurancedata.policy_id = $('#policy_id')[0].value;
+           this.currentVertragDoc = '';
            this.$http.post(this.urlPrefix+'fetchdocuments', { policy_id:this.insurancedata.policy_id, provider_id:this.insurancedata.provider_id, customer_id:this.currentId }).then(function(response){
                 this.vertrag = response.data;
           });
