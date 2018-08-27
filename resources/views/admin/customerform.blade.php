@@ -114,9 +114,8 @@
                       <label for="telephone">Telephone</label>
                       <input type="text" class="form-control" name="telephone"  id="telephone" placeholder="Telephone" v-model="$v.customer.telephone.$model">
                     </div>
-
                     <div class="form-group col-sm-6" :class="{ 'has-error': $v.customer.mobile.$error }">
-                      <label for="telephone">Mobile</label>
+                      <label for="mobile">Mobile</label>
                       <input type="text" class="form-control" name="mobile" id="mobile" placeholder="Mobile" v-model="$v.customer.mobile.$model">
                     </div>
                   </div>
@@ -224,8 +223,8 @@
                   <!-- <a target="_blank" href="{{ url('/admin/printcustomer/'.$data->id) }}" class="btn btn-primary" >Print</a> -->
   &nbsp;
                     <div class="btn-group btn-toggle"> 
-                    <button type="button" class="btn"  data-toggle="modal" data-target="#statusModal" class="btn btn-default" v-on:click="onStatus(1)"  v-bind:class="{'btn-primary':customer.status==1,'btn-default':customer.status==0}" >ACTIVE</button>
-                    <button  type="button" class="btn" data-toggle="modal" data-target="#statusModal" class="btn btn-default" v-on:click="onStatus(0)"  v-bind:class="{'btn-primary':customer.status==0,'btn-default':customer.status==1}">DEACTIVE</button>
+                    <button type="button" class="btn"  data-toggle="modal" data-target="#statusModal" class="btn btn-default" v-on:click="onStatus(1)"  v-bind:disabled="customer.status==1"  v-bind:class="{'btn-primary':customer.status==1,'btn-default':customer.status==0}" >ACTIVE</button>
+                    <button  type="button" class="btn" data-toggle="modal" data-target="#statusModal" class="btn btn-default" v-on:click="onStatus(0)" v-bind:disabled="customer.status==0" v-bind:class="{'btn-primary':customer.status==0,'btn-default':customer.status==1}">DEACTIVE</button>
                 
                  
                   </div>
@@ -289,7 +288,7 @@
                 <div class="modal-dialog" role="document">
                   <div class="modal-content">
                      <div class="modal-header">
-                      <h4 class="modal-title" id="exampleModalLabel"> <span style="text-transform:capitalize;">  </span> Insurance 
+                      <h4 class="modal-title" id="exampleModalLabel"> <span style="text-transform:capitalize;"> <% currentCtgName %>  </span> Insurance 
                       <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                       </button>
@@ -299,7 +298,7 @@
                         <div class="row">
                           <div class="form-group col-sm-6" :class="{ 'has-error': $v.insurancedata.provider_id.$error }">
                               <input type="hidden" name="insurance_ctg_id" id="insurance_ctg_id" v:bind:value="insurancedata.insurance_ctg_id" v-model="insurancedata.insurance_ctg_id">
-                                <label for="first_name_family">Provider Name*</label>
+                                <label for="providerSlct">Provider Name*</label>
                                 <select sty="width:100%;" class="form-control" name="provider" id="providerSlct" v-model="$v.insurancedata.provider_id.$model" v-on:change="fetchPolicyList()">
                                   <option value="0">Please Select</option>
                                   <option v-for="(vl, index) in providerslist" v-bind:value="vl.provider_id"  >  <% vl.providerName %></option>
@@ -431,12 +430,12 @@
                         <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                         </button>
-                        <h4 class="modal-title" id="exampleModalLabel"> Antrag </h4>
+                        <h4 class="modal-title" id="exampleModalLabel"> <% currentCtgName %> Antrag </h4>
                     </div>
                     <div class="modal-body">
                  <div class="row">
                     <div class="form-group col-sm-4">
-                                <label for="first_name_family">Provider Name*</label>
+                                <label for="providerSlct">Provider Name*</label>
                                 <select sty="width:100%;" class="form-control" name="provider" id="providerSlct" v-model="$v.insurancedata.provider_id.$model" v-on:change="loadAntragForm(event)">
                                   <option value="0">Please Select</option>
                                   <option v-for="(prd, index) in providerslist" v-bind:value="prd.provider_id"  >  <% prd.providerName %></option>
@@ -471,20 +470,20 @@
                         <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                         </button>
-                        <h4 class="modal-title" id="exampleModalLabel"> Vertrag </h4>
+                        <h4 class="modal-title" id="exampleModalLabel"><% currentCtgName %> Vertrag </h4>
                     </div>
                     <div class="modal-body">
                       <div class="row">
                         <div class="form-group col-sm-4">
-                            <label for="first_name_family">Provider Name*</label>
+                            <label for="vertragProviderSlct">Provider Name*</label>
                             <select sty="width:100%;" class="form-control" name="provider" id="vertragProviderSlct" v-model="$v.insurancedata.provider_id.$model" v-on:change="loadVertragPolicyList(event)" >
                               <option value="">Please Select</option>
                               <option v-for="(prd, index) in providerslist" v-bind:value="prd.provider_id"  >  <% prd.providerName %></option>
                             </select>
                         </div>
                         <div  class="form-group col-sm-4">
-                          <label for="first_name_family">Policy Number*</label>
-                           <select sty="width:100%;" class="form-control" name="policy_id"  id="policy_id" v-on:change="loadDocuments(event.target.value)" >
+                          <label for="policy_id">Policy Number*</label>
+                           <select sty="width:100%;" class="form-control" name="policy_id"  id="policy_id" v-on:change="loadDocuments()" >
                               <option value="">Please Select</option>
                               <option v-for="(pRow,index) in policylist" v-bind:value="pRow.policy_id"  >  <% pRow.policy_number %></option>
                             </select>

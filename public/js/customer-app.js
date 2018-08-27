@@ -12,6 +12,7 @@ var app = new Vue({
       isDocument:false,
       policylist:'',
       policyAction:'',
+      currentCtgName:'',
       customer:{
         id:null,
         gender:null,
@@ -25,6 +26,7 @@ var app = new Vue({
         gender:null,
         is_family:null,
         telephone:null,
+        mobile:null,
         parent_id:null,
         nationality:'',
        
@@ -174,8 +176,7 @@ var app = new Vue({
           },
 
         addNewCustomer: function () {
-            console.log(this.customer.nationality);
-            console.log(this.$v.customer);
+            console.log(this.$v.customer.mobile);
         if (this.$v.customer.$invalid) {
             this.$v.customer.$touch();
         }else{
@@ -257,7 +258,7 @@ var app = new Vue({
                 function(response){
                     this.$toaster.success(response.data);
                     this.getCustomerData();
-                    this.family=[];
+                    this.$v.family.$reset();
                     $('#familyModal').modal('hide');
                 }
             ).catch(function(response){
@@ -332,6 +333,7 @@ var app = new Vue({
            this.policyAction = '';
            this.insurancedata.provider_id='0';
            this.policylist = '';
+           this.currentCtgName =  item.name;
            $('#insuranceModal').find('.modal-body #selectJSFamily').val('');
            $('#insuranceModal').find('.modal-body #selectJSFamily').trigger('change');
         },
@@ -364,6 +366,7 @@ var app = new Vue({
             this.insurancedata.family = [];
             this.insurancedata.end_date = '';
             this.insurancedata.policy_number = '';
+            this.$v.insurancedata.$reset()
             $('#insuranceModal').find('.modal-body #selectJSFamily').val('');
             $('#insuranceModal').find('.modal-body #selectJSFamily').trigger('change');
             this.policyAction = '';
@@ -406,7 +409,7 @@ var app = new Vue({
 
         loadAntragForm:function(item){
          this.insurancedata.provider_id = parseInt(item.target.value);
-    
+         
            let providersLength = this.providerslist.length
             for(var i = 0; i < providersLength; i++) {
                 if( this.providerslist[i].provider_id == this.insurancedata.provider_id){
@@ -428,7 +431,7 @@ var app = new Vue({
         //antrag section
         loadAntragModal:function(item){
             this.fetchProvidersData(item.id);
-            
+            this.currentCtgName = item.name;
         },
         loadVertragModal:function(item){
            if(this.customer.policyArr.indexOf(item.id)>=0){
@@ -438,18 +441,23 @@ var app = new Vue({
                 this.vertrag = '';
                 this.fetchProvidersData(item.id);
                 this.insurancedata.insurance_ctg_id = item.id;
+                this.currentCtgName = item.name;
            }
         },
-        loadDocuments:function(val){
-           this.insurancedata.policy_id = parseInt(val);
+        loadDocuments:function(){
+           this.insurancedata.policy_id = $('#policy_id')[0].value;
+           this.currentVertragDoc = '';
            this.$http.post(this.urlPrefix+'fetchdocuments', { policy_id:this.insurancedata.policy_id, provider_id:this.insurancedata.provider_id, customer_id:this.currentId }).then(function(response){
                 this.vertrag = response.data;
           });
         },
         loadVertragPolicyList:function(item){
+          
             this.insurancedata.provider_id = parseInt(item.target.value);
             this.$http.post(this.urlPrefix+'fetchpolicylist/'+this.currentId,  this.insurancedata).then(function(response){  
                 this.policylist =  response.data;
+                $('#policy_id').val(''); $('#policy_id').trigger('change');
+                this.loadDocuments();
             })
         },
         uploadFile: function(){
