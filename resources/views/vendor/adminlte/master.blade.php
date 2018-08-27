@@ -93,6 +93,7 @@
     regexhelpers    = window.validators.helpers.regex,
     email           = window.validators.email,
     minLength       = window.validators.minLength,
+    maxLength       = window.validators.maxLength,
     numeric         = window.validators.numeric,
     url             = window.validators.url,
     pwdRegx = regexhelpers('pwdRegx', /^(?=.[a-z])(?=.[A-Z])(?=.\d)(?=.[$@$!%*?&])[A-Za-z\d$@$!%*?&]{6,}/),

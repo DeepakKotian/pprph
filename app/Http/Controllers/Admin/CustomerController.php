@@ -64,7 +64,7 @@ class CustomerController extends Controller
     }
     $addQry =  implode(',',$strArr);
     $count = $insuranceCtg->count();
-    $selectQry =  "SELECT c.id, c.first_name, c.last_name, c.email,c.city,c.nationality,c.zip, {$addQry} FROM customers c LEFT JOIN policy_detail pd ON pd.customer_id = c.id {$jnQry} WHERE c.is_family=0 GROUP BY c.id, c.first_name, c.last_name, c.email,c.city,c.nationality,c.zip ";      
+    $selectQry =  "SELECT c.id, c.first_name, c.last_name,c.status, c.email,c.city,c.nationality,c.zip, {$addQry} FROM customers c LEFT JOIN policy_detail pd ON pd.customer_id = c.id {$jnQry} WHERE c.is_family=0 GROUP BY c.id, c.first_name, c.last_name ";      
     $customer =  DB::select(DB::raw($selectQry));
 
         return Datatables::of($customer)
@@ -72,6 +72,11 @@ class CustomerController extends Controller
                 if ($request->has('id')&& $request->id!=null) {
                     $instance->collection = $instance->collection->filter(function ($row) use ($request) {
                          return $row['id'] == $request->get('id') ? true : false;
+                    });
+                }
+                if ($request->has('status')&& $request->status!=null) {
+                    $instance->collection = $instance->collection->filter(function ($row) use ($request) {
+                         return $row['status'] == $request->get('status') ? true : false;
                     });
                 }
                 if ($request->has('name')&& $request->name!=null) {
@@ -88,7 +93,7 @@ class CustomerController extends Controller
 
                 if ($request->has('searchTerm')&& $request->searchTerm!=null) {
                     $instance->collection = $instance->collection->filter(function ($row) use ($request) {
-                        return (Str::contains($row['zip'], $request->get('searchTerm')) || Str::contains($row['city'], $request->get('searchTerm')) 
+                        return (Str::contains($row['zip'], $request->get('searchTerm')) || Str::contains($row['email'], $request->get('searchTerm')) || Str::contains($row['city'], $request->get('searchTerm')) 
                         || Str::contains($row['first_name'], $request->get('searchTerm')) || Str::contains($row['last_name'], $request->get('searchTerm')) ) ? true : false;
                     });
                 }
@@ -119,6 +124,7 @@ class CustomerController extends Controller
             'first_name' => 'required|min:3',
             //'email' => 'required|email|unique:customers', 
             'gender' => 'required',
+            'dob'=>'required|date',
             //'language' => 'required',
             ]
         );
@@ -220,9 +226,9 @@ class CustomerController extends Controller
         $data = DB::table('policy_detail')->select(['policy_detail.id as policy_id', 'insurance_ctg_id', 'customers.id','policy_number',DB::raw('DATE_FORMAT(start_date, "%d-%m-%Y") as start_date'),DB::raw('DATE_FORMAT(end_date, "%d-%m-%Y") as end_date'),'insurance_ctg_id','provider_id','first_name'])
         ->leftJoin('customers','policy_detail.customer_id','=','customers.id')
         ->where('customer_id',$id)
-        ->where('insurance_ctg_id',$request->insurance_ctg_id)
-        ->where('provider_id',$request->provider_id)
+        ->where('policy_detail.id',$request->policy_id)
         ->first();
+
         if($data){
             $family = DB::table('customer_policy_member')->select(['family_member_id'])
                             ->where('policy_detail_id',$data->policy_id)
@@ -238,12 +244,24 @@ class CustomerController extends Controller
         return response()->json('Policy details not found', 404);
     }
 
+    public function fetchPolicyList($id,Request $request)
+    {
+        $data = DB::table('policy_detail')->select(['policy_detail.id as policy_id', 'insurance_ctg_id', 'customers.id','policy_number',DB::raw('DATE_FORMAT(start_date, "%d-%m-%Y") as start_date'),DB::raw('DATE_FORMAT(end_date, "%d-%m-%Y") as end_date'),'insurance_ctg_id','provider_id','first_name'])
+        ->leftJoin('customers','policy_detail.customer_id','=','customers.id')
+        ->where('customer_id',$id)
+        ->where('insurance_ctg_id',$request->insurance_ctg_id)
+        ->where('provider_id',$request->provider_id)
+        ->get();
+        if($data)
+        return response()->json($data, 200);
+        return response()->json('Policy details not found', 404);
+    }
+
     public function savePolicy($id,Request $request)
     {
         $check = DB::table('policy_detail')->select(['policy_detail.id as policy_id', 'policy_number',DB::raw('DATE_FORMAT(start_date, "%d-%m-%Y") as start_date'),DB::raw('DATE_FORMAT(end_date, "%d-%m-%Y") as end_date'),'insurance_ctg_id','provider_id'])
         ->where('customer_id',$id)
-        ->where('insurance_ctg_id',$request->insurance_ctg_id)
-        ->where('provider_id',$request->provider_id)
+        ->where('policy_detail.id',$request->policy_id)
         ->first();
         if(!empty($check)){
             $data['insurance_ctg_id'] = $request->insurance_ctg_id;
@@ -251,7 +269,7 @@ class CustomerController extends Controller
             $data['customer_id'] = $id;
             $data['policy_number'] = $request->policy_number;
             $data['start_date'] = date('Y-m-d',strtotime($request->start_date));
-            $data['end_date'] = date('Y-m-d',strtotime($request->end_date));
+            $data['end_date'] = $request->end_date!=''?date('Y-m-d',strtotime( $request->end_date)):NULL;
             policydetail::whereId($check->policy_id)->update($data);
             if($request->family){
                 customerpolicymember::where('policy_detail_id','=',$check->policy_id)->delete();
@@ -259,23 +277,25 @@ class CustomerController extends Controller
                 customerpolicymember::create(['policy_detail_id'=>$check->policy_id,'family_member_id'=>$value]);
                 }
             }  
-        }else{
-            $data['insurance_ctg_id'] = $request->insurance_ctg_id;
-            $data['provider_id'] = $request->provider_id;
-            $data['customer_id'] = $id;
-            $data['policy_number'] = $request->policy_number;
-            $data['start_date'] = date('Y-m-d',strtotime( $request->start_date));
-            $data['end_date'] = date('Y-m-d',strtotime($request->end_date));
-           
-            $policy = policydetail::create($data);
-            if($request->family){
-                // customerpolicymember::where('policy_detail_id','=',$policy->id)->delete();
-                foreach ($request->family as $key => $value) {
-                   customerpolicymember::create(['policy_detail_id'=> $policy->id,'family_member_id'=>$value]);
-                }
+        }
+         return response()->json('Successfully updated policy details',200);
+    }
+
+    public function addNewPolicy($id,Request $request)
+    {
+        $data['insurance_ctg_id'] = $request->insurance_ctg_id;
+        $data['provider_id'] = $request->provider_id;
+        $data['customer_id'] = $id;
+        $data['policy_number'] = $request->policy_number;
+        $data['start_date'] = date('Y-m-d',strtotime( $request->start_date));
+        $data['end_date'] = $request->end_date!=''?date('Y-m-d',strtotime( $request->end_date)):NULL;
+        $policy = policydetail::create($data);
+        if($request->family){
+            foreach ($request->family as $key => $value) {
+               customerpolicymember::create(['policy_detail_id'=> $policy->id,'family_member_id'=>$value]);
             }
         }
-        return response()->json('Successfully saved',200);
+        return response()->json('Successfully added new policy',200);
     }
 
     /**
@@ -289,8 +309,8 @@ class CustomerController extends Controller
     public function update(Request $request, customer $customer)
     {
         $user = DB::table('customers');
-        $checkAdmin =  $user->select('customers.email')->where('customers.email',$request->email)->where('customers.id','<>',$request->id)->first();
-        if(empty($checkAdmin)){
+        //$checkAdmin =  $user->select('customers.email')->where('customers.email',$request->email)->where('customers.id','<>',$request->id)->first();
+        //if(empty($checkAdmin)){
             $data['first_name'] = $request->first_name;
             $data['last_name'] = $request->last_name;
             $data['email'] = $request->email;
@@ -308,10 +328,10 @@ class CustomerController extends Controller
             $data['language'] = $request->language;
             if(customer::whereId($request->id)->update($data));
             return response()->json('Successfully updated',200);
-        }
-        else{
-            return response()->json('Email Aready Taken', 500);
-        }  
+        //}
+        // else{
+        //     return response()->json('Email Aready Taken', 500);
+        // }  
     }
 
     public function storeFamily(Request $request)
@@ -360,8 +380,7 @@ class CustomerController extends Controller
         $data = policydetail::select(['policy_detail.id as policy_id', 'insurance_ctg_id','document_name', 'customers.id','policy_number',DB::raw('DATE_FORMAT(start_date, "%d-%m-%Y") as start_date'),DB::raw('DATE_FORMAT(end_date, "%d-%m-%Y") as end_date'),'insurance_ctg_id','provider_id','first_name'])
         ->leftJoin('customers','policy_detail.customer_id','=','customers.id')
         ->where('customer_id',$request->customer_id)
-        ->where('insurance_ctg_id',$request->insurance_ctg_id)
-        ->where('provider_id',$request->provider_id)
+        ->where('policy_detail.id',$request->policy_id)
         ->first();
         if(!empty($data)){
             $addQry = ''; $docIds = [];

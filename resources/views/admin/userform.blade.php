@@ -23,8 +23,7 @@
 
 @section('content')
 
-
-<div class="row" id="users-app">
+<div class="row" id="users-app" v-cloak>
 <form class="form-horizontal">
   <div class="col-md-3">
 
