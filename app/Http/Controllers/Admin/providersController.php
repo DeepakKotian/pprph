@@ -75,12 +75,18 @@ class providersController extends Controller
             'name' => 'required',
             ]
         );
-        $insertData = massparameter::create([
+        $insertData = massparameter::firstOrCreate([
             'type' => $request['type'],
             'name' => $request['name'],
            
         ]);
-        if($insertData)
+        if($insertData->wasRecentlyCreated == true){
+            return response()->json('Successfully created',200);
+        }
+        else{
+            return response()->json('Providers already created',400);
+        }
+       
         return response()->json('Successfully created',200);
         return redirect()->back()->withErrors($validate->errors());
     }

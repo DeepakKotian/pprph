@@ -72,8 +72,16 @@ class insuranceController extends Controller
             'name' => preg_replace('!\s+!', ' ',$request['name']),
            
         ]);
-        if($insertData)
-        return response()->json('Successfully created',200);
+       
+
+      
+        if($insertData->wasRecentlyCreated == true){
+            return response()->json('Successfully created',200);
+        }
+        else{
+            return response()->json('Insurance already created',400);
+        }
+       
         return redirect()->back()->withErrors($validate->errors());
     }
 
