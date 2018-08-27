@@ -14,7 +14,7 @@
 @stop
 
 @section('content')
-<div class="row" id="calender-app">
+<div class="row" id="calender-app" v-cloak>
         <div class="col-md-3">
           <form action="" method="post">
           <div class="box box-primary">

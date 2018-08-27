@@ -13,7 +13,7 @@
 @stop
 @section('content')
 <!-- /.box-header -->
-<div class="row" id="task-app">
+<div class="row" id="task-app" v-cloak>
 <div class="col-sm-4">
 <div class="box box-primary">
             <div class="box-header">

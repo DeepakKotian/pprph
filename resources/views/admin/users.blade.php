@@ -12,7 +12,7 @@
 @stop
 @section('content')
 <!-- /.box-header -->
-<div class="box box-primary" id="users-app">
+<div class="box box-primary" id="users-app" v-cloak>
    <!-- Breadcrumbs-->
    <div class="box-header">
       <h3 class="box-title">View Users List </h3>

@@ -17,7 +17,7 @@
   </ol>
 @stop
 @section('content')
-<div class="row" id="customer-app">
+<div class="row" id="customer-app" v-cloak>
 
  <div class="col-md-12">
           <!-- general form elements -->

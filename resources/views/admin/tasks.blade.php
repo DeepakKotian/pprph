@@ -14,7 +14,7 @@
 <!-- /.box-header -->
 <div class="row">
 <div class="col-sm-6">
-<div class="box box-primary" id="task-app">
+<div class="box box-primary" id="task-app" v-cloak>
    <!-- Breadcrumbs-->
    <div class="box-header">
       <h3 class="box-title">View Tasks List </h3>

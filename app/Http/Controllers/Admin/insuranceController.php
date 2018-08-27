@@ -69,7 +69,7 @@ class insuranceController extends Controller
         );
         $insertData = massparameter::firstOrCreate([
             'type' => $request['type'],
-            'name' => $request['name'],
+            'name' => preg_replace('!\s+!', ' ',$request['name']),
            
         ]);
         if($insertData)

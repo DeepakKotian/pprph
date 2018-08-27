@@ -19,7 +19,7 @@ Customers List
 
             <!-- /.box-header -->
             
-            <div class="box box-primary" id="users-app">
+            <div class="box box-primary" id="users-app" v-cloak>
   
         <!-- Breadcrumbs-->
         <div class="box-header">
