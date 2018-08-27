@@ -101,9 +101,9 @@ var app = new Vue({
             this.user.photo= $('#user_photo')[0].files[0];
             let formData= new FormData();
             formData.append('first_name',this.user.first_name);
-            formData.append('last_name',this.user.last_name);
+            formData.append('last_name',this.user.last_name ? this.user.last_name:"");
             formData.append('email',this.user.email);
-            formData.append('phone',this.user.phone);
+            formData.append('phone',this.user.phone ? this.user.phone:"" );
             if(this.user.photo===undefined){
                 this.user.photo = 'userdefault.jpg';  
             }
@@ -153,9 +153,9 @@ var app = new Vue({
        
         let formData= new FormData();
         formData.append('first_name',this.user.first_name);
-        formData.append('last_name',this.user.last_name);
+        formData.append('last_name',this.user.last_name?this.user.last_name:"");
         formData.append('email',this.user.email);
-        formData.append('phone',this.user.phone);
+        formData.append('phone',this.user.phone?this.user.phone:"");
         formData.append('photo',this.user.photo);
         formData.append('role',this.user.role);
         if (this.$v.user.$invalid) {
@@ -188,9 +188,9 @@ var app = new Vue({
        
         let formData= new FormData();
         formData.append('first_name',this.profile.first_name);
-        formData.append('last_name',this.profile.last_name);
+        formData.append('last_name',this.profile.last_name ?this.profile.last_name:"");
         formData.append('email',this.profile.email);
-        formData.append('phone',this.profile.phone);
+        formData.append('phone',this.profile.phone?this.profile.phone:"" );
         formData.append('photo',this.profile.photo);
         formData.append('role',this.profile.role);
      
@@ -253,8 +253,7 @@ var app = new Vue({
   })
 
   Vue.filter('role-type', function (value) {
-     
-     
+  
     if(value==1){
       $roleType="Admin";
       return $roleType;

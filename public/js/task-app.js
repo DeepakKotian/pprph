@@ -12,12 +12,12 @@ var taskapp = new Vue({
         taskid:null,
         customerid:null,
         priority:null,
+        comment:null,
       },
       taskUsers:{},
       mytaskData:[],
       taskData:[],
       errors:[],
-
     },
 
     validations:{
@@ -61,9 +61,20 @@ var taskapp = new Vue({
             self=this;
             $('#due_date').datepicker({
                 format:'dd-mm-yyyy',
+                todayHighlight: true,
             }).on(
                 'changeDate',  function() { self.tasks.due_date = $('#due_date').val();  }
             )
+        },
+
+        assignTask:function(){
+        
+            this.$http.post(this.urlPrefix+'assigntask',this.tasks).then(
+                function(response){
+                    this.$toaster.success(response.data);
+                }
+            )
+        
         },
 
         addTask:function(){
@@ -88,6 +99,10 @@ var taskapp = new Vue({
                   
                 }
             )
+        },
+
+        loadTaskHistories:function(){
+
         },
         
         loadTaskDetail:function(item,cutomerId){
@@ -115,6 +130,8 @@ var taskapp = new Vue({
                 this.tasks.due_date=item.due_date;
                 this.tasks.assigned_id=item.assigned_id;
                 this.tasks.taskid=item.taskid;
+                this.tasks.priority=item.priority;
+                
             }
             this.$v.tasks.$reset();  
         },

@@ -19,7 +19,7 @@ class CreatePolicyDetailTable extends Migration
             $table->integer('provider_id');
             $table->integer('customer_id');
             $table->timestamp('start_date');
-            $table->timestamp('end_date');
+            $table->timestamp('end_date')->nullable();
             $table->string('document_name')->nullable();
             $table->string('policy_number')->unique();
             $table->timestamps();

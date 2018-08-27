@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Dashboard')
+@section('title', 'Documents')
 
 @section('content_header')   
    <h1>
@@ -8,7 +8,7 @@ Documents List
         <small>View list of documents</small>
       </h1>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="{{ url('/admin')}}"><i class="fa fa-dashboard"></i> Home</a></li>
       
         <li class="active">>Documents List</li>
       </ol>

@@ -67,7 +67,7 @@ class insuranceController extends Controller
             'name' => 'required',
             ]
         );
-        $insertData = massparameter::create([
+        $insertData = massparameter::firstOrCreate([
             'type' => $request['type'],
             'name' => $request['name'],
            

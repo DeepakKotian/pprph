@@ -8,7 +8,7 @@
      @endif
 </h1>
   <ol class="breadcrumb">
-    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+    <li><a href="{{ url('/admin')}}"><i class="fa fa-dashboard"></i> Home</a></li>
     @if(!empty($data))
       <li class="breadcrumb-item active">Edit Customer  </li>
     @else
@@ -218,8 +218,9 @@
               <div class="box-footer text-center">
                 
                 @if(!empty($data))
+                    <a href="{{ url('/admin/customers/') }}" class="btn btn-primary" >Cancel </a>
                 <!-- <button  class="btn btn-primary  " data-toggle="modal" v-on:click="taskapp.loadTaskDetail(null,currentId)" data-target="#addTask" >Add Task</button> -->
-                  <button type="button" class="btn btn-primary" v-on:click="updateCustomer">Update</button>
+                    <button type="button" class="btn btn-primary" v-on:click="updateCustomer">Update</button>
                   <!-- <a target="_blank" href="{{ url('/admin/printcustomer/'.$data->id) }}" class="btn btn-primary" >Print</a> -->
   &nbsp;
                     <div class="btn-group btn-toggle"> 

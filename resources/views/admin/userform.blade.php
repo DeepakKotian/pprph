@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Dashboard')
+@section('title', 'User')
 
 @section('content_header')
 <h1> @if(!empty($data))
@@ -11,7 +11,7 @@
      
       </h1>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li><a href="{{ url('/admin')}}"><i class="fa fa-dashboard"></i> Home</a></li>
       
         @if(!empty($data))
              <li class="breadcrumb-item active">Edit User  </li>

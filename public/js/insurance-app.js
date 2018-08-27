@@ -110,6 +110,7 @@ var app = new Vue({
                 this.$http.post(this.urlPrefix+'insurance-list',this.insurance).then(
                     function(response){
                         this.$toaster.success(response.data);
+                        $('#insuranceTable').DataTable().destroy();
                         this.loadAllInsurance();
                         $('#addInsurance').modal('hide');
                     }
@@ -161,6 +162,7 @@ var app = new Vue({
                 this.$http.post(this.urlPrefix+'providers-list',this.providers).then(
                     function(response){
                         this.$toaster.success(response.data);
+                        $('#providersTable').DataTable().destroy();
                         this.loadAllProviders();
                         
                     }

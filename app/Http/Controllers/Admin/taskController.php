@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\task;
+use App\taskhistory;
 use DB;
 use Auth;
 use App\User;
@@ -50,10 +51,31 @@ class taskController extends Controller
 
     public function fetchTaskUsers()
     {
-        $userList = User::where('role','<>',1)->get();
+        $userList = User::where('role','<>',1)->where('deleted_at','=',null)->get();
         if($userList)
         return $userList;
-      
+    }
+
+    public function assigntask(Request $request){
+     $datatask=[
+        'task_name' => $request['task_name'],
+        'task_detail' => $request['task_detail'],
+        'status' => 'Pending',
+        'user_id'=> Auth::user()->id,
+        'due_date'=> date('Y-m-d',strtotime($request['due_date'])),
+        'assigned_id' => $request['assigned_id'],
+        'priority' =>$request['priority'],
+     ];
+     $tempdatatask=$datatask;
+     
+     $datatask['comment'] = $request['comment'];
+     $datatask['task_id'] = $request['taskid'];
+     $datataskhistory = $datatask;
+   
+     $assignto=taskhistory::create($datataskhistory);
+     $updateTaskto=task::whereId($datatask['task_id'])->update($tempdatatask);
+     if($updateTaskto)
+     return response()->json('Successfully created',200); 
     }
 
     /**

@@ -63,12 +63,13 @@ var calenderapp = new Vue({
             minuteStep: 1,
             showSeconds: false,
             showMeridian: false,
-            defaultTime: false
+            defaultTime: false,
         }).on('changeTime.timepicker',function(selected){
             self.appointment.end_time = $('#end_time').val(); 
         });
         $('#end_date').datepicker({
             format:'dd-mm-yyyy',
+            todayHighlight: true
         }).on(
             'changeDate',  function(selected) { self.appointment.end_date = $('#end_date').val(); 
             var maxDate = new Date(selected.date.valueOf());
@@ -76,6 +77,7 @@ var calenderapp = new Vue({
         })
         $('#start_date').datepicker({
             format:'dd-mm-yyyy',
+            todayHighlight: true,
         }).on(
             'changeDate',  function(selected) {
                 var minDate = new Date(selected.date.valueOf());

@@ -1,12 +1,12 @@
 @extends('adminlte::page')
-@section('title', 'Dashboard')
+@section('title', 'Insurance')
 @section('content_header')   
 <h1>
    Insurance List <small>View list of Insurance</small>
 </h1>
 
 <ol class="breadcrumb">
-   <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+   <li><a href="{{ url('/admin')}}"><i class="fa fa-dashboard"></i> Home</a></li>
    <li class="active">Insurance List</li>
 </ol>
 @stop

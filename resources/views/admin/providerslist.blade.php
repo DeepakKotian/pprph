@@ -1,12 +1,12 @@
 @extends('adminlte::page')
-@section('title', 'Dashboard')
+@section('title', 'providers')
 @section('content_header')   
 <h1>
 Providers List <small>View list of Providers</small>
 </h1>
 
 <ol class="breadcrumb">
-   <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+   <li><a href="{{ url('/admin')}}"><i class="fa fa-dashboard"></i> Home</a></li>
    <li class="active">Providers List</li>
 </ol>
 @stop
@@ -71,8 +71,8 @@ Providers List <small>View list of Providers</small>
          </div>
          </div>
          <div class="modal-footer">
-          <button class="btn btn-primary" v-if="modalAction=='edit'" v-on:click="updateProvider()" type="button">Save</a>
-            <button class="btn btn-primary" v-if="modalAction=='add'" v-on:click="addNewProvider()" type="button">Save</a>
+          <button class="btn btn-primary" v-if="modalAction=='edit'" v-on:click="updateProvider()" data-dismiss="modal" type="button">Save</a>
+            <button class="btn btn-primary" v-if="modalAction=='add'" v-on:click="addNewProvider()" data-dismiss="modal" type="button">Save</a>
          </div>
       </div>
    </div>

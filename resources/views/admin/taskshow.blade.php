@@ -1,14 +1,15 @@
 @extends('adminlte::page')
-@section('title', 'Dashboard')
+@section('title', 'Task')
 @section('content_header')   
 <h1>
    Tasks Detail <small> Tasks Detail</small>
 </h1>
 
 <ol class="breadcrumb">
-   <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+   <li><a href="{{ url('/admin')}}"><i class="fa fa-dashboard"></i> Home</a></li>
    <li class="active"> Tasks Detail</li>
 </ol>
+
 @stop
 @section('content')
 <!-- /.box-header -->
@@ -19,7 +20,7 @@
               <h3 class="box-title"> Tasks Detail</h3>
               <div class="box-tools">
               <a class="btn btn-primary " href="{{ url('admin/mytask-list')}}" >Back</a>
-                    <a class="btn btn-warning " data-toggle="modal" v-on:click="loadTaskDetail({{ $task }})" data-target="#assignTask" >Assign</a>
+                    <a class="btn btn-warning " data-toggle="modal" v-on:click="loadTaskDetail({{ $task }})" data-target="#assignTask" > Assign </a>
               </div>
             </div>
             <!-- /.box-header -->
@@ -86,11 +87,11 @@
                     <span aria-hidden="true">×</span>
                     </button>
                     <h4 class="modal-title"  id="exampleModalLabel"> <span style="text-transform:capitalize"><% modalAction %></span> Assign</h4>
-                
                 </div>
                 <div class="modal-body">
                 <div class="box-body">
-                 
+                    <input type="hidden" class="form-control" v-model="tasks.taskid" id="exampleInputEmail1" placeholder="Enter Task Name">
+
                     <input type="hidden" class="form-control" v-model="tasks.task_name" id="exampleInputEmail1" placeholder="Enter Task Name">
                 
                     <input type="hidden" class="form-control" v-model="tasks.task_detail" id="exampleInputEmail1" placeholder="Enter Task Name">
@@ -100,7 +101,6 @@
                     <div class="form-group" :class="{ 'has-error': $v.tasks.assigned_id.$error }">
                     
                         <label for="exampleInputEmail1">Assign to </label>
-                        
                         <select class="form-control"  name="" v-model="$v.tasks.assigned_id.$model" id="">
                         <option value="">-------</option>
                         <option v-for="taskuser in taskUsers" :value="taskuser.id"> <% taskuser.first_name%> <% taskuser.last_name%></option>
@@ -118,20 +118,58 @@
                     </div>
                     <div class="form-group" :class="">
                     <label for="exampleInputEmail1">Comment </label>
-                    <textarea name="" id="" class="form-control" cols="30" rows="3"></textarea>
+                    <textarea name="" id="" v-model="tasks.comment" class="form-control" cols="30" rows="3"></textarea>
                     </div>
                 </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary" v-if="modalAction=='edit'" v-on:click="updatetasks()" type="button">Save</a>
-                    <button class="btn btn-primary" v-if="modalAction=='add'" v-on:click="addTask()" type="button">Save</a>
+                    <button class="btn btn-primary" v-if="modalAction=='edit'" v-on:click="assignTask()" type="button">Assign</a>
+                    
                 </div>
             </div>
         </div>
    </div>
    <!-- assign form end -->
 </div>
+<div class="col-sm-8">
+<div class="box">
+            <div class="box-header">
+              <h3 class="box-title">Responsive Hover Table</h3>
+
+              <div class="box-tools">
+                <div class="input-group input-group-sm" style="width: 150px;">
+                 
+                </div>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body table-responsive ">
+              <table class="table table-hover">
+                <tbody>
+                  
+                <tr>
+                  <th>Assign To</th>
+                  <th>Date</th>
+                  <th>time</th>
+                  <th>Status</th>
+                  <th>Comment</th>
+                </tr>
+                <tr>
+              
+                  <td>John Doe</td>
+                  <td>11-7-2014</td>
+                  <td>11-7-2014</td>
+                  <td>Approved</td>
+                  <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
+                </tr>
+               
+              </tbody></table>
+            </div>
+            <!-- /.box-body -->
+          </div>
 </div>
+</div>
+
 </div>
 @stop
 
