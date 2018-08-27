@@ -288,7 +288,7 @@
                 <div class="modal-dialog" role="document">
                   <div class="modal-content">
                      <div class="modal-header">
-                      <h4 class="modal-title" id="exampleModalLabel"> <span style="text-transform:capitalize;">  </span> Insurance 
+                      <h4 class="modal-title" id="exampleModalLabel"> <span style="text-transform:capitalize;"> <% currentCtgName %>  </span> Insurance 
                       <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                       </button>
@@ -430,7 +430,7 @@
                         <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                         </button>
-                        <h4 class="modal-title" id="exampleModalLabel"> Antrag </h4>
+                        <h4 class="modal-title" id="exampleModalLabel"> <% currentCtgName %> Antrag </h4>
                     </div>
                     <div class="modal-body">
                  <div class="row">
@@ -470,7 +470,7 @@
                         <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                         </button>
-                        <h4 class="modal-title" id="exampleModalLabel"> Vertrag </h4>
+                        <h4 class="modal-title" id="exampleModalLabel"><% currentCtgName %> Vertrag </h4>
                     </div>
                     <div class="modal-body">
                       <div class="row">
