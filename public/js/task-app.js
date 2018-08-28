@@ -105,7 +105,7 @@ var taskapp = new Vue({
                 this.$http.put(this.urlPrefix+'task-list/'+ this.tasks.taskid ,this.tasks).then(
                     function(response){
                         this.$toaster.success(response.data);
-                        this.loadAllProviders();
+                        this.loadAllTasks();
                         
                     }
                 ).catch(function(response){
@@ -157,7 +157,6 @@ var taskapp = new Vue({
                 this.tasks.taskid=item.taskid;
                 this.tasks.priority=item.priority;
                 this.tasks.status=item.status;
-                
             }
             this.$v.tasks.$reset();  
         },

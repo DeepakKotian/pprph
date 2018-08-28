@@ -26,7 +26,13 @@ class insuranceController extends Controller
     public function index()
     {
         //
-        return view('admin.insurancelist');
+        $insuranceList= view('admin.insurancelist');
+        if (Gate::denies('manage-admin', $insuranceList)) {
+            return redirect('/admin');
+        }
+            else{
+            return $insuranceList;
+        }
     }
 
     public function fetchInsurance()

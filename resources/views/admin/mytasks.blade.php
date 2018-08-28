@@ -48,7 +48,7 @@
                      <td><% row.due_date %> </td>
                      <td>
                        
-                        <a type="button" v-bind:href="urlPrefix+'task-list/'+ row.id" class="btn btn-default"><i class="glyphicon glyphicon-eye-open"></i></a>
+                        <a type="button" v-bind:href="urlPrefix+'task-list/'+ row.taskid" class="btn btn-default"><i class="glyphicon glyphicon-eye-open"></i></a>
                         
                      </td>
                   </tr>

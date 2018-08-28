@@ -155,11 +155,11 @@ class taskController extends Controller
         //
         $data['task_name'] = $request->task_name;
         $data['task_detail'] = $request->task_detail;
-        $data['status'] = $request->task_detail;
+        $data['status'] = $request->status;
         $data['due_date'] =  date('Y-m-d',strtotime($request->due_date));
         $data['assigned_id'] = $request->assigned_id;
         $data['priority'] = $request->priority;
-        if(massparameter::whereId($id)->update($data));
+        if(task::whereId($id)->update($data));
         return response()->json('Successfully updated',200);
     }
 

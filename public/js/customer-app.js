@@ -366,7 +366,8 @@ var app = new Vue({
             this.insurancedata.family = [];
             this.insurancedata.end_date = '';
             this.insurancedata.policy_number = '';
-            this.$v.insurancedata.$reset()
+            this.$v.insurancedata.$reset();
+         
             $('#insuranceModal').find('.modal-body #selectJSFamily').val('');
             $('#insuranceModal').find('.modal-body #selectJSFamily').trigger('change');
             this.policyAction = '';
@@ -392,6 +393,10 @@ var app = new Vue({
              }else{
               this.insurancedata.family =   $('#insuranceModal .modal-body .row').find('#selectJSFamily').val();
               this.$http.post(this.urlPrefix+'addnewpolicy/'+this.currentId,  this.insurancedata).then(function(response){
+                // $('#start_date').val('').datepicker('update');
+                // $('#end_date').val('').datepicker('update');
+                // $('#start_date').data('datepicker').setDate(null);
+                // $('#end_date').data('datepicker').setDate(null);
                 this.getCustomerData();
                 this.$toaster.success(response.data);
                 this.fetchPolicyList();
@@ -409,9 +414,9 @@ var app = new Vue({
 
         loadAntragForm:function(item){
          this.insurancedata.provider_id = parseInt(item.target.value);
-         
            let providersLength = this.providerslist.length
             for(var i = 0; i < providersLength; i++) {
+               
                 if( this.providerslist[i].provider_id == this.insurancedata.provider_id){
                   this.currentAntragDocument = this.providerslist[i].document_name;
                     if(this.currentAntragDocument==null){
@@ -432,6 +437,8 @@ var app = new Vue({
         loadAntragModal:function(item){
             this.fetchProvidersData(item.id);
             this.currentCtgName = item.name;
+            this.insurancedata.provider_id="0";
+            this.isDocument=false;
         },
         loadVertragModal:function(item){
            if(this.customer.policyArr.indexOf(item.id)>=0){
