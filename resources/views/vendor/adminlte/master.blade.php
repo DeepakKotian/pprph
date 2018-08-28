@@ -74,6 +74,7 @@
 <script src="{!! asset('js/vue.js') !!}"></script>
 <script src="{!! asset('js/vue-resource.js') !!}"></script>
 <script src="{!! asset('js/v-toaster.js') !!}"></script>
+<script src="{!! asset('js/v-mask.min.js') !!}"></script>
 <script>
     var urlPrefix = "/admin/";
 
@@ -87,6 +88,7 @@
     var tokenDt = token.content;
     Vue.use(window.vuelidate.default)
     Vue.use(VToaster, {timeout: 5000})
+    Vue.use(VueMask.VueMaskPlugin);
 
     var required     = window.validators.required,
     sameAs          = window.validators.sameAs,

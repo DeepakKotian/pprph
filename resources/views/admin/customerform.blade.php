@@ -110,13 +110,23 @@
                    
                   </div>
                   <div class="row">
-                    <div class="form-group col-sm-6" :class="{ 'has-error': $v.customer.telephone.$error }">
+                    <div class="form-group col-sm-6" >
                       <label for="telephone">Telephone</label>
-                      <input type="text" class="form-control" name="telephone"  id="telephone" placeholder="Telephone" v-model="$v.customer.telephone.$model">
+                      <div class="input-group">
+                      <div class="input-group-addon">
+                      +41
+                      </div>
+                       <input type="text" class="form-control" name="telephone"  id="telephone" v-mask="'## ### ## ##'" placeholder="Telephone"  v-model="customer.telephone">
+                      </div>
                     </div>
-                    <div class="form-group col-sm-6" :class="{ 'has-error': $v.customer.mobile.$error }">
+                    <div class="form-group col-sm-6">
                       <label for="mobile">Mobile</label>
-                      <input type="text" class="form-control" name="mobile" id="mobile" placeholder="Mobile" v-model="$v.customer.mobile.$model">
+                      <div class="input-group">
+                      <div class="input-group-addon">
+                      +41
+                      </div>
+                      <input type="text" class="form-control" name="mobile" id="mobile" v-mask="'## ### ## ##'" placeholder="Mobile" v-model="customer.mobile">
+                      </div>
                     </div>
                   </div>
                   <div class="row">
@@ -272,7 +282,12 @@
                         </div>    -->
                         <div class="form-group " :class="{ 'has-error': $v.family.mobile_family.$error }">
                             <label for="mobile_family">Mobile Number*</label>
-                            <input type="text" class="form-control" name="mobile_family"  id="mobile_family"  v-model="family.mobile_family" placeholder="Mobile Number">
+                            <div class="input-group">
+                            <div class="input-group-addon">
+                            +41
+                            </div>
+                            <input type="text" v-mask="'## ### ## ##'" class="form-control" name="mobile_family"  id="mobile_family"  v-model="family.mobile_family" placeholder="Mobile Number">
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">

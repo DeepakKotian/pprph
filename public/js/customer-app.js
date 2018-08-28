@@ -77,12 +77,12 @@ var app = new Vue({
           last_name:{
             required:required,
           },
-          telephone:{
-            phoneRegx:phoneRegx,
-          },
-          mobile:{
-            phoneRegx:phoneRegx,
-         },
+        //   telephone:{
+        //     phoneRegx:phoneRegx,
+        //   },
+        //   mobile:{
+        //     phoneRegx:phoneRegx,
+        //  },
       },
       family:{
         mobile_family:{
@@ -226,7 +226,6 @@ var app = new Vue({
             });
         }
       },
-
       loadFamily:function(item){
         this.modalAction='add';
         this.family.first_name_family="";
