@@ -534,7 +534,7 @@
                             </div>
                               <div class="form-group col-sm-6 otherdocs">
                                 <label for="">Choose from Documents</label>
-                                <select class="form-control" name="otherDocuments" id="otherDocuments" v-on:change="checkDocument">
+                                <select class="form-control" name="otherDocuments" id="otherDocuments"  v-on:change="checkDocument">
                                     <option value="">Please Select</option>
                                     <option v-for="(rw, index) in vertrag.allDocs" v-bind:value="rw.id"> <% rw.document_name %>  </option>
                                 </select>

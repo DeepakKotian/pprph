@@ -85,6 +85,7 @@ Customers List
                                 <th>Email</th>
                                 <th>City</th>
                                 <th>Postcode</th>
+                                <th>Status</th>
                                 @foreach($insuranceCtg as $key=> $rowCtg)
                                 <th> {{ $rowCtg->name }}</th>
                                 @endforeach
@@ -150,6 +151,7 @@ Customers List
             {data: 'email', name: 'email'},
             {data: 'city', name: 'city'},
             {data: 'zip', name: 'zip'},
+            {data: 'status', name: 'status'},
             @foreach($insuranceCtg as $key=> $rowCtg)
             {data: 'ctg{{ $key }}', name: 'ctg{{ $key }}'},
             @endforeach
@@ -171,7 +173,27 @@ Customers List
                 }
                return data;
             }
-       }]
+       },
+       {
+            targets: [6],
+            data: null,
+            render: function(data, type, full, meta){
+                if(data>0){
+                    if(type === 'display'){
+                        data = '<span class="fa fa-check text-green" rel="ctg_'+meta.row+'_'+meta.col+'"></span>';
+                       // data = '<input type="checkbox" class="icheckbox" name="ctg_'+meta.row+'_'+meta.col+'" value="'+data+'" checked >';
+                    }
+                }else{
+                    if(type === 'display'){
+                        data = '<span class="fa fa-times text-red" rel="ctg_'+meta.row+'_'+meta.col+'"></span>';
+                       // data = '<input type="checkbox"  class="icheckbox" name="ctg_'+meta.row+'_'+meta.col+'"  value="'+data+'">';
+                    }
+                }
+               return data;
+            }
+       }
+    ],
+       
     });
 
    $(document).on('click', '#customerTable tbody tr', function () {

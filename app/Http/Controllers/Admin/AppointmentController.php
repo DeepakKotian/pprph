@@ -62,4 +62,40 @@ class AppointmentController extends Controller
            }
            return redirect()->back()->withErrors($validate->errors());
     }
+
+    public function update(Request $request){
+        $id = Auth::user()->id;
+        $validate = $this->validate(request(),[
+            'title' => 'required',
+            'description' => 'required',
+            'assigned_id' => 'required',
+            ]
+        );
+        $startTime = $request['start_time']?$request['start_time']:'00';
+        $endTime = $request['end_time']?$request['end_time']:'00';
+        $editId =  $request->id;
+        $startDate = $request['start_date'].' '.$startTime.':00';
+        $endDate = $request['end_date'].' '.$endTime.':00';
+        $data = [
+            'task_name' => $request['title'],
+            'task_detail' => $request['description'],
+            'status' => 'Pending',
+            'user_id'=>  $id,
+            'type'=>'appointment',
+            'start_date'=> date('Y-m-d h:i:s',strtotime($startDate)),
+            'due_date'=> date('Y-m-d h:i:s',strtotime($endDate)),
+            'assigned_id' => $request['assigned_id'],
+        ];
+       $updatedData = task::whereId($editId)->update($data);
+       if($updatedData){
+        $response = task::leftjoin('users as u','u.id','=','tasks.user_id')
+        ->select('tasks.task_name as title', 'u.first_name','u.last_name','tasks.assigned_id', 'tasks.task_detail as description',DB::raw('tasks.due_date as end, tasks.start_date as start '),
+                         DB::raw('tasks.id as id' ))
+        ->where('type','=','appointment')
+        ->where('tasks.id','=',$editId)
+        ->get();
+        return response()->json($response,200);
+       }
+       return redirect()->back()->withErrors($validate->errors());
+    }
 }

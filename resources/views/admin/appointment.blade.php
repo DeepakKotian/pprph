@@ -68,7 +68,7 @@
             <div class="box-footer text-center">
                <button class="btn btn-info" type="button" v-on:click="appointment=[]; action=''">CLEAR</button>
                <button class="btn btn-primary" v-show="action!='edit'" type="button" v-on:click="addAppointment">ADD</button>
-               <button class="btn btn-primary" v-show="action=='edit'" type="button">UPDATE</button>
+               <button class="btn btn-primary" v-show="action=='edit'" type="button" v-on:click="updateAppointment">UPDATE</button>
                <button class="btn btn-danger" v-show="action=='edit'" type="button">DELETE</button>
             </div>
           </div>
