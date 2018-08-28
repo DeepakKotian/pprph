@@ -525,7 +525,7 @@
                                 <tbody>
                                   <tr v-for="(doc, index) in vertrag.policyDocs">
                                     <td> <% doc.document_name %> </td>
-                                    <td> <a class="fa fa-eye" target="_blank" v-bind:href="urlPrefix+'../uploads/vertrag/'+doc.document_name"></a> 
+                                    <td> <a class="fa fa-eye" target="_blank" v-bind:href="urlPrefix+'../uploads/vertrag/'+doc.document_name"></a> &nbsp;&nbsp;
                                     <a class="fa fa-download" download v-bind:href="urlPrefix+'../uploads/vertrag/'+doc.document_name"> </a> </td>
                                   </tr>
                                 </tbody>
