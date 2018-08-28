@@ -134,6 +134,7 @@ Customers List
         searching:false,
         processing: true,
         serverSide: true,
+        order: [[ 0, "desc" ]],
         ajax: {
             url: '{{ url("admin/customer-filter-data") }}',
             data: function (d) {

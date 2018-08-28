@@ -165,14 +165,16 @@
 #insuranceTable.dataTable thead th:last-child,
 #userTable.dataTable thead th:last-child,
 #providersTable.dataTable thead th:last-child,
-#policyMappingTable.dataTable thead th:last-child
+#policyMappingTable.dataTable thead th:last-child,
+#documentsTable.dataTable thead th:last-child
 {
     pointer-events: none;
 }
 #insuranceTable.dataTable thead th:last-child.sorting:after,
 #userTable.dataTable thead th:last-child.sorting:after,
 #providersTable.dataTable thead th:last-child.sorting:after,
-#policyMappingTable.dataTable thead th:last-child.sorting:after
+#policyMappingTable.dataTable thead th:last-child.sorting:after,
+#documentsTable.dataTable thead th:last-child.sorting:after
 {
     display:none;
 }
