@@ -77,12 +77,6 @@ var app = new Vue({
           last_name:{
             required:required,
           },
-        //   telephone:{
-        //     phoneRegx:phoneRegx,
-        //   },
-        //   mobile:{
-        //     phoneRegx:phoneRegx,
-        //  },
       },
       family:{
         mobile_family:{
