@@ -97,5 +97,6 @@ Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     Route::get('/appointment', 'Admin\AppointmentController@index');
     Route::get('/fetchappointments', 'Admin\AppointmentController@fetchAppointments');
     Route::post('/add-appointment', 'Admin\AppointmentController@store');
+    Route::post('/update-appointment', 'Admin\AppointmentController@update');
 
 });

@@ -33,8 +33,8 @@ class CustomerController extends Controller
         $insuranceCtg = DB::table('massparameter')->where('type','category')->get();
         
         $arrClm = [];
-        $cnt = $insuranceCtg->count()+5;
-        for($i=6;$i<=$cnt;$i++){
+        $cnt = $insuranceCtg->count()+6;
+        for($i=7;$i<=$cnt;$i++){
             $arrClm[]= $i;
         }
         $arrClms = implode(',',$arrClm);

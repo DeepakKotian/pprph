@@ -4,22 +4,22 @@ var calenderapp = new Vue({
       urlPrefix:urlPrefix,
       action:"",
       appointment:{
-        start_date:null,
-        end_date:null,
+        start_date:'',
+        end_date:'',
         assigned_id:'',
-        title:null,
-        description:null,
-        start_time:null,
-        end_time:null,
+        title:'',
+        description:'',
+        start_time:'',
+        end_time:'',
       },
       users:{
 
       },
       events:[],
-      date:null,
-      d : null,
-      m  : null,
-      y : null,
+      date:'',
+      d : '',
+      m  : '',
+      y : '',
     },
     validations:{
         appointment:{
@@ -55,7 +55,7 @@ var calenderapp = new Vue({
             minuteStep: 1,
             showSeconds: false,
             showMeridian: false,
-            defaultTime: false
+            defaultTime: '0'
         }).on('changeTime.timepicker',function(selected){
             self.appointment.start_time = $('#start_time').val(); 
         });
@@ -63,13 +63,14 @@ var calenderapp = new Vue({
             minuteStep: 1,
             showSeconds: false,
             showMeridian: false,
-            defaultTime: false,
+            defaultTime: '0',
         }).on('changeTime.timepicker',function(selected){
             self.appointment.end_time = $('#end_time').val(); 
         });
         $('#end_date').datepicker({
             format:'dd-mm-yyyy',
-            todayHighlight: true
+            todayHighlight: true,
+            startDate:'0',
         }).on(
             'changeDate',  function(selected) { self.appointment.end_date = $('#end_date').val(); 
             var maxDate = new Date(selected.date.valueOf());
@@ -78,6 +79,7 @@ var calenderapp = new Vue({
         $('#start_date').datepicker({
             format:'dd-mm-yyyy',
             todayHighlight: true,
+            startDate:'0',
         }).on(
             'changeDate',  function(selected) {
                 var minDate = new Date(selected.date.valueOf());
@@ -104,7 +106,6 @@ var calenderapp = new Vue({
       },
 
       loadCalender:function(){ 
-            console.log('dfdf');
             self = this;
             $('#calendar').fullCalendar({
                 header    : {
@@ -122,10 +123,11 @@ var calenderapp = new Vue({
                     self.appointment.title = calEvent.title;
                     self.appointment.description = calEvent.description;
                     self.appointment.assigned_id = calEvent.assigned_id;
-                    self.appointment.start_date = moment(calEvent.start).format('d-m-Y');
-                    self.appointment.end_date = moment(calEvent.end).format('d-m-Y');
-                    self.appointment.start_time = moment(calEvent.start).format('HH')+':'+ moment(calEvent.start).format('mm');
-                    self.appointment.end_time =  moment(calEvent.end).format('HH')+':'+ moment(calEvent.end).format('mm');
+                    self.appointment.start_date = moment(calEvent.start).format('DD-MM-YYYY');
+                    self.appointment.end_date = moment(calEvent.end).format('DD-MM-YYYY');
+                    self.appointment.start_time = moment(calEvent.start).format('HH')+':'+ moment(calEvent.start).format('MM');
+                    self.appointment.end_time =  moment(calEvent.end).format('HH')+':'+ moment(calEvent.end).format('MM');
+                    self.appointment.id =  calEvent.id;
                     self.action = 'edit';
                  },
                 events    : self.events,
@@ -151,14 +153,29 @@ var calenderapp = new Vue({
                 function(response){
                     this.events = response.data;
                     this.loadCalender();
-                    this.appointment = [];
+                   
                     this.$toaster.success('Added Successfully');
+                    window.location.reload();
                 }).catch(function(response){
                     this.$toaster.error(response.data);
                 });
             }
-        
         },
+        updateAppointment:function(){
+            if(this.$v.appointment.$invalid){
+                this.$v.appointment.$touch();
+            }else{
+                this.$http.post(this.urlPrefix+'update-appointment',this.appointment).then( 
+                    function(response){
+                        this.events = response.data;
+                        this.$v.appointment.$reset();
+                        this.$toaster.success('Updated Successfully');
+                        window.location.reload();
+                    }).catch(function(response){
+                        this.$toaster.error(response.data);
+                    });
+            }
+        }
      },
      
     delimiters: ["<%","%>"]
