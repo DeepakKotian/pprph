@@ -20,6 +20,7 @@
     <link href="{{ asset('css/v-toaster.css') }}" rel="stylesheet">
    
     <link rel="stylesheet" href="{{ asset('css/admin_custom.css') }} ">
+    <link rel="stylesheet" href="{{ asset('css/jquery-ui.css') }} ">
 
     @if(config('adminlte.plugins.select2'))
         <!-- Select2 -->

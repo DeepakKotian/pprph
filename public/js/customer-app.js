@@ -79,10 +79,6 @@ var app = new Vue({
           },
       },
       family:{
-        mobile_family:{
-            required:required,
-            phoneRegx:phoneRegx,  
-        },
         email_family:{
             email:email,
         },
@@ -137,7 +133,6 @@ var app = new Vue({
         $('#end_date').datepicker({
             format:'dd-mm-yyyy',
             todayHighlight: true
-           
         }).on(
             'changeDate',  function(selected) { self.insurancedata.end_date = $('#end_date').val(); 
             var maxDate = new Date(selected.date.valueOf());
@@ -211,9 +206,9 @@ var app = new Vue({
                 function(response){
                     this.$toaster.success(response.data);
                     this.getCustomerData();
-                    setTimeout(function(){
-                        window.location.href = urlPrefix+'customers';
-                    },2000)
+                    // setTimeout(function(){
+                    //     window.location.href = urlPrefix+'customers';
+                    // },2000)
                 }
             ).catch(function(response){
                 this.$toaster.error(response.data);

@@ -85,9 +85,13 @@ class CustomerController extends Controller
                     });
                 }
                //To get the product search dynamically
-                if ($request->has('ctg')&& $request->ctg!=null) { 
+                if ($request->ctg!=null && $request->statusPrd!=null) { 
                     $instance->collection = $instance->collection->filter(function ($row) use ($request) {
-                            return $row['ctg'.$request->ctg] > 0 ? true : false;
+                            if( $request->statusPrd==1){
+                                return $row['ctg'.$request->ctg] > 0 ? true : false;
+                            }else{
+                                return $row['ctg'.$request->ctg] > 0 ? false : true;
+                            }
                     });
                 }
 
@@ -136,7 +140,7 @@ class CustomerController extends Controller
             'telephone' => $request['telephone'],
             'mobile' => $request['mobile'],
             'zip' => $request['zip'],
-            'dob' => $request['dob'],
+            'dob' =>  date('Y-m-d h:i:s',strtotime($request['dob'])),
             'status' => $request['status'],
             'nationality' => $request['nationality'],
             'city' => $request['city'],
@@ -189,7 +193,7 @@ class CustomerController extends Controller
             ->where('customers.is_family','0')
             ->where('customers.id',$request->id)
             ->first();
-        $data->dob =  date('m/d/Y',strtotime($data->dob));
+        $data->dob =  date('d-m-Y',strtotime($data->dob));
         $data->insurance = DB::table('massparameter')->select(['id','type','name'])
         ->where('massparameter.type','category')
         ->groupBy('massparameter.id')
@@ -457,5 +461,24 @@ class CustomerController extends Controller
         $pdf = PDF::loadView('admin.printcustomer', ['data' => $data]);
         return $pdf->stream($data->first_name.'-'.$data->first_name.'-detail.pdf');
         //return $pdf->download('customer'.$id.'.pdf'); //To download 
+    }
+
+    public function search(Request $request)
+    {
+        $data = []; $str='';
+        $terms = explode(' ',$request->term);
+        foreach ($terms as $ky => $val) {
+            $str.=" first_name like '%" . $val . "%' OR last_name like '%" . $val . "%' OR " ;
+        }
+        if($str){
+            $str = substr($str, 0, -3);
+            $str =  "(". $str.")";
+        }
+        $result = customer::select('id','first_name','last_name')->whereRaw( $str )->where('customers.is_family','0')->get();
+        foreach ($result as $key => $value) {
+            $data[$key]['id'] = $value['id'];
+            $data[$key]['value'] = $value['first_name'].' '.$value['last_name'];
+        }
+        return response()->json($data,200);
     }
 }
