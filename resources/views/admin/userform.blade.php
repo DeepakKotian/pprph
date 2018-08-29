@@ -117,6 +117,7 @@
             
             <div class="form-group">
               <div class="col-sm-offset-2 col-sm-10">
+                        <a href="{{ url('admin/users') }}" class="btn btn-primary">Cancel</a>
                        @if(!empty($data))
                             <button type="button" class="btn btn-primary" v-on:click="updateUser()">Update</button>
                         @else
