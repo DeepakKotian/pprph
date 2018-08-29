@@ -38,9 +38,9 @@
                      <td><% row.name %> </td>
                     
                      <td>
-                        <a type="button" data-toggle="modal"  data-target="#addInsurance"  v-on:click="loadinsurancemodal(row)" class="btn btn-default"><i class="fa fa-edit"></i></a>
-                     
-                     </td>
+                        <a data-toggle="modal"  data-target="#addInsurance"  v-on:click="loadinsurancemodal(row)" class="btn btn-default"><i class="fa fa-edit"></i></a>
+                        <a data-toggle="modal"  class="btn btn-default" v-on:click="loadStatusModal(row)"> <i class="fa fa-square" v-bind:class="{'text-green':row.status==1,'text-red':row.status==0}"></i> </a>
+                      </td>
                   </tr>
                </tbody>
             </table>
@@ -62,6 +62,25 @@
          <div class="modal-footer">
             <button class="btn btn-secondary" type="button"  data-dismiss="modal">Cancel</button>
             <button class="btn btn-primary"   v-on:click="deleteUser(currentUserId)" type="button">Yes</a>
+         </div>
+      </div>
+   </div>
+</div>
+
+<!-- change status Modal-->
+<div class="modal fade" id="statusModal" tabindex="-1" role="dialog" aria-labelledby="statusModalLabel" aria-hidden="true">
+   <div class="modal-dialog" role="document">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title" id="modalLabel">Status?</h4>
+         </div>
+         <div class="modal-body">Are you sure you want to <span v-show="insurance.status ==1"> deactivate </span> <span v-show="insurance.status ==0"> activate </span> <b> <% insurance.name %>   </b> ?</div>
+         <div class="modal-footer">
+            <button class="btn btn-secondary" type="button"  data-dismiss="modal">Cancel</button>
+            <button class="btn btn-primary"   v-on:click="changeStatus(insurance)" type="button">Yes</a>
          </div>
       </div>
    </div>
@@ -102,4 +121,5 @@
 
 @section('js')
 <script src="{!! asset('js/insurance-app.js') !!}"></script>
+
 @stop

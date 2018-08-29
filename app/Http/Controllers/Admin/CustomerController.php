@@ -30,7 +30,7 @@ class CustomerController extends Controller
     public function index()
     {
         $customer = customer::select(['id','first_name','last_name'])->where('is_family','=',0)->get();
-        $insuranceCtg = DB::table('massparameter')->where('type','category')->get();
+        $insuranceCtg = DB::table('massparameter')->where('type','category')->where('status',1)->get();
         
         $arrClm = [];
         $cnt = $insuranceCtg->count()+6;
@@ -56,7 +56,7 @@ class CustomerController extends Controller
         GROUP BY cust.id, cust.first_name */
     $jnQry='';
     $strArr = [];
-    $insuranceCtg = DB::table('massparameter')->where('type','category')->get();
+    $insuranceCtg = DB::table('massparameter')->where('type','category')->where('status',1)->get();
     foreach ($insuranceCtg as $key => $value) { //Dynamic queries 
         $jnQry .= " LEFT JOIN massparameter ctg{$key} ON pd.insurance_ctg_id= ctg{$key}.id  AND ctg{$key}.id=$value->id AND ctg{$key}.type='category' ";
         $name = preg_replace('/\s+/', '_', $value->name);
@@ -197,9 +197,10 @@ class CustomerController extends Controller
         $data->dob =  date('d-m-Y',strtotime($data->dob));
         $data->insurance = DB::table('massparameter')->select(['id','type','name'])
         ->where('massparameter.type','category')
+        ->where('status',1)
         ->groupBy('massparameter.id')
         ->get();
-        $data->providers = DB::table('massparameter')->select(['id','type','name'])->where('type','provider')->get();
+        $data->providers = DB::table('massparameter')->select(['id','type','name'])->where('type','provider')->where('status',1)->get();
         $data->policy = DB::table('massparameter')->select(['massparameter.id','insurance_ctg_id','provider_id'])
         ->leftJoin('policy_detail','policy_detail.insurance_ctg_id','=','massparameter.id')
         ->where('massparameter.type','category')

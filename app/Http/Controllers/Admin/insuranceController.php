@@ -241,5 +241,15 @@ class insuranceController extends Controller
 
     }
 
+    public function updateStatus(Request $request)
+    {
+        $data['status'] = 1;
+        if($request->status==1){
+            $data['status'] = 0;
+        }
+        $json_data = massparameter::whereId($request->id)->update($data);
+        return response()->json('Successfully updated status', 200);
+    }
+
    
 }

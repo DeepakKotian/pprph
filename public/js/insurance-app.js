@@ -83,7 +83,8 @@ var app = new Vue({
         if($('#policyMappingTable').length>0){
             this.loadAllPolicyMapping();
         }
-        
+       
+      
      },
 
     methods: {
@@ -375,12 +376,28 @@ var app = new Vue({
         },
 
         loadDataTable:function(){
-          setTimeout( function(){ $('#insuranceTable').DataTable(); },500)
+          setTimeout( function(){ $('#insuranceTable').DataTable();  },500)
           setTimeout( function(){ $('#providersTable').DataTable(); },500)
           setTimeout( function(){ $('#policyMappingTable').DataTable(); },500)
             
+        },
+        loadStatusModal:function(item){
+            this.insurance =  item;
+            $('#statusModal').modal('show');
+        },
+        changeStatus:function(item){
+            this.insurance =  item;
+            console.log(this.insurance);
+            this.$http.post(this.urlPrefix+'update-insurance-status',this.insurance).then(
+                function(response){
+                    this.$toaster.success(response.data);
+                    $('#statusModal').modal('hide');
+                    this.loadAllProviders();
+                    this.loadAllInsurance();
+                    this.loadDataTable();
+                }
+            )
         }
-
      },
      
     delimiters: ["<%","%>"]
