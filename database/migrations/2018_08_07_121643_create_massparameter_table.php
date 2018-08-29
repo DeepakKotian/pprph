@@ -20,7 +20,7 @@ class CreateMassparameterTable extends Migration
             $table->string('description')->nullable();
             $table->string('field_1')->nullable();
             $table->string('field_2')->nullable();
-            $table->string('field_3')->nullable();
+            $table->boolean('status')->default(true);
             $table->timestamps();
         });
     }
