@@ -38,7 +38,7 @@ class insuranceController extends Controller
     public function fetchInsurance()
     {
         $insuranceList = [];
-        $insuranceList = DataTables::of(massparameter::where('type','=','category'))->toJson();
+        $insuranceList = DataTables::of(massparameter::where('type','=','category')->orderby('id','desc'))->toJson();
         if($insuranceList)
             $fchinsuranceList= $insuranceList;
         if (Gate::denies('manage-admin', $fchinsuranceList)) {
@@ -157,7 +157,7 @@ class insuranceController extends Controller
     {
         $mappingList = [];
         $mappingList = DataTables::of(insurancemapped::leftjoin('massparameter as inc','inc.id','=','insurance_ctg_id')->leftjoin('massparameter as prd','prd.id','=','provider_id')->groupby('insurance_ctg_id','provider_id')
-        ->select(DB::raw('inc.name as insurance_name'),DB::raw('prd.name as provider_name'),'insurance_mapped.id','insurance_ctg_id','provider_id','document_name'))->toJson();
+        ->select(DB::raw('inc.name as insurance_name'),DB::raw('prd.name as provider_name'),'insurance_mapped.id','insurance_ctg_id','provider_id','document_name')->orderby('insurance_mapped.id','desc'))->toJson();
         if($mappingList)
             $fchmappingList= $mappingList;
         if (Gate::denies('manage-admin', $fchmappingList)) {

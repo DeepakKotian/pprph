@@ -165,7 +165,7 @@ class AdminController extends Controller
 
     public function fetchAllUsers(){
       $data = [];
-      $data = DataTables::of(DB::table('users')->where('id','<>',auth::user()->id)->where('deleted_at','=',null))->toJson();
+      $data = DataTables::of(DB::table('users')->where('id','<>',auth::user()->id)->where('deleted_at','=',null)->orderby('id','desc'))->toJson();
       if($data)
       $fchdata= $data;
       
