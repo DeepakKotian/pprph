@@ -77,6 +77,9 @@ var app = new Vue({
           last_name:{
             required:required,
           },
+          telephone:{
+              required:required,
+          },
       },
       family:{
         email_family:{
@@ -93,9 +96,12 @@ var app = new Vue({
           start_date:{
               required:required,
           },
-          policy_number:{
+          end_date:{
             required:required,
-          }
+          },
+        //   policy_number:{
+        //     required:required,
+        //   }
       }
     },
     created: function(){

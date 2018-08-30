@@ -66,6 +66,7 @@ Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     Route::post('/fetchdocuments', 'Admin\CustomerController@fetchDocuments');
     Route::post('/upload-document', 'Admin\CustomerController@uploadDocuments');
     Route::get('/printcustomer/{id}', 'Admin\CustomerController@printCustomer');
+  
     
     // insurance management
     Route::get('/policy-mapping', 'Admin\insuranceController@policyMapping');

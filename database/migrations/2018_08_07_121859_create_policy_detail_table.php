@@ -22,6 +22,7 @@ class CreatePolicyDetailTable extends Migration
             $table->timestamp('end_date')->nullable();
             $table->string('document_name')->nullable();
             $table->string('policy_number')->unique();
+            $table->boolean('status')->default(false);
             $table->timestamps();
         });
     }
