@@ -68,14 +68,14 @@ Customers List
                            <option value="1">Active</option>
                         </select>
                     </div>
-                    <!-- <div class="form-group">
+                    <div class="form-group">
                         <label class="left-15" for="selectJS">Status</label>
                         <select class="form-control selectJS" name="status">
                            <option value="">------</option>
                            <option value="0">Inactive</option>
                            <option value="1">Active</option>
                         </select>
-                    </div> -->
+                    </div>
                 </form>
             </div>
             <div class="col-12">
