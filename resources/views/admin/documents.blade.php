@@ -38,10 +38,10 @@ Documents List
             </div>
             <div class="col-12">
                 <div class="table table-responsive">
-                    <table class="table table-bordered" id="customerTable">
+                    <table class="table table-bordered" id="documentsTable">
                             <thead>
                                 <tr>
-                                    <th>Id</th>
+                                    <th>Document Id</th>
                                     <th>Document </th>
                                     <th>Customer Name</th>
                                     <th>Action</th>                           
@@ -106,7 +106,7 @@ Documents List
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }
             });
-  var oTable = $('#customerTable').DataTable({
+  var oTable = $('#documentsTable').DataTable({
         searching:false,
         processing: true,
         serverSide: true,
@@ -144,7 +144,7 @@ Documents List
     });
 
  
-     $('#customerTable tbody').on('click', '.btn-view', function (e) {
+     $('#documentsTable tbody').on('click', '.btn-view', function (e) {
         var data = oTable.row( $(this).parents('tr') ).data();
         var document_id = data.document_id;
         $.ajax({

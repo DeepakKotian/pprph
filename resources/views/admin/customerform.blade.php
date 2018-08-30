@@ -24,6 +24,9 @@
           <div class="box box-primary">
             <div class="box-header with-border">
               <h3 class="box-title">Customer Form</h3>
+              <div class="box-tools">
+              <a class="btn btn-primary btn-md pull-right" href="{{ url('admin/customers') }}">Back to List Page</a>
+              </div>
             </div>
             <!-- /.box-header -->
             <!-- form start -->
@@ -87,7 +90,7 @@
                   </div>
                   <div class="form-group">
                     <label for="address">Address</label>
-                    <textarea class="form-control" name="address" id="address" cols="10" rows="2"></textarea>
+                    <textarea class="form-control" name="address" id="address" cols="10" v-model="customer.address" rows="2"></textarea>
                   </div>
                   <div class="row">
                     <div class="form-group col-sm-4" :class="{ 'has-error': $v.customer.zip.$error }">
@@ -110,13 +113,23 @@
                    
                   </div>
                   <div class="row">
-                    <div class="form-group col-sm-6" :class="{ 'has-error': $v.customer.telephone.$error }">
+                    <div class="form-group col-sm-6" >
                       <label for="telephone">Telephone</label>
-                      <input type="text" class="form-control" name="telephone"  id="telephone" placeholder="Telephone" v-model="$v.customer.telephone.$model">
+                      <div class="input-group">
+                      <div class="input-group-addon">
+                      +41
+                      </div>
+                       <input type="text" class="form-control" name="telephone"  id="telephone" v-mask="'## ### ## ##'" placeholder="Telephone"  v-model="customer.telephone">
+                      </div>
                     </div>
-                    <div class="form-group col-sm-6" :class="{ 'has-error': $v.customer.mobile.$error }">
+                    <div class="form-group col-sm-6">
                       <label for="mobile">Mobile</label>
-                      <input type="text" class="form-control" name="mobile" id="mobile" placeholder="Mobile" v-model="$v.customer.mobile.$model">
+                      <div class="input-group">
+                      <div class="input-group-addon">
+                      +41
+                      </div>
+                      <input type="text" class="form-control" name="mobile" id="mobile" v-mask="'## ### ## ##'" placeholder="Mobile" v-model="customer.mobile">
+                      </div>
                     </div>
                   </div>
                   <div class="row">
@@ -193,7 +206,7 @@
                                     <td> <% fmly.first_name %></td>
                                     <td> <% fmly.last_name %></td>
                                     <td> <% fmly.dob %></td>
-                                    <td> <% fmly.mobile %></td>
+                                    <td> <span v-show="fmly.mobile">+41</span> <% fmly.mobile %></td>
                                     <td>
                                       <a type="button" class="btn btn-default" data-toggle="modal" data-target="#familyModal" v-on:click="loadFamily(fmly)"><i class="fa fa-edit"></i></a> 
                                       <a type="button" data-toggle="modal" data-target="#deleteFamilyModal" v-on:click="loadFamily(fmly)" class="btn btn-default"><i class="fa fa-trash"></i></a>
@@ -223,8 +236,8 @@
                   <!-- <a target="_blank" href="{{ url('/admin/printcustomer/'.$data->id) }}" class="btn btn-primary" >Print</a> -->
   &nbsp;
                     <div class="btn-group btn-toggle"> 
-                    <button type="button" class="btn"  data-toggle="modal" data-target="#statusModal" class="btn btn-default" v-on:click="onStatus(1)"  v-bind:disabled="customer.status==1"  v-bind:class="{'btn-primary':customer.status==1,'btn-default':customer.status==0}" >ACTIVE</button>
-                    <button  type="button" class="btn" data-toggle="modal" data-target="#statusModal" class="btn btn-default" v-on:click="onStatus(0)" v-bind:disabled="customer.status==0" v-bind:class="{'btn-primary':customer.status==0,'btn-default':customer.status==1}">DEACTIVE</button>
+                    <button type="button" class="btn"  data-toggle="modal" data-target="#statusModal" class="btn btn-success" v-on:click="onStatus(1)" v-bind:class="'btn-success'"  v-bind:disabled="customer.status==1"   >ACTIVE</button>
+                    <button  type="button" class="btn" data-toggle="modal" data-target="#statusModal" class="btn btn-danger" v-on:click="onStatus(0)" v-bind:class="'btn-danger'" v-bind:disabled="customer.status==0" >DEACTIVE</button>
                 
                  
                   </div>
@@ -270,9 +283,14 @@
                           <option v-for="country in countries" v-bind:value="country.name"> <% country.name %> </option>
                       </select>
                         </div>    -->
-                        <div class="form-group " :class="{ 'has-error': $v.family.mobile_family.$error }">
-                            <label for="mobile_family">Mobile Number*</label>
-                            <input type="text" class="form-control" name="mobile_family"  id="mobile_family"  v-model="family.mobile_family" placeholder="Mobile Number">
+                        <div class="form-group ">
+                            <label for="mobile_family">Mobile Number</label>
+                            <div class="input-group">
+                            <div class="input-group-addon">
+                            +41
+                            </div>
+                            <input type="text" v-mask="'## ### ## ##'" class="form-control" name="mobile_family"  id="mobile_family"  v-model="family.mobile_family" placeholder="Mobile Number">
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -510,7 +528,7 @@
                                 <tbody>
                                   <tr v-for="(doc, index) in vertrag.policyDocs">
                                     <td> <% doc.document_name %> </td>
-                                    <td> <a class="fa fa-eye" target="_blank" v-bind:href="urlPrefix+'../uploads/vertrag/'+doc.document_name"></a> 
+                                    <td> <a class="fa fa-eye" target="_blank" v-bind:href="urlPrefix+'../uploads/vertrag/'+doc.document_name"></a> &nbsp;&nbsp;
                                     <a class="fa fa-download" download v-bind:href="urlPrefix+'../uploads/vertrag/'+doc.document_name"> </a> </td>
                                   </tr>
                                 </tbody>

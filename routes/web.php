@@ -53,7 +53,8 @@ Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     Route::get('/fetchcustomer/{id}', 'Admin\CustomerController@fetchCustomer');
     Route::post('/fetchpolicydetail/{id}', 'Admin\CustomerController@fetchPolicyDetail');
     Route::post('/fetchpolicylist/{id}', 'Admin\CustomerController@fetchPolicyList');
-    
+    Route::get('/customer-search', 'Admin\CustomerController@search');
+
     Route::get('/customer-filter-data', 'Admin\CustomerController@getCustomFilterData');
     Route::post('/customer-form/{id}', 'Admin\CustomerController@update');
     Route::post('/storefamily', 'Admin\CustomerController@storeFamily');

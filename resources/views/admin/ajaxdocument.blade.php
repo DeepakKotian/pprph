@@ -4,13 +4,16 @@
     <table class="table table-bordered">  
         <thead> 
             <tr>
+            <th> Policy Number </th>
             <th> Policy Name</th>
             <th> Provider Name </th>
+           
             </tr> 
         </thead>    
         <tbody>
         @foreach($documents as $key=>$val)   
             <tr>
+                <td>{{ $val->policy_number }} </td>   
                 <td>{{ $val->insurance_name }} </td>   
                 <td>{{ $val->provider_name }} </td>   
             </tr>

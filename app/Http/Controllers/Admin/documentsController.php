@@ -38,7 +38,7 @@ class documentsController extends Controller
             ->filter(function ($instance) use ($request) {
             if ($request->has('searchTerm') && $request->searchTerm!=null) {
                 $instance->collection = $instance->collection->filter(function ($row) use ($request) {
-                    return Str::contains($row['document_name'], $request->get('searchTerm')) || Str::contains($row['name'], $request->get('searchTerm')) ? true : false;
+                    return Str::contains(strtolower($row['document_name']), strtolower($request->get('searchTerm'))) || Str::contains($row['name'], $request->get('searchTerm')) ? true : false;
                 });
             }
         })->make(true);;
@@ -73,7 +73,7 @@ class documentsController extends Controller
      */
     public function show(Request $request)
     {
-        $document =  DB::table('documents')->select(['documents.customer_id','documents.id','documents.document_name', 'policy_documents.*', 
+        $document =  DB::table('documents')->select(['documents.customer_id','policy_detail.policy_number','documents.id','documents.document_name', 'policy_documents.*', 
         'customers.first_name as name', 'inc.name as insurance_name', 'prd.name as provider_name'])
         ->leftJoin('customers','customers.id','=','documents.customer_id')
         ->leftJoin('policy_documents','document_id','=','documents.id')
@@ -82,7 +82,7 @@ class documentsController extends Controller
         ->leftJoin('massparameter as prd','prd.id','=','policy_detail.provider_id')
         ->where('customers.id','=', $request->id)
         ->where('documents.id','=', $request->document_id)
-        ->groupBy('policy_detail.provider_id')
+        ->groupBy('policy_detail.policy_number')
         ->get();
         foreach ($document  as $key => $value) {
             $document->docName = $value->document_name;
