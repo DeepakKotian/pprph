@@ -95,7 +95,7 @@
                   <div class="row">
                     <div class="form-group col-sm-4" :class="{ 'has-error': $v.customer.zip.$error }">
                       <label for="zip">Zip*</label>
-                      <input type="text" class="form-control" name="zip"  id="zip" placeholder="Postal Code" v-model="$v.customer.zip.$model">
+                      <input type="text" class="form-control" name="zip"  id="zip" v-mask="'######'" placeholder="Postal Code" v-model="$v.customer.zip.$model">
                     </div>
                     <div class="form-group col-sm-4">
                       <label for="city">City</label>
@@ -306,7 +306,7 @@
                 <div class="modal-dialog" role="document">
                   <div class="modal-content">
                      <div class="modal-header">
-                      <h4 class="modal-title" id="exampleModalLabel"> <span style="text-transform:capitalize;"> <% currentCtgName %>  </span> Insurance 
+                      <h4 class="modal-title" id="exampleModalLabel"> <span style="text-transform:capitalize;"> <% currentCtgName %>  </span>  
                       <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                       </button>
