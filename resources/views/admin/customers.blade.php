@@ -196,6 +196,13 @@ a.ui-button:active,
 
 @section('js')
 <script src="{!! asset('js/jquery-ui.js') !!}"></script>
+<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+
+<script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+
 <script>
   var oTable = $('#customerTable').DataTable({
         searching:false,
@@ -232,11 +239,13 @@ a.ui-button:active,
                 if(data>0){
                     if(type === 'display'){
                         data = '<span class="fa fa-square text-green" rel="ctg_'+meta.row+'_'+meta.col+'"></span>';
+                        //data = '<img src="/uploads/greenicon.png">';
                        // data = '<input type="checkbox" class="icheckbox" name="ctg_'+meta.row+'_'+meta.col+'" value="'+data+'" checked >';
                     }
                 }else{
                     if(type === 'display'){
                         data = '<span class="fa fa-square text-red" rel="ctg_'+meta.row+'_'+meta.col+'"></span>';
+                        //data = '<img src="/uploads/redicon.png">';
                        // data = '<input type="checkbox"  class="icheckbox" name="ctg_'+meta.row+'_'+meta.col+'"  value="'+data+'">';
                     }
                 }
@@ -262,6 +271,10 @@ a.ui-button:active,
             }
        }
     ],
+    dom: 'Bfrtip',
+    buttons: [
+         'csv', 'excel'
+    ]
        
     });
 

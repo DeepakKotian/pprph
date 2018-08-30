@@ -84,9 +84,9 @@ Policy Mapping <small>View Policy Mapping </small>
             <div class="form-group" :class="{ 'has-error': $v.policyMappings.insure_id.$error }">
          
               <label for="exampleInputEmail1"> Select Insurance Name *</label>
-              <select class="form-control select2" style="width: 100%;" v-model="$v.policyMappings.insure_id.$model" >
+              <select class="form-control select2" style="width: 100%;"  v-model="$v.policyMappings.insure_id.$model">
               <option value="" > Select Insurance Name</option>
-                  <option v-for="rowinsureselect in insuranceslect"  v-bind:value="rowinsureselect.id " ><% rowinsureselect.name %></option>
+                  <option v-for="rowinsureselect in insuranceslect"  v-bind:value="rowinsureselect.id" ><% rowinsureselect.name %></option>
                 
               </select>
  
@@ -94,7 +94,7 @@ Policy Mapping <small>View Policy Mapping </small>
 
             <div class="form-group" :class="{ 'has-error': $v.policyMappings.plcy_id.$error }">
           
-              <label for="exampleInputEmail1"> Select Providers Name *</label>
+              <label for="plcy_id"> Select Providers Name *</label>
               <select class="form-control select2" style="width: 100%;" v-model="$v.policyMappings.plcy_id.$model">
               <option value="" > Select Providers Name</option>
               <option v-for="rowprovideselect in providersselect" v-bind:value="rowprovideselect.id"  ><% rowprovideselect.name %></option>
@@ -102,19 +102,18 @@ Policy Mapping <small>View Policy Mapping </small>
               </select>
  
             </div>
-            
             <div class="form-group" >
-                  <label for="exampleInputFile">Upload Document: </label>
-                  <div class="input-group ">
-                <div class="input-group-btn">
-                  <button type="button" id="OpenImgUpload" class="btn btn-primary">Choose file</button>
-                </div>
-                <input type="text"  readonly class="form-control input-rounded" v-model="policyMappings.ducumentData"  id="editDocumentfile"  >
-                <!-- /btn-group -->
-                <input type="file"  class="filestyle" id="documentfile">
+            <label for="exampleInputFile">Upload Document: </label>
+            <div class="input-group">
+                  <span class="input-group-btn image-preview-input">
+                      <span class="btn btn-primary btn-file image-preview-input-title">
+                          Browse… <input type="file"   id="documentfile" name="input-file-preview"/>
+                      </span>
+                  </span>
+                  <input type="text"   class="form-control image-preview-filename input-rounded" v-model="policyMappings.ducumentData"  id="editDocumentfile"  >
+              </div>
               </div>
 
-             </div>
                
          </div>
          </div>
@@ -133,18 +132,30 @@ Policy Mapping <small>View Policy Mapping </small>
 
 @section('js')
 <script src="{!! asset('js/insurance-app.js') !!}"></script>
-<script>
-$('#OpenImgUpload').click(function(){ 
-  
-$('#documentfile').trigger('click');
+<style> 
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
 
-});
-$('#documentfile').hide();
-$('#documentfile').change(function(){
-         var input = this;
-         var fileName = input.files[0].name;
-         $('#editDocumentfile').val(fileName)
-     });
+#img-upload{
+    width: 100%;
+}
+</style>
 
-</script>
 @stop

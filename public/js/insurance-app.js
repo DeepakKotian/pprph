@@ -1,26 +1,3 @@
-// let token = document.head.querySelector('meta[name="csrf-token"]');
-
-// if (token) {
-//     Vue.http.interceptors.push(function(request, next) {
-//         request.headers.set('X-CSRF-TOKEN', token.content)
-//         next()
-//       })
-// } 
-
-// var tokenDt = token.content;
-// Vue.use(window.vuelidate.default)
-// Vue.use(VToaster, {timeout: 5000})
-
-// var required     = window.validators.required,
-//  sameAs          = window.validators.sameAs,
-//  regexhelpers    = window.validators.helpers.regex,
-//  email           = window.validators.email,
-//  minLength       = window.validators.minLength,
-//  numeric         = window.validators.numeric,
-//  url             = window.validators.url,
-//  pwdRegx = regexhelpers('pwdRegx', /^(?=.[a-z])(?=.[A-Z])(?=.\d)(?=.[$@$!%*?&])[A-Za-z\d$@$!%*?&]{6,}/),
-//  phoneRegx = regexhelpers('phoneRegx',/^[+]?[0-9]\d{9,}$/);
-
 var app = new Vue({
     el: '#insurance-app',
     data: {
@@ -40,8 +17,9 @@ var app = new Vue({
 
       providersData:[],
       policyMappings:{
-        insure_id:null,
-        plcy_id:null,
+        insure_id:'',
+        plcy_id:'',
+        
       },
       policyMappingData:[],
       errors:[],
@@ -70,10 +48,12 @@ var app = new Vue({
         }
     },
     created: function(){
-    
+        this.loadDropDowninsurance();
+        this.loadDropDownproviders();
     }, 
     mounted: function(){
-       
+        
+
         if($('#insuranceTable').length>0){
             this.loadAllInsurance();
         }
@@ -83,12 +63,19 @@ var app = new Vue({
         if($('#policyMappingTable').length>0){
             this.loadAllPolicyMapping();
         }
-       
-      
+        let self= this;
+        $(".image-preview-input input:file").change(function (){     
+         
+            var filedata = this.files[0];
+            $(".image-preview-filename").val(filedata.name);  
+            //self.policyMappings.ducumentData = filedata.name;            
+           
+        });  
+        
      },
 
     methods: {
-
+       
 
         loadinsurancemodal:function(item){
             this.modalAction='add';
@@ -100,9 +87,6 @@ var app = new Vue({
             }
             this.$v.insurance.$reset();  
         },
-
-       
-
         addNewInsurance: function () {
             
           if (this.$v.insurance.$invalid) {
@@ -111,6 +95,7 @@ var app = new Vue({
           else{
                 this.$http.post(this.urlPrefix+'insurance-list',this.insurance).then(
                     function(response){
+                      
                         this.$toaster.success(response.data);
                         $('#insuranceTable').DataTable().destroy();
                         this.loadAllInsurance();
@@ -233,8 +218,8 @@ var app = new Vue({
             this.policyMappings.plcy_id="";
             this.policyMappings.mappingId="";
             this.policyMappings.ducumentData = "";
-            this.loadDropDowninsurance();
-            this.loadDropDownproviders();
+            // this.loadDropDowninsurance();
+            // this.loadDropDownproviders();
             if(item !== null){
                 this.modalAction='edit';
                 this.policyMappings.insure_id=item.insurance_ctg_id;
@@ -242,7 +227,7 @@ var app = new Vue({
                 this.policyMappings.mappingId=item.id;
                 this.policyMappings.ducumentData = item.document_name;
             }
-            this.$v.policyMappings.$reset();  
+          this.$v.policyMappings.$reset();  
         },
 
         loadDropDowninsurance:function(){
@@ -263,20 +248,20 @@ var app = new Vue({
            
         },
 
-        loadDropDowninsurance:function(){
-            this.$http.post(this.urlPrefix+'fetchinsurance').then(
-                function(response){
-                    this.insuranceslect=response.data.data; 
-                })
-           
-        },
+      
 
         addNewPolicymapping:function(){
             if (this.$v.policyMappings.$invalid) {
                 this.$v.policyMappings.$touch()
              }
              else{
-                this.policyMappings.ducumentData= $('#documentfile')[0].files[0];
+                // if($('#documentfile')[0].files[0]){
+                    this.policyMappings.ducumentData= $('#documentfile')[0].files[0];
+                // }
+                //  else{
+                //     this.policyMappings.ducumentData=null;
+                //  }
+
                 let formData= new FormData();
                 formData.append('insure_id',this.policyMappings.insure_id);
                 formData.append('policy_id',this.policyMappings.plcy_id);
@@ -287,22 +272,27 @@ var app = new Vue({
                     }
                     }).then(
                     function(response){
+                      // this.policyMappings.ducumentData=null;
                         this.$toaster.success(response.data);
                         $('#policyMappingTable').DataTable().destroy();
                         this.loadAllPolicyMapping();
+                        $('#addPolicyMapping').modal('hide'); 
                         
                     }
                 ).catch(function(response){
+                  
                    if(response.data){
+                   
                     this.$toaster.error(response.data);
                    }
                    else{
+                   
                     let self = this;
                     $.each(response.data.errors, function(key, value){
                         self.$toaster.error(value[0]);
                     });
                    }
-                    
+                  // this.policyMappings.ducumentData=null;
                 });
             } 
         }, 
@@ -344,6 +334,7 @@ var app = new Vue({
             let self = this;
             this.$http.post(this.urlPrefix+'fetchinsurance').then(
                 function(response){
+                    $('#insuranceTable').DataTable().destroy();
                     self.insuranceData  = response.data.data; 
                   
                 }
@@ -357,6 +348,7 @@ var app = new Vue({
             let self = this;
             this.$http.post(this.urlPrefix+'fetchprovider').then(
                 function(response){
+                    $('#providersTable').DataTable().destroy();
                     self.providersData  = response.data.data;
               
                 }
@@ -368,17 +360,18 @@ var app = new Vue({
             let self = this;
             this.$http.post(this.urlPrefix+'fetchpolicymapping').then(
                 function(response){
+                    $('#policyMappingTable').DataTable().destroy();
                     self.policyMappingData  = response.data.data;
-            
+                   
                 }
             )
             self.loadDataTable();
         },
 
         loadDataTable:function(){
-          setTimeout( function(){ $('#insuranceTable').DataTable();  },500)
-          setTimeout( function(){ $('#providersTable').DataTable(); },500)
-          setTimeout( function(){ $('#policyMappingTable').DataTable(); },500)
+          setTimeout( function(){ $('#insuranceTable').DataTable({"order": [[0, "desc" ]],}); },500)
+          setTimeout( function(){ $('#providersTable').DataTable({"order": [[0, "desc" ]],}); },500)
+          setTimeout( function(){ $('#policyMappingTable').DataTable({"order": [[0, "desc" ]],}); },500)
             
         },
         loadStatusModal:function(item){

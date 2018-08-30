@@ -214,8 +214,9 @@ var app = new Vue({
             let self = this;
             this.$http.post(this.urlPrefix+'userdatatable').then(
                 function(response){
-                    self.usersData  = response.data.data;
                     $('#userTable').DataTable().destroy();
+                    self.usersData  = response.data.data;
+                   
                 }
             )
             self.loadDataTable();
@@ -223,7 +224,7 @@ var app = new Vue({
 
         loadDataTable:function(){
         
-            setTimeout( function(){ $('#userTable').DataTable(); },500)
+            setTimeout( function(){ $('#userTable').DataTable({"order": [[0, "desc" ]],}); },1000)
         }
 
      },

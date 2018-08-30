@@ -40,7 +40,7 @@ class providersController extends Controller
     public function fetchProvider()
     {
         $providerlist = [];
-        $providerlist = DataTables::of(massparameter::where('type','=','provider'))->toJson();
+        $providerlist = DataTables::of(massparameter::where('type','=','provider')->orderby('id','desc'))->toJson();
         if($providerlist)
             $fchproviderlist= $providerlist;
         if (Gate::denies('manage-admin', $fchproviderlist)) {
