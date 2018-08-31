@@ -25,6 +25,7 @@
          <div class="table table-responsive">
             <table class="table table-bordered" id="userTable">
                <thead>
+                  
                   <th>Id</th>
                   <th>Name</th>
                   <th>Email</th>
@@ -33,6 +34,7 @@
                </thead>
                <tbody>
                   <tr v-for="row in usersData">
+                  
                      <td><% row.id %></td>
                      <td><% row.first_name %> <% row.last_name %></td>
                      <td><% row.email %></td>

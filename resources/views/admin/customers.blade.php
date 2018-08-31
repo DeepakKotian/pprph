@@ -26,6 +26,7 @@ Customers List
               <h3 class="box-title">View Customers List </h3>
               <div class="box-tools">
                 <a class="btn btn-primary btn-md pull-right" href="{{ url('admin/customer-form') }}">Add New</a>
+                <!-- <a href="{{ route('export.file',['type'=>'xlsx']) }}">Download Excel xlsx</a> -->
               </div>
         </div>
     <div class="box-body">
@@ -196,13 +197,6 @@ a.ui-button:active,
 
 @section('js')
 <script src="{!! asset('js/jquery-ui.js') !!}"></script>
-<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
-
-<script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-<script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
-<script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
-<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
-
 <script>
   var oTable = $('#customerTable').DataTable({
         searching:false,
@@ -270,12 +264,8 @@ a.ui-button:active,
                return data;
             }
        }
-    ],
-    dom: 'Bfrtip',
-    buttons: [
-         'csv', 'excel'
     ]
-       
+
     });
 
    $(document).on('click', '#customerTable tbody tr', function () {

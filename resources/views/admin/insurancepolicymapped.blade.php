@@ -28,15 +28,15 @@ Policy Mapping <small>View Policy Mapping </small>
          <div class="table table-responsive">
             <table class="table table-bordered" id="policyMappingTable">
                <thead>
-                  <th>Id</th>
+                  <th>#</th>
                   <th>Insurancre Name</th>
                   <th>Policy Name</th>
                   <th>Options</th>
                </thead>
                <tbody>
              
-                  <tr v-for="row in policyMappingData">
-                     <td><% row.id %></td>
+                  <tr v-for="(row,index) in policyMappingData">
+                     <td><% index+1 %></td>
                      <td><% row.insurance_name %> </td>
                      <td><% row.provider_name %> </td>
                      <td>
@@ -86,7 +86,7 @@ Policy Mapping <small>View Policy Mapping </small>
               <label for="exampleInputEmail1"> Select Insurance Name *</label>
               <select class="form-control select2" style="width: 100%;"  v-model="$v.policyMappings.insure_id.$model">
               <option value="" > Select Insurance Name</option>
-                  <option v-for="rowinsureselect in insuranceslect"  v-bind:value="rowinsureselect.id" ><% rowinsureselect.name %></option>
+                  <option v-for="rowinsureselect in insuranceslect" v-if="rowinsureselect.status==1"  v-bind:value="rowinsureselect.id" ><% rowinsureselect.name %></option>
                 
               </select>
  
@@ -97,20 +97,20 @@ Policy Mapping <small>View Policy Mapping </small>
               <label for="plcy_id"> Select Providers Name *</label>
               <select class="form-control select2" style="width: 100%;" v-model="$v.policyMappings.plcy_id.$model">
               <option value="" > Select Providers Name</option>
-              <option v-for="rowprovideselect in providersselect" v-bind:value="rowprovideselect.id"  ><% rowprovideselect.name %></option>
+              <option v-for="rowprovideselect in providersselect" v-if="rowprovideselect.status==1" v-bind:value="rowprovideselect.id"  ><% rowprovideselect.name %></option>
                  
               </select>
  
             </div>
             <div class="form-group" >
-            <label for="exampleInputFile">Upload Document: </label>
+            <label for="exampleInputFile">Upload Antrag Document: </label>
             <div class="input-group">
                   <span class="input-group-btn image-preview-input">
                       <span class="btn btn-primary btn-file image-preview-input-title">
                           Browse… <input type="file"   id="documentfile" name="input-file-preview"/>
                       </span>
                   </span>
-                  <input type="text"   class="form-control image-preview-filename input-rounded" v-model="policyMappings.ducumentData"  id="editDocumentfile"  >
+                  <label   class="form-control image-preview-filename input-rounded"   id="editDocumentfile"  > <% policyMappings.ducumentData %></label>
               </div>
               </div>
 
@@ -157,5 +157,19 @@ Policy Mapping <small>View Policy Mapping </small>
     width: 100%;
 }
 </style>
+<script>
+
+        $(".image-preview-input input:file").change(function (){     
+         
+         var filedata = this.files[0];
+         var reader = new FileReader();
+       
+             $(".image-preview-filename").text(filedata.name);  
+        
+      
+         reader.readAsDataURL(filedata);
+     });  
+     
+     </script>
 
 @stop

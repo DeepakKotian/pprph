@@ -101,4 +101,8 @@ Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     Route::post('/add-appointment', 'Admin\AppointmentController@store');
     Route::post('/update-appointment', 'Admin\AppointmentController@update');
 
+    Route::get('export-file/{type}', 'Admin\CustomerController@exportFile')->name('export.file');
+    
+   
+
 });

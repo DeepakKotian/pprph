@@ -19,6 +19,7 @@ var app = new Vue({
       policyMappings:{
         insure_id:'',
         plcy_id:'',
+        ducumentData:'',
         
       },
       policyMappingData:[],
@@ -63,15 +64,8 @@ var app = new Vue({
         if($('#policyMappingTable').length>0){
             this.loadAllPolicyMapping();
         }
-        let self= this;
-        $(".image-preview-input input:file").change(function (){     
-         
-            var filedata = this.files[0];
-            $(".image-preview-filename").val(filedata.name);  
-            //self.policyMappings.ducumentData = filedata.name;            
-           
-        });  
         
+    
      },
 
     methods: {
@@ -218,14 +212,15 @@ var app = new Vue({
             this.policyMappings.plcy_id="";
             this.policyMappings.mappingId="";
             this.policyMappings.ducumentData = "";
-            // this.loadDropDowninsurance();
-            // this.loadDropDownproviders();
+            $(".image-preview-filename").text("");  
             if(item !== null){
+                $('#documentfile').val('');
                 this.modalAction='edit';
                 this.policyMappings.insure_id=item.insurance_ctg_id;
                 this.policyMappings.plcy_id=item.provider_id;
                 this.policyMappings.mappingId=item.id;
                 this.policyMappings.ducumentData = item.document_name;
+                $(".image-preview-filename").text(this.policyMappings.ducumentData);  
             }
           this.$v.policyMappings.$reset();  
         },
@@ -248,19 +243,17 @@ var app = new Vue({
            
         },
 
-      
-
         addNewPolicymapping:function(){
             if (this.$v.policyMappings.$invalid) {
                 this.$v.policyMappings.$touch()
              }
              else{
-                // if($('#documentfile')[0].files[0]){
+                if($('#documentfile')[0].files[0]){
                     this.policyMappings.ducumentData= $('#documentfile')[0].files[0];
-                // }
-                //  else{
-                //     this.policyMappings.ducumentData=null;
-                //  }
+                }
+                 else{
+                    this.policyMappings.ducumentData=null;
+                 }
 
                 let formData= new FormData();
                 formData.append('insure_id',this.policyMappings.insure_id);
@@ -302,14 +295,15 @@ var app = new Vue({
             {
                 this.policyMappings.ducumentData= $('#documentfile')[0].files[0];
             }
-           
+            else{
+              this.policyMappings.ducumentData= $(".image-preview-filename").text();  
+                console.log(this.policyMappings.ducumentData); 
+             }
             let formData= new FormData();
-          
             formData.append('insure_id',this.policyMappings.insure_id);
             formData.append('policy_id',this.policyMappings.plcy_id);
             formData.append('documnetData',this.policyMappings.ducumentData);
             formData.append('mappingId',this. policyMappings.mappingId);
-           
             if (this.$v.policyMappings.$invalid) {
                 this.$v.policyMappings.$touch()
             }
@@ -321,6 +315,7 @@ var app = new Vue({
                     }).then(
                     function(response){
                         this.$toaster.success(response.data);
+                        $('#documentfile').val('');
                         $('#policyMappingTable').DataTable().destroy();
                         this.loadAllPolicyMapping();
                     }
@@ -369,10 +364,10 @@ var app = new Vue({
         },
 
         loadDataTable:function(){
-          setTimeout( function(){ $('#insuranceTable').DataTable({"order": [[0, "desc" ]],}); },500)
-          setTimeout( function(){ $('#providersTable').DataTable({"order": [[0, "desc" ]],}); },500)
-          setTimeout( function(){ $('#policyMappingTable').DataTable({"order": [[0, "desc" ]],}); },500)
-            
+          setTimeout( function(){ $('#insuranceTable').DataTable({ destroy: true, "order": [[0, "desc" ]],}); },500)
+          setTimeout( function(){ $('#providersTable').DataTable({ destroy: true, "order": [[0, "desc" ]],}); },500)
+         setTimeout( function(){ $('#policyMappingTable').DataTable({destroy: true,"order": [[0, "desc" ]],}); },500)
+    
         },
         loadStatusModal:function(item){
             this.insurance =  item;
@@ -387,7 +382,7 @@ var app = new Vue({
                     $('#statusModal').modal('hide');
                     this.loadAllProviders();
                     this.loadAllInsurance();
-                    this.loadDataTable();
+                    //this.loadDataTable();
                 }
             )
         }

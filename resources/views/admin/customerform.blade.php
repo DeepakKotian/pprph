@@ -95,11 +95,11 @@
                   <div class="row">
                     <div class="form-group col-sm-4" :class="{ 'has-error': $v.customer.zip.$error }">
                       <label for="zip">Zip*</label>
-                      <input type="text" class="form-control" name="zip"  id="zip" placeholder="Postal Code" v-model="$v.customer.zip.$model">
+                      <input type="text" class="form-control" name="zip"  v-mask="'######'" id="zip" placeholder="Postal Code" v-model="$v.customer.zip.$model">
                     </div>
                     <div class="form-group col-sm-4">
                       <label for="city">City</label>
-                      <input type="text" class="form-control" name="city"  id="city" placeholder="City" v-model="customer.city">
+                      <input type="text" class="form-control" name="city"   id="city" placeholder="City" v-model="customer.city">
                     </div>
                     <div class="form-group col-sm-4">
                       <label for="nationality">Nationality</label>
@@ -158,17 +158,19 @@
                               <tr>
                                 <th> Insurance Name</th>
                                 <th>Antrag</th>
-                                <th>Vertrag</th>
+                                <th>Vertrag  </th>
                               </tr>
                             </thead>
                             <tbody>
+                        
                               <tr v-for="(item, index) in customer.insurance">
                                 <td>
+                               
                                    <a href="" data-toggle="modal" :class="{'text-green':customer.policyArr.indexOf(item.id)>=0, 'text-red':customer.policyArr.indexOf(item.id)<0}" data-target="#insuranceModal" v-on:click="loadInsuranceModal(item)" ><% item.name %></a>
                                 </td>
                                 <td>
                                   <button  v-on:click="loadAntragModal(item)"  data-toggle="modal" data-target="#antragModal"  type="button" class="btn btn-default btn-sm">
-                                  <i class="fa fa-square "  :class="'text-green'" ></i></button>
+                                  <i class="fa fa-square " :class="'text-green'"  ></i></button>
                                 </td>
                                 <td>
                                 <button  type="button" class="btn btn-default btn-sm" v-on:click="loadVertragModal(item)">

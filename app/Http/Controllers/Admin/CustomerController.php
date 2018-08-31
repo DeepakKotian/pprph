@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
-
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
+use PHPExcel_Worksheet_Drawing;
+use Maatwebsite\Excel\Facades\Excel;
 use App\customer;
 use App\customerpolicymember;
 use App\policydetail;
+use App\User;
 use DB;
 use Auth;
 use DataTables;
@@ -129,10 +131,16 @@ class CustomerController extends Controller
             'first_name' => 'required|min:3',
             //'email' => 'required|email|unique:customers', 
             'gender' => 'required',
-            'dob'=>'required|date',
+           // 'dob'=>'required|date',
             //'language' => 'required',
             ]
         );
+        if($request['dob']!= null){
+           $dob= date('Y-m-d h:i:s',strtotime($request['dob']));
+        }
+        else{
+            $dob= NULL;
+        }
         $insertData = customer::create([
             'first_name' => $request['first_name'],
             'last_name' => $request['last_name'],
@@ -141,7 +149,7 @@ class CustomerController extends Controller
             'telephone' => $request['telephone'],
             'mobile' => $request['mobile'],
             'zip' => $request['zip'],
-            'dob' =>  date('Y-m-d h:i:s',strtotime($request['dob'])),
+            'dob' => $dob, 
             'status' => $request['status'],
             'nationality' => $request['nationality'],
             'city' => $request['city'],
@@ -194,7 +202,13 @@ class CustomerController extends Controller
             ->where('customers.is_family','0')
             ->where('customers.id',$request->id)
             ->first();
+        if($data->dob != null)
+        {
         $data->dob =  date('d-m-Y',strtotime($data->dob));
+        }
+        else{
+            $data->dob="";
+        }
         $data->insurance = DB::table('massparameter')->select(['id','type','name'])
         ->where('massparameter.type','category')
         ->where('status',1)
@@ -314,6 +328,16 @@ class CustomerController extends Controller
     
     public function update(Request $request, customer $customer)
     {
+        
+        if($request->dob != null){
+            $dob= date('Y-m-d h:i:s',strtotime($request->dob));
+         }
+         else{
+             $dob= NULL;
+         }
+        
+        
+
         $user = DB::table('customers');
         //$checkAdmin =  $user->select('customers.email')->where('customers.email',$request->email)->where('customers.id','<>',$request->id)->first();
         //if(empty($checkAdmin)){
@@ -324,7 +348,7 @@ class CustomerController extends Controller
             $data['telephone'] = $request->telephone;
             $data['mobile'] = $request->mobile;
             $data['zip'] = $request->zip;
-            $data['dob'] = date('Y-m-d h:i:s',strtotime($request->dob));
+            $data['dob'] = $dob;
             $data['nationality'] = $request->nationality;
             $data['city'] =   $request->city;
             $data['status'] =   $request->status;
@@ -342,12 +366,19 @@ class CustomerController extends Controller
 
     public function storeFamily(Request $request)
     {
+        if($request['dob_family']!=null)
+        {
+           $dob= date('Y-m-d h:i:s',strtotime($request['dob_family']));
+        }
+        else{
+            $dob=null;
+        }
         $insertData = customer::create([
             'first_name' => $request['first_name_family'],
             'last_name' => $request['last_name_family'],
             'is_family'=>1,
             'parent_id'=>$request['parent_id'],
-            'dob' => date('Y-m-d h:i:s',strtotime($request['dob_family'])),
+            'dob' => $dob,
             'nationality' => $request['nationality_family'],
             'mobile' => $request['mobile_family'],
         ]);
@@ -357,10 +388,17 @@ class CustomerController extends Controller
 
     public function updateFamily(Request $request)
     {
-        
+        if($request->dob_family!=null)
+        {
+           $dob= date('Y-m-d h:i:s',strtotime($request->dob_family));
+        }
+        else{
+            $dob=null;
+        }
+
         $data['first_name'] = $request->first_name_family;
         $data['last_name'] = $request->last_name_family;
-        $data['dob'] = date('Y-m-d h:i:s',strtotime($request->dob_family));
+        $data['dob'] =  $dob;
         $data['nationality'] = $request->nationality_family;
         $data['mobile'] = $request->mobile_family;
         if(customer::whereId($request->id)->update($data));
@@ -483,4 +521,45 @@ class CustomerController extends Controller
         }
         return response()->json($data,200);
     }
+
+    // public function view()
+    // {
+    //     $filename = 'File Name';
+
+    //     Excel::create($filename, function($excel){
+        
+    //        $excel->sheet('sheet name', function($sheet){
+    //             $objDrawing = new PHPExcel_Worksheet_Drawing;
+    //             $objDrawing->setPath(public_path('uploads/userphoto/userdefault.jpg')); //your image path
+    //             $objDrawing->setCoordinates('A2');
+    //             $objDrawing->setWorksheet($sheet);
+    //        });
+        
+    //     })->export('xls');
+    // }
+
+    public function exportFile($type){
+
+        $customer = customer::select('id','first_name','last_name','email','city','zip')->where('is_family','=',0)->get();
+        //$insuranceCtg = DB::table('massparameter')->where('type','category')->where('status',1)->get();
+
+        return Excel::create('hdtuto_demo', function($excel) use ($customer) {
+
+        $excel->sheet('sheet name', function($sheet) use ($customer)
+        {
+            $objDrawing = new PHPExcel_Worksheet_Drawing;
+            $objDrawing->setPath(public_path('uploads/redicon.png')); //your image path
+            $objDrawing->setCoordinates('A2');
+            $sheet->fromArray($customer);
+            $objDrawing->setWorksheet($sheet);
+        });
+
+        })->export($type);
+        return Excel::download(new CustomerExports, 'users.xlsx');
+
+       
+    } 
+    
+    
+    
 }

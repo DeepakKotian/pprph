@@ -157,7 +157,7 @@ class insuranceController extends Controller
     {
         $mappingList = [];
         $mappingList = DataTables::of(insurancemapped::leftjoin('massparameter as inc','inc.id','=','insurance_ctg_id')->leftjoin('massparameter as prd','prd.id','=','provider_id')->groupby('insurance_ctg_id','provider_id')
-        ->select(DB::raw('inc.name as insurance_name'),DB::raw('prd.name as provider_name'),'insurance_mapped.id','insurance_ctg_id','provider_id','document_name')->orderby('insurance_mapped.id','desc'))->toJson();
+        ->select('inc.name as insurance_name','prd.name as provider_name','insurance_mapped.id','insurance_ctg_id','provider_id','document_name')->where('inc.status',1)->where('prd.status',1)->orderby('insurance_mapped.id','desc'))->toJson();
         if($mappingList)
             $fchmappingList= $mappingList;
         if (Gate::denies('manage-admin', $fchmappingList)) {
@@ -237,7 +237,6 @@ class insuranceController extends Controller
         else{
             return response()->json('Policy Already Mapped', 500);
         }
-
 
     }
 
