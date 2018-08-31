@@ -77,6 +77,9 @@ var app = new Vue({
           last_name:{
             required:required,
           },
+          telephone:{
+              required:required,
+          },
       },
       family:{
         email_family:{
@@ -93,9 +96,12 @@ var app = new Vue({
           start_date:{
               required:required,
           },
-          policy_number:{
+          end_date:{
             required:required,
-          }
+          },
+        //   policy_number:{
+        //     required:required,
+        //   }
       }
     },
     created: function(){
@@ -432,6 +438,7 @@ var app = new Vue({
             this.insurancedata.provider_id = '';
             $('#vertragModal').find(".modal-body #vertragProviderSlct").val('');
             $('#vertragModal').find(".modal-body #vertragProviderSlct").trigger('change');
+            $('#vertragModal').find(".modal-footer .btn-primary.documentAdd").hide();
             this.policylist = [];
            if(this.customer.policyArr.indexOf(item.id)>=0){
                 $('#vertragModal').modal('show');
@@ -494,6 +501,8 @@ var app = new Vue({
                 function(response){
                     this.$toaster.success(response.data);
                     this.loadDocuments($('#policy_id').val());
+                    $('#documentType').val('');
+                    $('#document').val('');
                 }
             ).catch(function(response){
                 let self = this;

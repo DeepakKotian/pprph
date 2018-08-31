@@ -95,7 +95,7 @@
                   <div class="row">
                     <div class="form-group col-sm-4" :class="{ 'has-error': $v.customer.zip.$error }">
                       <label for="zip">Zip*</label>
-                      <input type="text" class="form-control" name="zip"  v-mask="'######'" id="zip" placeholder="Postal Code" v-model="$v.customer.zip.$model">
+                      <input type="text" class="form-control" name="zip"  id="zip" v-mask="'######'" placeholder="Postal Code" v-model="$v.customer.zip.$model">
                     </div>
                     <div class="form-group col-sm-4">
                       <label for="city">City</label>
@@ -113,13 +113,13 @@
                    
                   </div>
                   <div class="row">
-                    <div class="form-group col-sm-6" >
+                    <div class="form-group col-sm-6" :class="{ 'has-error': $v.customer.telephone.$error }">
                       <label for="telephone">Telephone</label>
                       <div class="input-group">
                       <div class="input-group-addon">
                       +41
                       </div>
-                       <input type="text" class="form-control" name="telephone"  id="telephone" v-mask="'## ### ## ##'" placeholder="Telephone"  v-model="customer.telephone">
+                       <input type="text" class="form-control" name="telephone"  id="telephone" v-mask="'## ### ## ##'" placeholder="Telephone"  v-model="$v.customer.telephone.$model">
                       </div>
                     </div>
                     <div class="form-group col-sm-6">
@@ -308,7 +308,7 @@
                 <div class="modal-dialog" role="document">
                   <div class="modal-content">
                      <div class="modal-header">
-                      <h4 class="modal-title" id="exampleModalLabel"> <span style="text-transform:capitalize;"> <% currentCtgName %>  </span> Insurance 
+                      <h4 class="modal-title" id="exampleModalLabel"> <span style="text-transform:capitalize;"> <% currentCtgName %>  </span>  
                       <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                       </button>
@@ -324,10 +324,10 @@
                                   <option v-for="(vl, index) in providerslist" v-bind:value="vl.provider_id"  >  <% vl.providerName %></option>
                                 </select>
                             </div>
-                            <div class="form-group col-sm-6" :class="{ 'has-error': $v.insurancedata.policy_number.$error }">
+                            <!-- <div class="form-group col-sm-6" :class="{ 'has-error': $v.insurancedata.policy_number.$error }">
                                 <label for="policy_number">Policy Number</label>
                                 <input type="text" class="form-control" name="policy_number" v-model="$v.insurancedata.policy_number.$model"  id="policy_number"   placeholder="Policy Number">
-                            </div>
+                            </div> -->
                         </div>
                         <div class="row">
                           <div class="form-group col-sm-6" :class="{ 'has-error': $v.insurancedata.start_date.$error }">
@@ -339,13 +339,13 @@
                               <input type="text" class="form-control" name="start_date"  id="start_date"   v-model="$v.insurancedata.start_date.$model"   placeholder="Start Date">
                           </div>
                           </div>
-                          <div class="form-group col-sm-6" >
+                          <div class="form-group col-sm-6" :class="{ 'has-error': $v.insurancedata.end_date.$error }">
                               <label for="policy_number">End Date</label>
                               <div class="input-group">
                                 <div class="input-group-addon">
                                  <i class="fa fa-calendar"></i>
                                 </div>
-                              <input type="text" class="form-control" name="end_date"  id="end_date"  v-model="insurancedata.end_date"  placeholder="End Date">
+                              <input type="text" class="form-control" name="end_date"  id="end_date"  v-model="$v.insurancedata.end_date.$model"  placeholder="End Date">
                             </div>
                           </div>
                         </div>
@@ -431,10 +431,12 @@
                         </button>
                         <h4 class="modal-title" id="exampleModalLabel">Delete?</h4>
                     </div>
-                    <div class="modal-body">Are you sure you want to <% statusText %> <b></b> ?</div>
+                    <div class="modal-body" v-show="customer.policy==''">Are you sure you want to <% statusText %> <b></b> ?</div>
+                    <div class="modal-body" v-show="customer.policy!=''"> Please deactivate all active products to <% statusText %> </div>
                     <div class="modal-footer">
                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                        <button class="btn btn-primary" data-dismiss="modal" v-on:click="statusUpdate(currentId)" type="button">Yes</a>
+                        <button class="btn btn-primary" v-show="customer.policy==''" data-dismiss="modal" v-on:click="statusUpdate(currentId)" type="button">Yes</button>
+                        <button class="btn btn-primary"  v-show="customer.policy!=''" data-dismiss="modal"  type="button">Yes</button>
                     </div>
             </div>
 

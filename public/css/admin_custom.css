@@ -166,7 +166,8 @@
 #userTable.dataTable thead th:last-child,
 #providersTable.dataTable thead th:last-child,
 #policyMappingTable.dataTable thead th:last-child,
-#documentsTable.dataTable thead th:last-child
+#documentsTable.dataTable thead th:last-child,
+#policyDetailTable.dataTable thead th:first-child
 {
     pointer-events: none;
 }
@@ -174,10 +175,16 @@
 #userTable.dataTable thead th:last-child.sorting:after,
 #providersTable.dataTable thead th:last-child.sorting:after,
 #policyMappingTable.dataTable thead th:last-child.sorting:after,
-#documentsTable.dataTable thead th:last-child.sorting:after
+#documentsTable.dataTable thead th:last-child.sorting:after,
+#policyDetailTable.dataTable thead th:first-child:after
 {
     display:none;
 }
+#policyDetailTable.dataTable thead th:first-child,#policyDetailTable.dataTable tbody td:first-child{
+    text-align: center;
+}
+
+ 
 [v-cloak] {display: none;}
 
  

@@ -31,7 +31,7 @@ class CustomerController extends Controller
     
     public function index()
     {
-        $customer = customer::select(['id','first_name','last_name'])->where('is_family','=',0)->get();
+        $customer = customer::select(['id','unique_id','first_name','last_name'])->where('is_family','=',0)->get();
         $insuranceCtg = DB::table('massparameter')->where('type','category')->where('status',1)->get();
         
         $arrClm = [];
@@ -66,7 +66,7 @@ class CustomerController extends Controller
     }
     $addQry =  implode(',',$strArr);
     $count = $insuranceCtg->count();
-    $selectQry =  "SELECT c.id, c.first_name, c.last_name,c.status, c.email,c.city,c.nationality,c.zip, {$addQry} FROM customers c LEFT JOIN policy_detail pd ON pd.customer_id = c.id {$jnQry} WHERE c.is_family=0 GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC";      
+    $selectQry =  "SELECT c.id,c.unique_id, c.first_name, c.last_name,c.status, c.email,c.city,c.nationality,c.zip, {$addQry} FROM customers c LEFT JOIN policy_detail pd ON pd.customer_id = c.id {$jnQry} WHERE c.is_family=0 GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC";      
 
     $customer =  DB::select(DB::raw($selectQry));
 
@@ -118,6 +118,61 @@ class CustomerController extends Controller
         //
     }
 
+    public function printCustomerGrid(Request $request)
+    {
+        $jnQry='';
+        $strArr = [];
+        $insuranceCtg = DB::table('massparameter')->where('type','category')->where('status',1)->get();
+        foreach ($insuranceCtg as $key => $value) { //Dynamic queries 
+            $jnQry .= " LEFT JOIN massparameter ctg{$key} ON pd.insurance_ctg_id= ctg{$key}.id  AND ctg{$key}.id=$value->id AND ctg{$key}.type='category' ";
+            $name = preg_replace('/\s+/', '_', $value->name);
+            $strArr[$key] = "(COUNT(IF(pd.insurance_ctg_id = ctg{$key}.id,1,NULL))) ctg{$key}";
+        }
+        $addQry =  implode(',',$strArr);
+        $count = $insuranceCtg->count();
+        $selectQry =  "SELECT c.id, c.first_name, c.last_name,c.status, c.email,c.city,c.nationality,c.zip, {$addQry} FROM customers c LEFT JOIN policy_detail pd ON pd.customer_id = c.id {$jnQry} WHERE c.is_family=0 GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC";      
+
+        $customer =  DB::select(DB::raw($selectQry));
+
+        $data = Datatables::of($customer)
+            ->filter(function ($instance) use ($request) {
+                if ($request->has('id')&& $request->id!=null) {
+                    $instance->collection = $instance->collection->filter(function ($row) use ($request) {
+                         return $row['id'] == $request->get('id') ? true : false;
+                    });
+                }
+                if ($request->has('status')&& $request->status!=null) {
+                    $instance->collection = $instance->collection->filter(function ($row) use ($request) {
+                         return $row['status'] == $request->get('status') ? true : false;
+                    });
+                }
+                if ($request->has('name')&& $request->name!=null) {
+                    $instance->collection = $instance->collection->filter(function ($row) use ($request) {
+                         return $row['id'] == $request->get('name') ? true : false;
+                    });
+                }
+               //To get the product search dynamically
+                if ($request->ctg!=null && $request->statusPrd!=null) { 
+                    $instance->collection = $instance->collection->filter(function ($row) use ($request) {
+                            if( $request->statusPrd==1){
+                                return $row['ctg'.$request->ctg] > 0 ? true : false;
+                            }else{
+                                return $row['ctg'.$request->ctg] > 0 ? false : true;
+                            }
+                    });
+                }
+
+                if ($request->has('searchTerm')&& $request->searchTerm!=null) {
+                    $instance->collection = $instance->collection->filter(function ($row) use ($request) {
+                        return (Str::contains($row['zip'], $request->get('searchTerm')) || Str::contains($row['email'], $request->get('searchTerm')) || Str::contains($row['city'], $request->get('searchTerm')) 
+                        || Str::contains($row['first_name'], $request->get('searchTerm')) || Str::contains($row['last_name'], $request->get('searchTerm')) ) ? true : false;
+                    });
+                }
+            })
+            ->make(true);
+        dd($data);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -126,12 +181,16 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-
+        $uniqueId = 0;
+        $data = customer::select('unique_id')->where('customers.is_family','0')->orderBy('id','desc')->first();
+        if(!empty($data)){
+            $uniqueId = $data->unique_id;
+        }
+        $uniqueId = $uniqueId+1;
         $validate = $this->validate(request(),[
             'first_name' => 'required|min:3',
             //'email' => 'required|email|unique:customers', 
             'gender' => 'required',
-           // 'dob'=>'required|date',
             //'language' => 'required',
             ]
         );
@@ -143,6 +202,7 @@ class CustomerController extends Controller
         }
         $insertData = customer::create([
             'first_name' => $request['first_name'],
+            'unique_id'=>$uniqueId,
             'last_name' => $request['last_name'],
             'email' => $request['email'],
             'email_office' => $request['email_office'],
@@ -218,6 +278,7 @@ class CustomerController extends Controller
         $data->policy = DB::table('massparameter')->select(['massparameter.id','insurance_ctg_id','provider_id'])
         ->leftJoin('policy_detail','policy_detail.insurance_ctg_id','=','massparameter.id')
         ->where('massparameter.type','category')
+        ->where('end_date','>=',date('Y-m-d'))
         ->where('customer_id',$request->id)
         ->groupBy('massparameter.id')
         ->get();
@@ -287,7 +348,7 @@ class CustomerController extends Controller
             $data['insurance_ctg_id'] = $request->insurance_ctg_id;
             $data['provider_id'] = $request->provider_id;
             $data['customer_id'] = $id;
-            $data['policy_number'] = $request->policy_number;
+           
             $data['start_date'] = date('Y-m-d',strtotime($request->start_date));
             $data['end_date'] = $request->end_date!=''?date('Y-m-d',strtotime( $request->end_date)):NULL;
             policydetail::whereId($check->policy_id)->update($data);
@@ -303,10 +364,17 @@ class CustomerController extends Controller
 
     public function addNewPolicy($id,Request $request)
     {
+        $uniqueId = 0;
+        $policy = policydetail::select('id')->orderBy('id','desc')->first();
+        if($policy){
+          $uniqueId = $policy->id;
+        }
+        $uniqueId = 'P0'.($uniqueId + 1); 
+        $rand = rand();
         $data['insurance_ctg_id'] = $request->insurance_ctg_id;
         $data['provider_id'] = $request->provider_id;
         $data['customer_id'] = $id;
-        $data['policy_number'] = $request->policy_number;
+        $data['policy_number'] = $uniqueId;
         $data['start_date'] = date('Y-m-d',strtotime( $request->start_date));
         $data['end_date'] = $request->end_date!=''?date('Y-m-d',strtotime( $request->end_date)):NULL;
         $policy = policydetail::create($data);
@@ -508,15 +576,19 @@ class CustomerController extends Controller
         $data = []; $str='';
         $terms = explode(' ',$request->term);
         foreach ($terms as $ky => $val) {
-            $str.=" first_name like '%" . $val . "%' OR last_name like '%" . $val . "%' OR " ;
+            $str.=" first_name like '%" . $val . "%' OR last_name like '%" . $val . "%' OR mobile like  '%" . $val . "%' OR telephone like  '%" . $val . "%' OR  dob like  '%" . $val . "%' OR " ;
         }
         if($str){
             $str = substr($str, 0, -3);
             $str =  "(". $str.")";
         }
-        $result = customer::select('id','first_name','last_name')->whereRaw( $str )->where('customers.is_family','0')->get();
+        $result = customer::select('id','parent_id','first_name','last_name')->whereRaw( $str )->get();
         foreach ($result as $key => $value) {
-            $data[$key]['id'] = $value['id'];
+            if($value['parent_id']>0){
+               $data[$key]['id'] = $value['parent_id'];
+            }else{
+               $data[$key]['id'] = $value['id'];
+            }
             $data[$key]['value'] = $value['first_name'].' '.$value['last_name'];
         }
         return response()->json($data,200);
