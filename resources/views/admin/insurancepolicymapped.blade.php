@@ -28,15 +28,15 @@ Policy Mapping <small>View Policy Mapping </small>
          <div class="table table-responsive">
             <table class="table table-bordered" id="policyMappingTable">
                <thead>
-                  <th>#</th>
+                  <th>Id</th>
                   <th>Insurancre Name</th>
                   <th>Policy Name</th>
                   <th>Options</th>
                </thead>
                <tbody>
              
-                  <tr v-for="(row,index) in policyMappingData">
-                     <td><% index+1 %></td>
+                  <tr v-for="row in policyMappingData">
+                     <td><% row.id %></td>
                      <td><% row.insurance_name %> </td>
                      <td><% row.provider_name %> </td>
                      <td>
