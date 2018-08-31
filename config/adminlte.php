@@ -186,6 +186,10 @@ return [
                     'text' => 'Add Customer',
                     'url'  => 'admin/customer-form',
                 ],
+                [
+                    'text' => 'Provision',
+                    'url'  => 'admin/provision',
+                ],
             ],
         ],
 
@@ -208,7 +212,7 @@ return [
                 ],
             ],
         ],
-        //   [
+        // [
         //     'text'    => 'Document Management',
         //     'icon'    => 'tasks',
         //     'submenu' => [

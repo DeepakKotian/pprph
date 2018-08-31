@@ -29,9 +29,7 @@ var app = new Vue({
         mobile:null,
         parent_id:null,
         nationality:'',
-       
       },
-      customerData:[],
       currentVertragDoc:'',
       errors:[],
       family:{
@@ -192,7 +190,8 @@ var app = new Vue({
      }, 
      getCustomerData: function () {
         this.$http.get(this.urlPrefix+'fetchcustomer/'+this.currentId).then(function(response){
-        this.customer=response.data;
+        this.customer = response.data;
+
         setTimeout(function() {
             $('.selectJS').select2();
             $('#insuranceModal').find('.modal-body #selectJSFamily').select2();
