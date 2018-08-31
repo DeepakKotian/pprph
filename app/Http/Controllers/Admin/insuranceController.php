@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\massparameter;
 use App\insurancemapped;
+use App\policydetail;
+use App\customer;
 use DataTables;
 use Auth;
 use Gate;
@@ -251,5 +253,83 @@ class insuranceController extends Controller
         return response()->json('Successfully updated status', 200);
     }
 
-   
+    public function policyDetail()
+    {
+        $customer = customer::select(['id','unique_id','first_name','last_name'])->where('is_family','=',0)->get();
+        $insuranceCtg = DB::table('massparameter')->where('type','category')->where('status',1)->get();
+        return view('admin.policydetail',compact(['customer','insuranceCtg']));
+    }
+
+    public function policyFilterData(Request $request)
+    {
+        $policyDetail = policydetail::select('customers.id as custId','policy_detail.id as policy_detail_id','policy_detail.status as status',DB::raw('DATE_FORMAT(start_date, "%d-%m-%Y") as start_date'),DB::raw('DATE_FORMAT(end_date, "%d-%m-%Y") as end_date'),'first_name','last_name','telephone','email','city','zip', DB::raw('DATE_FORMAT(policy_detail.created_at, "%d-%m-%Y") as activation_date'), 'inc.name as insuranceName','prd.name as providerName')
+        ->leftJoin('customers','customer_id','=','customers.id')
+        ->leftJoin('massparameter as inc','inc.id','=','policy_detail.insurance_ctg_id')
+        ->leftJoin('massparameter as prd','prd.id','=','policy_detail.provider_id');
+        
+        return Datatables::of($policyDetail) 
+            ->filter(function ($instance) use ($request) {
+            if ($request->has('id')&& $request->id!=null) {
+                $instance->collection = $instance->collection->filter(function ($row) use ($request) {
+                     return $row['custId'] == $request->get('id') ? true : false;
+                });
+            }
+            if ($request->has('status')&& $request->status!=null) {
+                $instance->collection = $instance->collection->filter(function ($row) use ($request) {
+                     return $row['status'] == $request->get('status') ? true : false;
+                });
+            }
+            if ($request->has('searchTerm')&& $request->searchTerm!=null) {
+                    $instance->whereRaw("
+                        customers.first_name like '%{$request->searchTerm}%' 
+                        OR customers.last_name like '%{$request->searchTerm}%' 
+                        OR CONCAT(first_name,' ',last_name) like '%{$request->searchTerm}%'
+                        OR customers.telephone like '%{$request->searchTerm}%'
+                        OR customers.email like '%{$request->searchTerm}%'
+                        OR customers.city like '%{$request->searchTerm}%'
+                        OR customers.zip like '%{$request->searchTerm}%'
+                        OR inc.name like '%{$request->searchTerm}%'
+                        OR prd.name like '%{$request->searchTerm}%'
+                        ");
+            }
+           
+        })
+        ->make(true);
+    }
+
+    public function policyStatus(Request $request){
+        $dataChecked['status'] = 1;
+        $data['status'] = 0;
+        if($request->itemsChecked)
+        $json_data = policydetail::whereIn('id',$request->itemsChecked)->update($dataChecked);
+        if($request->items)
+        $json_data = policydetail::whereIn('id',$request->items)->update($data);
+        return response()->json('Successfully updated status', 200);
+    }
+
+    public function search(Request $request)
+    {
+        $data = []; $str='';
+        $terms = explode(' ',$request->term);
+        foreach ($terms as $ky => $val) {
+            $str.=" first_name like '%" . $val . "%' OR last_name like '%" . $val . "%' OR mobile like  '%" . $val . "%' OR telephone like  '%" . $val . "%' OR  dob like  '%" . $val . "%' OR " ;
+        }
+        if($str){
+            $str = substr($str, 0, -3);
+            $str =  "(". $str.")";
+        }
+        $result = policydetail::select('customers.id','parent_id','first_name','last_name')
+        ->leftJoin('customers','customer_id','=','customers.id')
+        ->whereRaw( $str )->groupBy('customers.id')->get();
+        foreach ($result as $key => $value) {
+            if($value['parent_id']>0){
+               $data[$key]['id'] = $value['parent_id'];
+            }else{
+               $data[$key]['id'] = $value['id'];
+            }
+            $data[$key]['value'] = $value['first_name'].' '.$value['last_name'];
+        }
+        return response()->json($data,200);
+    }
+
 }
