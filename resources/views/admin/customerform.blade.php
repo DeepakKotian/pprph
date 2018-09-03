@@ -85,7 +85,7 @@
                     </div>
                     <div class="form-group col-sm-6">
                       <label for="company">Company</label>
-                      <input type="text" class="form-control" name="company"  id="company" placeholder="Company" v-model="customer.company">
+                      <input type="text" class="form-control" name="company"   id="company" placeholder="Company" v-model="customer.company">
                     </div>
                   </div>
                   <div class="form-group">
@@ -140,9 +140,10 @@
                     <div class="form-group col-sm-6" :class="{ 'has-error': $v.customer.email_office.$error }">
                       <label for="telephone">Email office</label>
                       <input type="email" class="form-control" name="email_office"  id="email_office" placeholder="Emai Office" v-model="$v.customer.email_office.$model">
+                       <input type="hidden" v-model="oldCustomerData" >
                     </div>
                   </div>
-  
+
                  
                 </div>
                <div class="col-sm-7">
@@ -226,6 +227,7 @@
                     </div>
         
                 </div>
+           
               </div>
            
               <!-- /.box-body -->
@@ -236,7 +238,7 @@
                 <!-- <button  class="btn btn-primary  " data-toggle="modal" v-on:click="taskapp.loadTaskDetail(null,currentId)" data-target="#addTask" >Add Task</button> -->
                     <button type="button" class="btn btn-primary" v-on:click="updateCustomer">Update</button>
                   <!-- <a target="_blank" href="{{ url('/admin/printcustomer/'.$data->id) }}" class="btn btn-primary" >Print</a> -->
-  &nbsp;
+                     &nbsp;
                     <div class="btn-group btn-toggle"> 
                     <button type="button" class="btn"  data-toggle="modal" data-target="#statusModal" class="btn btn-success" v-on:click="onStatus(1)" v-bind:class="'btn-success'"  v-bind:disabled="customer.status==1"   >ACTIVE</button>
                     <button  type="button" class="btn" data-toggle="modal" data-target="#statusModal" class="btn btn-danger" v-on:click="onStatus(0)" v-bind:class="'btn-danger'" v-bind:disabled="customer.status==0" >DEACTIVE</button>

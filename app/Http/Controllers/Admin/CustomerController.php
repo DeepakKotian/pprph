@@ -396,7 +396,12 @@ class CustomerController extends Controller
     
     public function update(Request $request, customer $customer)
     {
-        
+        // $a1=$request->customer;
+        // $a1=array_slice($a1, 0,22);
+        // $a2=$request->oldCustomer;
+        // $result=array_diff($a1,$a2);
+   
+
         if($request->dob != null){
             $dob= date('Y-m-d h:i:s',strtotime($request->dob));
          }
@@ -404,9 +409,7 @@ class CustomerController extends Controller
              $dob= NULL;
          }
         
-        
-
-        $user = DB::table('customers');
+        // $user = DB::table('customers');
         //$checkAdmin =  $user->select('customers.email')->where('customers.email',$request->email)->where('customers.id','<>',$request->id)->first();
         //if(empty($checkAdmin)){
             $data['first_name'] = $request->first_name;

@@ -29,10 +29,10 @@
             </select>
             </div>
 
-            <div class="form-group" :class="{ 'has-error': $v.tasks.status.$error }">
-              <label for="exampleInputEmail1">Priority *</label>
+            <div v-if="modalAction=='edit'" class="form-group" :class="{ 'has-error': $v.tasks.status.$error }">
+              <label for="exampleInputEmail1">Status *</label>
               <select class="form-control"  name="" v-model="$v.tasks.status.$model" id="">
-                <option value="">------</option>
+                <option value="New">New</option>
                 <option value="In progress">In progress</option>
                 <option value="On Hold">on Hold</option>
                 <option value="Completed">Completed</option>
@@ -45,7 +45,7 @@
             
             <select class="form-control"  name="" v-model="$v.tasks.assigned_id.$model" id="">
             <option value="">-------</option>
-            <option v-for="taskuser in taskUsers" :value="taskuser.id"> <% taskuser.first_name%> <% taskuser.last_name%></option>
+            <option v-for="taskuser in taskUsers" :value="taskuser.id"> <% taskuser.first_name %> <% taskuser.last_name %></option>
             </select>
             </div>
 

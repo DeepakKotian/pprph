@@ -37,7 +37,7 @@ var taskapp = new Vue({
                 required:required,
              },
              status:{
-                status:required,
+                required:required,
              },
         },
       
@@ -77,12 +77,14 @@ var taskapp = new Vue({
             this.$http.post(this.urlPrefix+'assigntask',this.tasks).then(
                 function(response){
                     this.$toaster.success(response.data);
+                    $('#addTask').modal('hide');
                 }
             )
         
         },
 
         addTask:function(){
+            
             if (this.$v.tasks.$invalid) {
                 this.$v.tasks.$touch()
                }
@@ -90,9 +92,10 @@ var taskapp = new Vue({
                 this.$http.post(this.urlPrefix+'task-list',this.tasks).then(
                     function(response){
                         this.$toaster.success(response.data);
+                        $('#addTask').modal('hide');
                         $('#taskTable').DataTable().destroy();
                         this.loadAllTasks();
-                    }
+                 }
             )
           }
         },
@@ -105,6 +108,7 @@ var taskapp = new Vue({
                 this.$http.put(this.urlPrefix+'task-list/'+ this.tasks.taskid ,this.tasks).then(
                     function(response){
                         this.$toaster.success(response.data);
+                        $('#addTask').modal('hide');
                         this.loadAllTasks();
                         
                     }
@@ -131,7 +135,6 @@ var taskapp = new Vue({
         },
         
         loadTaskDetail:function(item,cutomerId){
-          
             this.loadTaskUser();
             this.modalAction='add';
             this.tasks.task_name="";
@@ -140,6 +143,7 @@ var taskapp = new Vue({
             this.tasks.assigned_id="";
             this.tasks.taskid="";
             this.tasks.priority="";
+            this.tasks.status="New";
             
             if(cutomerId!=null){
                 this.tasks.customerid=cutomerId;

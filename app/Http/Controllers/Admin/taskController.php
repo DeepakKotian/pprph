@@ -108,12 +108,13 @@ class taskController extends Controller
         $insertData = task::create([
             'task_name' => $request['task_name'],
             'task_detail' => $request['task_detail'],
-            'status' => 'New',
+            'status' => $request['status'],
             'user_id'=> Auth::user()->id,
+            'priority'=>$request['priority'],
             'due_date'=> date('Y-m-d',strtotime($request['due_date'])),
             'assigned_id' => $request['assigned_id'],
-            'priority' =>$request['priority'],
         ]);
+     
         if($insertData)
         return response()->json('Successfully created',200);
         return redirect()->back()->withErrors($validate->errors());
@@ -156,9 +157,9 @@ class taskController extends Controller
         $data['task_name'] = $request->task_name;
         $data['task_detail'] = $request->task_detail;
         $data['status'] = $request->status;
+        $data['priority']= $request->priority;
         $data['due_date'] =  date('Y-m-d',strtotime($request->due_date));
         $data['assigned_id'] = $request->assigned_id;
-        $data['priority'] = $request->priority;
         if(task::whereId($id)->update($data));
         return response()->json('Successfully updated',200);
     }

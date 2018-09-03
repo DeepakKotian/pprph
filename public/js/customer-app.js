@@ -13,6 +13,7 @@ var app = new Vue({
       policylist:'',
       policyAction:'',
       currentCtgName:'',
+
       customer:{
         id:null,
         gender:null,
@@ -31,7 +32,10 @@ var app = new Vue({
         nationality:'',
        
       },
-      customerData:[],
+      oldCustomerData:{
+       
+      },
+      sampleDta:[],
       currentVertragDoc:'',
       errors:[],
       family:{
@@ -99,12 +103,12 @@ var app = new Vue({
           end_date:{
             required:required,
           },
-        //   policy_number:{
-        //     required:required,
-        //   }
+        
       }
     },
+    
     created: function(){
+
         this.currentId = $('#currentId').val();
         this.family.parent_id = this.currentId;
 
@@ -114,10 +118,12 @@ var app = new Vue({
            
         });
     }, 
+
     mounted: function(){
-       
+   
         if(this.currentId)
         this.getCustomerData();
+        
         let self = this;
         $('#dob').datepicker({
             format:'dd-mm-yyyy',
@@ -192,7 +198,27 @@ var app = new Vue({
      }, 
      getCustomerData: function () {
         this.$http.get(this.urlPrefix+'fetchcustomer/'+this.currentId).then(function(response){
+        this.oldCustomerData={
+                id:response.data.id,
+                gender:response.data.gender,
+                email:response.data.email,
+                email_office:response.data.email_office,
+                first_name:response.data.first_name,
+                last_name:response.data.last_name,
+                language:response.data.language,
+                zip:response.data.zip,
+                dob:response.data.dob,
+                gender:response.data.gender,
+                is_family:response.data.is_family,
+                telephone:response.data.telephone,
+                mobile:response.data.mobile,
+                parent_id:response.data.parent_id,
+                nationality:response.data.nationality,
+            };
+
         this.customer=response.data;
+       
+       
         setTimeout(function() {
             $('.selectJS').select2();
             $('#insuranceModal').find('.modal-body #selectJSFamily').select2();
@@ -325,7 +351,7 @@ var app = new Vue({
            this.insurancedata.end_date = '';
            this.insurancedata.policy_number = '';
            this.policyAction = '';
-           this.insurancedata.provider_id='0';
+           this.insurancedata.provider_id='';
            this.policylist = '';
            this.currentCtgName =  item.name;
            $('#insuranceModal').find('.modal-body #selectJSFamily').val('');
@@ -434,6 +460,7 @@ var app = new Vue({
             this.insurancedata.provider_id="0";
             this.isDocument=false;
         },
+
         loadVertragModal:function(item){
             this.insurancedata.provider_id = '';
             $('#vertragModal').find(".modal-body #vertragProviderSlct").val('');

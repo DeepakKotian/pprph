@@ -146,7 +146,6 @@
             <div class="box-body table-responsive ">
               <table class="table table-hover">
                 <tbody>
-                  
                 <tr>
                   <th>Assign To</th>
                   <th>Date</th>
@@ -155,7 +154,6 @@
                   <th>Comment</th>
                 </tr>
                 <tr>
-              
                   <td>John Doe</td>
                   <td>11-7-2014</td>
                   <td>11-7-2014</td>
