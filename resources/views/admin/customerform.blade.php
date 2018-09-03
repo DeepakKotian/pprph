@@ -44,7 +44,7 @@
                     @if($data)
                     <div class="form-group col-sm-4">
                       <label for="id">Customer Id</label>
-                      <input type="text" class="form-control" v-model="customer.id"  id="id"  placeholder="Customer Id" readonly>
+                      <input type="text" class="form-control" v-model="customer.unique_id"  id="id"  placeholder="Customer Id" readonly>
                     </div>
                     @endif
                     <div class="form-group col-sm-4"> 
@@ -535,7 +535,15 @@
                                   <tr v-for="(doc, index) in vertrag.policyDocs">
                                     <td> <% doc.document_name %> </td>
                                     <td> <a class="fa fa-eye" target="_blank" v-bind:href="urlPrefix+'../uploads/vertrag/'+doc.document_name"></a> &nbsp;&nbsp;
-                                    <a class="fa fa-download" download v-bind:href="urlPrefix+'../uploads/vertrag/'+doc.document_name"> </a> </td>
+                                    <a class="fa fa-download" download v-bind:href="urlPrefix+'../uploads/vertrag/'+doc.document_name"> </a> &nbsp;&nbsp;
+                                    <a class="fa fa-trash" target="_blank" v-on:click="$('#docId'+doc.id).show()"></a>
+                                    <div class="alert alert-warning alert-dismissible"  v-bind:id="'docId'+doc.id" role="alert" style="display:none;padding:5px; margin-bottom:0;">
+                                      <button type="button" class="close" v-on:click="$('#docId'+doc.id).hide()" aria-label="Close" style="right:0;">
+                                       <span aria-hidden="true">&times;</span>
+                                      </button>
+                                      <span aria-hidden="true"> <a href="javascript:void(0)" v-on:click="deletePolicyDocument(doc)" style="text-decoration:none"> Yes Delete!  <i class="fa fa-trash"></i> </a> </span>
+                                    </div>
+                                    </td>
                                   </tr>
                                 </tbody>
                               </thead>

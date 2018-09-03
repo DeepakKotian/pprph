@@ -198,6 +198,8 @@ var app = new Vue({
         this.$http.get(this.urlPrefix+'fetchcustomer/'+this.currentId).then(function(response){
         this.oldCustomerData={
                 id:response.data.id,
+                unique_id:response.data.unique_id,
+                status:response.data.status,
                 gender:response.data.gender,
                 email:response.data.email,
                 email_office:response.data.email_office,
@@ -212,7 +214,7 @@ var app = new Vue({
                 mobile:response.data.mobile,
                 parent_id:response.data.parent_id,
                 nationality:response.data.nationality,
-            };
+             };
 
         this.customer=response.data;
        
@@ -232,7 +234,7 @@ var app = new Vue({
             this.$v.customer.$touch()
         }
         else{
-            this.$http.post(this.urlPrefix+'customer-form/'+this.currentId,this.customer).then(
+            this.$http.post(this.urlPrefix+'customer-form/'+this.currentId,{customer:this.customer,oldCustomerData:this.oldCustomerData}).then(
                 function(response){
                     this.$toaster.success(response.data);
                     this.getCustomerData();
@@ -525,7 +527,7 @@ var app = new Vue({
                 }).then(
                 function(response){
                     this.$toaster.success(response.data);
-                    this.loadDocuments($('#policy_id').val());
+                    this.loadDocuments();
                     $('#documentType').val('');
                     $('#document').val('');
                 }
@@ -538,6 +540,14 @@ var app = new Vue({
                 
             });
         },
+        deletePolicyDocument:function(doc){
+            this.$http.post(this.urlPrefix+'delete-document',  doc).then(function(response){
+                this.loadDocuments();
+                this.$toaster.success(response.data); 
+                this.fetchPolicyList();
+            }
+          )
+        }
       },
      
     delimiters: ["<%","%>"]

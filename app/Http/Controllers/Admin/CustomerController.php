@@ -11,6 +11,7 @@ use App\customer;
 use App\customerpolicymember;
 use App\policydetail;
 use App\User;
+use App\customerlog;
 use DB;
 use Auth;
 use DataTables;
@@ -394,45 +395,45 @@ class CustomerController extends Controller
      * @return \Illuminate\Http\Response
      */
     
-    public function update(Request $request, customer $customer)
+    public function update(Request $request)
     {
-        // $a1=$request->customer;
-        // $a1=array_slice($a1, 0,22);
-        // $a2=$request->oldCustomer;
-        // $result=array_diff($a1,$a2);
-   
-
-        if($request->dob != null){
-            $dob= date('Y-m-d h:i:s',strtotime($request->dob));
+        $data = [];
+        $customer = $request->customer;
+        
+        $customer = array_slice($customer, 0,22);
+        $oldCustomerData = $request->oldCustomerData;
+        $result = array_diff($customer,$oldCustomerData);
+        $arrCustomer =  [];
+        foreach ($result as $key => $value) {
+            if(array_key_exists($key,$oldCustomerData)){
+                if($customer[$key] !=  $oldCustomerData[$key])
+                {
+                    $arrCustomer[$key]['old_value'] =  $oldCustomerData[$key];
+                    $arrCustomer[$key]['new_value'] = $customer[$key];
+                    $data[$key] = $customer[$key];
+                }
+           }
+        }
+        if(!empty($arrCustomer)){
+            $arrCustomer['logs'] = serialize($arrCustomer); // serialize should always kept on top to insert only form changes. 
+            $arrCustomer['user_id'] = Auth::user()->id;
+            $arrCustomer['customer_id'] = $customer['id'];
+            $arrCustomer['type'] = 'personal';
+            customerlog::create($arrCustomer);
+        }
+       
+        if(isset($data['dob'])){
+            $dob= date('Y-m-d h:i:s',strtotime($data['dob']));
          }
          else{
              $dob= NULL;
          }
-        
-        // $user = DB::table('customers');
-        //$checkAdmin =  $user->select('customers.email')->where('customers.email',$request->email)->where('customers.id','<>',$request->id)->first();
-        //if(empty($checkAdmin)){
-            $data['first_name'] = $request->first_name;
-            $data['last_name'] = $request->last_name;
-            $data['email'] = $request->email;
-            $data['email_office'] = $request->email_office;
-            $data['telephone'] = $request->telephone;
-            $data['mobile'] = $request->mobile;
-            $data['zip'] = $request->zip;
-            $data['dob'] = $dob;
-            $data['nationality'] = $request->nationality;
-            $data['city'] =   $request->city;
-            $data['status'] =   $request->status;
-            $data['address'] = $request->address;
-            $data['company'] = $request->company;
-            $data['gender'] = $request->gender;
-            $data['language'] = $request->language;
-            if(customer::whereId($request->id)->update($data));
+
+        if(!empty($data)){
+            if(customer::whereId($customer['id'])->update($data));
             return response()->json('Successfully updated',200);
-        //}
-        // else{
-        //     return response()->json('Email Aready Taken', 500);
-        // }  
+        }
+ 
     }
 
     public function storeFamily(Request $request)
