@@ -25,7 +25,8 @@
             <div class="box-header with-border">
               <h3 class="box-title">Customer Form</h3>
               <div class="box-tools">
-              <a class="btn btn-primary btn-md pull-right" href="{{ url('admin/customers') }}">Back to List Page</a>
+                <a  style="display:none;" class="btn btn-primary btn-md" data-toggle="modal" data-target="#logsModal" v-on:click="fetchLogs">Logs</a>
+                <a class="btn btn-primary btn-md " href="{{ url('admin/customers') }}">Back to List Page</a>
               </div>
             </div>
             <!-- /.box-header -->
@@ -446,6 +447,51 @@
     
     </div>
      <!-- Status Modal end-->
+  <!-- logs modal -->
+  <div class="modal fade" id="logsModal" tabindex="-1" role="dialog" aria-labelledby="logsModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                    <div class="modal-header">
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title" id="exampleModalLabel">Logs</h4>
+                    </div>
+                    <div class="modal-body" > 
+                    
+                        <ul>
+                          <li v-for="(logs, index) in customerlogs">
+                            <h3>Edited By : <% logs.userName %> on <% logs.updated_at %> </h3>
+                            <div class="form-group">
+
+                              <ul>
+                                <li v-for="(rw,index) in logs.logArr">
+                                    <div v-show="index=='first_name'">
+                                       First Name : "<% rw.old_value %>" to <% rw.new_value %>
+                                    </div>
+                                    <div v-show="index=='last_name'">
+                                       Last name : "<% rw.old_value %>" to <% rw.new_value %>
+                                    </div>
+                                    <div v-show="index=='company'">
+                                       Company : "<% rw.old_value %>" to <% rw.new_value %>
+                                    </div>
+                                    <div v-show="index=='address'">
+                                       Address: "<% rw.old_value %>" to <% rw.new_value %>
+                                    </div>
+                                </li>
+                              </ul>
+                            </div>
+                          </li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">OK</button>
+                    </div>
+            </div>
+      </div>
+    </div>
+    <!-- logsmodal ends -->
+
      <!-- Antrag Modal -->
     <div class="modal fade" id="antragModal" tabindex="-1" role="dialog" aria-labelledby="antragModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">

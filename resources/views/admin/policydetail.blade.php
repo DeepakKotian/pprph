@@ -55,7 +55,7 @@ Policy List
                         </select>
                     </div>
                     <div class="form-group left-15">
-                        <button class="btn btn-primary" style="display:none;" type="button" id="provisionButton" onclick="this.preventDefault"> Update Status </button>
+                        <button class="btn btn-primary" style="" type="button" id="provisionButton" onclick="this.preventDefault"> Update Status </button>
                     </div>
                 </form>
             </div>

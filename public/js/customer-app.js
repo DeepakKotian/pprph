@@ -31,6 +31,9 @@ var app = new Vue({
         parent_id:null,
         nationality:'',
       },
+      customerlogs:{
+
+      },
       oldCustomerData:{
       },
       sampleDta:[],
@@ -207,7 +210,11 @@ var app = new Vue({
                 last_name:response.data.last_name,
                 language:response.data.language,
                 zip:response.data.zip,
+                company:response.data.company,
+                city:response.data.city,
+                address:response.data.address,
                 dob:response.data.dob,
+                country:response.data.country,
                 gender:response.data.gender,
                 is_family:response.data.is_family,
                 telephone:response.data.telephone,
@@ -547,9 +554,14 @@ var app = new Vue({
                 this.fetchPolicyList();
             }
           )
+        },
+        fetchLogs:function(){
+            this.$http.get(this.urlPrefix+'fetch-logs/'+this.currentId).then(function(response){
+                this.customerlogs = response.data;
+            }
+          )
         }
       },
-     
     delimiters: ["<%","%>"]
   })
 

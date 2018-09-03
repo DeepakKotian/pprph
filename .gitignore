@@ -13,3 +13,6 @@ yarn-error.log
 .env
 routes/web.php
 *.pdf
+config/excel.php
+config/excel.php
+config/excel.php

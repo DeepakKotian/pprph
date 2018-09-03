@@ -405,14 +405,11 @@ class CustomerController extends Controller
         $result = array_diff($customer,$oldCustomerData);
         $arrCustomer =  [];
         foreach ($result as $key => $value) {
-            if(array_key_exists($key,$oldCustomerData)){
-                if($customer[$key] !=  $oldCustomerData[$key])
-                {
+            if($key!='created_at' && $key!='updated_at'){
                     $arrCustomer[$key]['old_value'] =  $oldCustomerData[$key];
                     $arrCustomer[$key]['new_value'] = $customer[$key];
                     $data[$key] = $customer[$key];
-                }
-           }
+            }
         }
         if(!empty($arrCustomer)){
             $arrCustomer['logs'] = serialize($arrCustomer); // serialize should always kept on top to insert only form changes. 
@@ -432,6 +429,8 @@ class CustomerController extends Controller
         if(!empty($data)){
             if(customer::whereId($customer['id'])->update($data));
             return response()->json('Successfully updated',200);
+        }else{
+            return response()->json('No changes done',500);
         }
  
     }
@@ -636,7 +635,17 @@ class CustomerController extends Controller
 
        
     } 
-    
-    
-    
+
+    public function fetchLogs($id){
+        $data = customerlog::select('customerlogs.*','customers.id',DB::raw("CONCAT(customers.first_name,' ',customers.last_name)as custName"),DB::raw("CONCAT(users.first_name,' ',users.last_name)as userName"))
+        ->where('customer_id',$id)
+        ->leftJoin('customers','customers.id','=','customer_id')
+        ->leftJoin('users','users.id','=','user_id')
+        ->get();
+        foreach ($data as $key => $value) {
+           $data[$key]->logArr = unserialize($value['logs']); 
+        }
+        return response()->json($data,200);
+    }
+   
 }

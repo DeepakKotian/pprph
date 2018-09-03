@@ -212,17 +212,17 @@ return [
                 ],
             ],
         ],
-        // [
-        //     'text'    => 'Document Management',
-        //     'icon'    => 'tasks',
-        //     'submenu' => [
-        //         [
-        //             'text' => 'Documents',
-        //             'url'  => 'admin/documents',
-        //         ],
+        [
+            'text'    => 'Document Management',
+            'icon'    => 'tasks',
+            'submenu' => [
+                [
+                    'text' => 'Documents',
+                    'url'  => 'admin/documents',
+                ],
                
-        //     ],
-        // ],
+            ],
+        ],
         // [
         //     'text'    => 'Task Management',
         //     'icon'    => 'tasks',
