@@ -361,6 +361,7 @@ var app = new Vue({
            this.insurancedata.provider_id='';
            this.policylist = '';
            this.currentCtgName =  item.name;
+           this.$v.insurancedata.$reset();
            $('#insuranceModal').find('.modal-body #selectJSFamily').val('');
            $('#insuranceModal').find('.modal-body #selectJSFamily').trigger('change');
         },
