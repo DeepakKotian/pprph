@@ -585,6 +585,7 @@ class CustomerController extends Controller
             $str = substr($str, 0, -3);
             $str =  "(". $str.")";
         }
+
         $result = customer::select('id','parent_id','first_name','last_name')->whereRaw( $str )->get();
         foreach ($result as $key => $value) {
             if($value['parent_id']>0){

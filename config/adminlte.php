@@ -212,7 +212,7 @@ return [
                 ],
             ],
         ],
-        //   [
+        // [
         //     'text'    => 'Document Management',
         //     'icon'    => 'tasks',
         //     'submenu' => [

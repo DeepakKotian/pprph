@@ -30,10 +30,8 @@ var app = new Vue({
         mobile:null,
         parent_id:null,
         nationality:'',
-       
       },
       oldCustomerData:{
-       
       },
       sampleDta:[],
       currentVertragDoc:'',
