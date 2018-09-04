@@ -30,6 +30,7 @@ var app = new Vue({
         mobile:null,
         parent_id:null,
         nationality:'',
+        appointments:'',
       },
       customerlogs:{
 

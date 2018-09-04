@@ -27,6 +27,8 @@ class AppointmentController extends Controller
         return $data;
     }
 
+ 
+
     public function store(Request $request){
         $id = Auth::user()->id;
         $validate = $this->validate(request(),[

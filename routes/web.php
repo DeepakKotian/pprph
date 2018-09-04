@@ -96,8 +96,10 @@ Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     Route::post('fetchtasklist', 'Admin\taskController@fetchTaskList');
     Route::post('fetchmytasklist', 'Admin\taskController@fetchMyTaskList');
     Route::post('assigntask', 'Admin\taskController@assigntask');
+    Route::post('fetchtaskhistory', 'Admin\taskController@fetchTaskHistory');
     Route::resource('task-list', 'Admin\taskController');
     
+
     Route::get('/fetchnotification', 'Admin\AdminController@fetchNotification');
     Route::get('/appointment', 'Admin\AppointmentController@index');
     Route::get('/fetchappointments', 'Admin\AppointmentController@fetchAppointments');

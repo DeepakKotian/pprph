@@ -16,10 +16,12 @@ var taskapp = new Vue({
         status:null,
         
       },
+      taskHistory:{},
       taskUsers:{},
       mytaskData:[],
       taskData:[],
       errors:[],
+      currentTasksId:'',
     },
 
     validations:{
@@ -55,9 +57,12 @@ var taskapp = new Vue({
             this.fetchMyTaskList();
 
         }
+
+        this.currentTasksId = $('#tasksId').val();
         
         this.loadTaskUser();
         this.loadDatepicker();
+       this.loadTaskHistories();
        
      },
 
@@ -77,7 +82,8 @@ var taskapp = new Vue({
             this.$http.post(this.urlPrefix+'assigntask',this.tasks).then(
                 function(response){
                     this.$toaster.success(response.data);
-                    $('#addTask').modal('hide');
+                    $('#assignTask').modal('hide');
+                    this.loadTaskHistories();
                 }
             )
         
@@ -131,7 +137,11 @@ var taskapp = new Vue({
         },
 
         loadTaskHistories:function(){
-
+            this.$http.post(this.urlPrefix+'fetchtaskhistory',{id:this.currentTasksId}).then(
+                function(response){
+                    this.taskHistory  = response.data;
+                }
+            )
         },
         
         loadTaskDetail:function(item,cutomerId){
