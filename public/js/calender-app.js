@@ -138,11 +138,7 @@ var calenderapp = new Vue({
      
             self = this;
             $('#calendar').fullCalendar({
-                header    : {
-                    left  : 'prev,next today',
-                    center: 'title',
-                    right : 'month,agendaWeek,agendaDay'
-                },
+               
                 buttonText: {
                     today: 'today',
                     month: 'month',
@@ -154,7 +150,7 @@ var calenderapp = new Vue({
                     self.appointment.title = calEvent.title;
                     self.appointment.description = calEvent.description;
                     self.appointment.assigned_id = calEvent.assigned_id;
-                    console.log( self.appointment.assigned_id);
+                  
                     self.showAssign=false;
                     if(self.user_id !=self.appointment.assigned_id){
                         self.showAssign=true;
@@ -167,12 +163,13 @@ var calenderapp = new Vue({
                     self.appointment.id =  calEvent.id;
                     self.action = 'edit';
                  },
+                 timeFormat: 'H(:mm)',
                 events    : self.events,
-              
-                
+           
                 eventRender: function(eventObj, $el) {
                     
                     var t = moment(eventObj.start).format('HH') + ":" + moment(eventObj.start).format('mm') + " - " + moment(eventObj.end).format('HH') + ":" + moment(eventObj.end).format('mm')
+                  
                     $el.popover({
                       title: eventObj.title +' Time- ' +t + ', With:' + eventObj.first_name+' '+ eventObj.last_name,
                       content: eventObj.description,
@@ -181,9 +178,25 @@ var calenderapp = new Vue({
                       container: 'body'
                     });
                   },
+                
+                
+                dayClick: function (date, jsEvent, view) {
+                       $(this).css('background-color', 'red');
+                        $('#calendar').fullCalendar('gotoDate', date);
+                        $('#calendar').fullCalendar('changeView', 'agendaDay');
+                   
+                },
+              
+
+                header: {
+                    left: 'title',
+                    center: '',
+                    right: 'month,agendaWeek,agendaDay, today, prev,next,prevYear,nextYear',
+                },
             })
             $('#calendar').fullCalendar( 'removeEventSource', self.events )
             $('#calendar').fullCalendar( 'addEventSource', self.events )
+            
         },
 
         addAppointment:function(){
@@ -224,12 +237,31 @@ var calenderapp = new Vue({
                         this.events = response.data;
                         this.$v.appointment.$reset();
                         this.$toaster.success('Updated Successfully');
-                        window.location.reload();
+                 
+                       window.location.reload();
                     }).catch(function(response){
                         this.$toaster.error(response.data);
                     });
             }
-        }
+        },
+        onDelete:function(){
+          //console.log(this.appointment.id);
+          appintmentId=this.appointment.id;
+        
+         },
+         
+         deleteAppintment:function(appointmentId){
+         
+               this.$http.post(this.urlPrefix+'deleteappointment',{appointmentId:appointmentId}).then(
+                   function(response){
+                    
+                      $('#deleteModal').modal('hide');
+                      this.$toaster.success('Deleted Successfully');
+                    //  this.loadCalender(); 
+                      window.location.reload(); 
+                   }
+               )
+           },
      },
      
     delimiters: ["<%","%>"]

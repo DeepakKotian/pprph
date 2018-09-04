@@ -5,7 +5,7 @@
 @section('content_header')
 <h1>
         Appointment
-        <small>Control panel</small>
+        <small>Appointment list</small>
       </h1>
       <ol class="breadcrumb">
         <li><a href="{{ url('/admin')}}"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -90,7 +90,7 @@
                <button class="btn btn-info" type="button" v-on:click="appointment=[]; action=''">CLEAR</button>
                <button class="btn btn-primary" v-show="action!='edit'" type="button" v-on:click="addAppointment">ADD</button>
                <button class="btn btn-primary" v-show="action=='edit'" type="button" v-on:click="updateAppointment">UPDATE</button>
-               <button class="btn btn-danger" v-show="action=='edit'" type="button">DELETE</button>
+               <button class="btn btn-danger" v-show="action=='edit'" data-toggle="modal" data-target="#deleteModal"  v-on:click="onDelete(appointment.id)" type="button">DELETE</button>
             </div>
           </div>
           </form>
@@ -107,6 +107,26 @@
           </div>
           <!-- /. box -->
         </div>
+        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                        <div class="modal-header">
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                            </button>
+                            <h4 class="modal-title" id="exampleModalLabel">Delete?</h4>
+                        </div>
+
+                        <div class="modal-body">Are you sure you want to delete ?</div>
+
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" type="button"  data-dismiss="modal">Cancel</button>
+                            <button class="btn btn-primary"   v-on:click="deleteAppintment(appintmentId)" type="button">Yes</a>
+                        </div>
+
+                </div>
+
+   </div>
         <!-- /.col -->
       </div>
       <!-- /.row -->
@@ -122,104 +142,5 @@
 <script src="{{ asset('vendor/adminlte/calendar/fullcalendar.min.js') }}"></script>
 <script src="{{ asset('js/calender-app.js') }}"></script>
 
-<script>
-$(function () {
-  /* initialize the calendar
-  -----------------------------------------------------------------*/
-  //Date for the calendar events (dummy data)
-  // var date = new Date()
-  // var d    = date.getDate(),
-  //     m    = date.getMonth(),
-  //     y    = date.getFullYear();
 
-  // $('#calendar').fullCalendar({
-  //   header    : {
-  //     left  : 'prev,next today',
-  //     center: 'title',
-  //     right : 'month,agendaWeek,agendaDay'
-  //   },
-  //   buttonText: {
-  //     today: 'today',
-  //     month: 'month',
-  //     week : 'week',
-  //     day  : 'day'
-  //   },
-  //   //Random default events
-  //   events    : [
-  //     {
-  //       title          : 'All Day Event',
-  //       start          : new Date(y, m, 1),
-  //       end          : new Date(y, m, 4),
-  //       backgroundColor: '#f56954', //red
-  //       borderColor    : '#f56954' //red
-  //     },
-  //     {
-  //       title          : 'Long Event',
-  //       start          : new Date(y, m, d - 5),
-  //       end            : new Date(y, m, d - 2),
-  //       backgroundColor: '#f39c12', //yellow
-  //       borderColor    : '#f39c12' //yellow
-  //     },
-  //     {
-  //       title          : 'Meeting',
-  //       start          : new Date(y, m, d, 10, 30),
-  //       allDay         : false,
-  //       backgroundColor: '#0073b7', //Blue
-  //       borderColor    : '#0073b7' //Blue
-  //     },
-  //     {
-  //       title          : 'Lunch',
-  //       start          : new Date(y, m, d, 12, 0),
-  //       end            : new Date(y, m, d, 14, 0),
-  //       allDay         : false,
-  //       backgroundColor: '#00c0ef', //Info (aqua)
-  //       borderColor    : '#00c0ef' //Info (aqua)
-  //     },
-  //     {
-  //       title          : 'Birthday Party',
-  //       start          : new Date(y, m, d + 1, 19, 0),
-  //       end            : new Date(y, m, d + 1, 22, 30),
-  //       allDay         : false,
-  //       backgroundColor: '#00a65a', //Success (green)
-  //       borderColor    : '#00a65a' //Success (green)
-  //     },
-  //     {
-  //       title          : 'Click for Google',
-  //       start          : new Date(y, m, 28),
-  //       end            : new Date(y, m, 29),
-  //       url            : 'http://google.com/',
-  //       backgroundColor: '#3c8dbc', //Primary (light-blue)
-  //       borderColor    : '#3c8dbc' //Primary (light-blue)
-  //     }
-  //   ],
-  //   editable  : true,
-  //   droppable : true, // this allows things to be dropped onto the calendar !!!
-  //   drop      : function (date, allDay) { // this function is called when something is dropped
-
-  //     // retrieve the dropped element's stored Event Object
-  //     var originalEventObject = $(this).data('eventObject')
-
-  //     // we need to copy it, so that multiple events don't have a reference to the same object
-  //     var copiedEventObject = $.extend({}, originalEventObject)
-
-  //     // assign it the date that was reported
-  //     copiedEventObject.start           = date
-  //     copiedEventObject.allDay          = allDay
-  //     copiedEventObject.backgroundColor = $(this).css('background-color')
-  //     copiedEventObject.borderColor     = $(this).css('border-color')
-
-  //     // render the event on the calendar
-  //     // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
-  //     $('#calendar').fullCalendar('renderEvent', copiedEventObject, true)
-
-  //     // is the "remove after drop" checkbox checked?
-  //     if ($('#drop-remove').is(':checked')) {
-  //       // if so, remove the element from the "Draggable Events" list
-  //       $(this).remove()
-  //     }
-
-  //   }
-  // })
-})
-</script>
 @stop

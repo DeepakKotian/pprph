@@ -104,6 +104,8 @@ Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     Route::post('/add-appointment', 'Admin\AppointmentController@store');
     Route::post('/update-appointment', 'Admin\AppointmentController@update');
     Route::get('/fetchcustomersforappointment', 'Admin\AppointmentController@fetchCustomersForAppointment');
+    Route::post('/deleteappointment', 'Admin\AppointmentController@deleteAppointment');
+    
     Route::get('export-file/{type}', 'Admin\CustomerController@exportFile')->name('export.file');
 
     Route::get('/provision', 'Admin\insuranceController@policyDetail');

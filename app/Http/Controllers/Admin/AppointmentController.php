@@ -41,8 +41,8 @@ class AppointmentController extends Controller
 
         $startDate = $request['start_date'].' '.$startTime.':00';
         $endDate = $request['end_date'].' '.$endTime.':00';
-        $startDate=date('Y-m-d h:i:s',strtotime($startDate));
-        $endDate=date('Y-m-d h:i:s',strtotime($endDate));
+        $startDate=date('Y-m-d H:i:s',strtotime($startDate));
+        $endDate=date('Y-m-d H:i:s',strtotime($endDate));
         $data = [
             'task_name' => $request['title'],
             'task_detail' => $request['description'],
@@ -87,8 +87,8 @@ class AppointmentController extends Controller
         $editId =  $request->id;
         $startDate = $request['start_date'].' '.$startTime.':00';
         $endDate = $request['end_date'].' '.$endTime.':00';
-        $startDate=date('Y-m-d h:i:s',strtotime($startDate));
-        $endDate=date('Y-m-d h:i:s',strtotime($endDate));
+        $startDate=date('Y-m-d H:i:s',strtotime($startDate));
+        $endDate=date('Y-m-d H:i:s',strtotime($endDate));
         $data = [
             'task_name' => $request['title'],
             'task_detail' => $request['description'],
@@ -126,5 +126,13 @@ class AppointmentController extends Controller
             return response()->json($customers,200);
         }
            
+    }
+
+    public function deleteAppointment(Request $request){
+        $delete= task::find($request->appointmentId);
+        $delete->delete();
+        if($delete){
+            return response()->json('Deleted Successfully',200); 
+        }
     }
 }
