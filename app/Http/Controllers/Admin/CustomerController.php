@@ -681,12 +681,12 @@ class CustomerController extends Controller
     } 
 
     public function fetchLogs($id){
-        $data = customerlog::select('customerlogs.*','customers.id',DB::raw("CONCAT(customers.first_name,' ',customers.last_name)as custName"),DB::raw("CONCAT(users.first_name,' ',users.last_name)as userName"))
+        $data = customerlog::select('customerlogs.*','customers.id',DB::raw("CONCAT_WS(' ',users.first_name,users.last_name) as userName"))
         ->where('customer_id',$id)
-        ->leftJoin('customers','customers.id','=','customer_id')
-        ->leftJoin('users','users.id','=','user_id')
+        ->leftJoin('users','users.id','=','customerlogs.user_id')
+        ->leftJoin('customers','customers.id','=','customerlogs.customer_id')
         ->get();
-
+  
         foreach ($data as $key => $value) {
            $data[$key]->logArr = unserialize($value['logs']); 
         }
