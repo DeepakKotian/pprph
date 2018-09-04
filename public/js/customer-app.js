@@ -271,6 +271,17 @@ var app = new Vue({
             this.family.mobile_family = item.mobile;
             this.family.email_family = item.email;
             this.family.id = item.id; 
+            this.oldCustomerData = {
+                family : {
+                    first_name_family:item.first_name,
+                    last_name_family:item.last_name,
+                    dob_family :item.dob,
+                    nationality_family : item.nationality,
+                    mobile_family : item.mobile,
+                    id : item.id,
+                    
+                }
+            }
         }
         this.$v.family.$reset();  
       },
@@ -303,7 +314,7 @@ var app = new Vue({
             this.$v.family.$touch();
         }else{
             console.log(this.family);
-            this.$http.post(this.urlPrefix+'updatefamily',this.family).then(
+            this.$http.post(this.urlPrefix+'updatefamily',{family:this.family,oldFamily:this.oldCustomerData.family}).then(
                 function(response){
                     this.$toaster.success(response.data);
                     this.getCustomerData();

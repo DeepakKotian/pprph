@@ -457,14 +457,14 @@
                         </button>
                         <h4 class="modal-title" id="exampleModalLabel">Logs</h4>
                     </div>
-                    <div class="modal-body" > 
-                    
-                        <ul>
+                    <div class="modal-body"> 
+                        <ul style="height:500px;overflow:auto;">
                           <li v-for="(logs, index) in customerlogs">
-                            <h3>Edited By : <% logs.userName %> on <% logs.updated_at %> </h3>
-                            <div class="form-group">
-
-                              <ul>
+                            <h3  v-if="logs.type=='personal'">Personal Info Edited By : <% logs.userName %> on <% logs.updated_at %> </h3>
+                            <h3 v-if="logs.type=='add_family'"> Family Added By : <% logs.userName %> on <% logs.updated_at %> </h3>
+                            <h3 v-if="logs.type=='update_family'"> Family Edited By : <% logs.userName %> on <% logs.updated_at %> </h3>
+                            <div class="form-group" v-if="logs.type=='personal'">
+                              <ul >
                                 <li v-for="(rw,index) in logs.logArr">
                                     <div v-show="index=='first_name'">
                                        First Name : "<% rw.old_value %>" to <% rw.new_value %>
@@ -472,11 +472,69 @@
                                     <div v-show="index=='last_name'">
                                        Last name : "<% rw.old_value %>" to <% rw.new_value %>
                                     </div>
+                                    <div v-show="index=='dob'">
+                                      Dob : "<% rw.old_value %>" to <% rw.new_value %>
+                                    </div>
+                                    <div v-show="index=='language'">
+                                       Language : "<% rw.old_value %>" to <% rw.new_value %>
+                                    </div>
+                                    <div v-show="index=='gender'">
+                                       Sex : "<% rw.old_value %>" to <% rw.new_value %>
+                                    </div>
                                     <div v-show="index=='company'">
                                        Company : "<% rw.old_value %>" to <% rw.new_value %>
                                     </div>
                                     <div v-show="index=='address'">
                                        Address: "<% rw.old_value %>" to <% rw.new_value %>
+                                    </div>
+                                    <div v-show="index=='city'">
+                                      City : "<% rw.old_value %>" to <% rw.new_value %>
+                                    </div>
+                                    <div v-show="index=='zip'">
+                                      Postal code : "<% rw.old_value %>" to <% rw.new_value %>
+                                    </div>
+                                    <div v-show="index=='telephone'">
+                                      Telephone : "<% rw.old_value %>" to <% rw.new_value %>
+                                    </div>
+                                    <div v-show="index=='nationality'">
+                                      Nationality : "<% rw.old_value %>" to <% rw.new_value %>
+                                    </div>
+                                    <div v-show="index=='mobile'">
+                                      Mobile : "<% rw.old_value %>" to <% rw.new_value %>
+                                    </div>
+                                    <div v-show="index=='email'">
+                                      Email : "<% rw.old_value %>" to <% rw.new_value %>
+                                    </div>
+                                    <div v-show="index=='email_office'">
+                                      Email office : "<% rw.old_value %>" to <% rw.new_value %>
+                                    </div>
+                                </li>
+                              </ul>
+                            </div>
+                            <div class="form-group" v-if="logs.type=='add_family'">
+                              <ul>
+                                <li>
+                                  <% logs.logArr.dob %>
+                                  <% logs.logArr.first_name %>
+                                  <% logs.logArr.last_name %>
+                                  <% logs.logArr.mobile %>
+                                </li>
+                              </ul>
+                            </div>
+                            <div class="form-group" v-if="logs.type=='update_family'">
+                              <ul>
+                                <li v-for="(fmly,index) in logs.logArr">
+                                   <div v-show="index=='first_name_family'">
+                                      First name : "<% fmly.old_value %>" to <% fmly.new_value %>
+                                    </div>
+                                    <div v-show="index=='last_name_family'">
+                                       Last name : "<% fmly.old_value %>" to <% fmly.new_value %>
+                                    </div>
+                                    <div v-show="index=='dob_family'">
+                                      Dob : "<% fmly.old_value %>" to <% fmly.new_value %>
+                                    </div>
+                                    <div v-show="index=='mobile_family'">
+                                      Mobile : "<% fmly.old_value %>" to <% fmly.new_value %>
                                     </div>
                                 </li>
                               </ul>
@@ -491,7 +549,6 @@
       </div>
     </div>
     <!-- logsmodal ends -->
-
      <!-- Antrag Modal -->
     <div class="modal fade" id="antragModal" tabindex="-1" role="dialog" aria-labelledby="antragModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
