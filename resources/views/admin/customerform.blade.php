@@ -144,7 +144,50 @@
                        <input type="hidden" v-model="oldCustomerData" >
                     </div>
                   </div>
-
+                  @if(!empty($data))
+               
+                  <div class="row">
+                    <div class="form-group col-sm-12 dsfdsf">
+                      <div class="box box-info">
+                          <div class="box-header with-border">
+                            <h3 class="box-title familyToggle" >Add Family</h3>
+                          </div>
+                          <div class="box-body">
+                            <table class="table table-bordered">
+                              <thead>
+                                <tr>
+                                  <th> Name</th>
+                                  <th>Last Name</th>
+                                  <th>DOB</th>
+                                  <th>Mobile</th>
+                                  <th>Action</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr v-for="(fmly, index) in customer.family">
+                                    <td> <% fmly.first_name %></td>
+                                    <td> <% fmly.last_name %></td>
+                                    <td> <% fmly.dob %></td>
+                                    <td> <span v-show="fmly.mobile">+41</span> <% fmly.mobile %></td>
+                                    <td>
+                                      <a type="button" class="btn btn-default" data-toggle="modal" data-target="#familyModal" v-on:click="loadFamily(fmly)"><i class="fa fa-edit"></i></a> 
+                                      <a type="button" data-toggle="modal" data-target="#deleteFamilyModal" v-on:click="loadFamily(fmly)" class="btn btn-default"><i class="fa fa-trash"></i></a>
+                                    </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                          <div class="box-footer text-right">
+                            <button type="button" data-toggle="modal" data-target="#familyModal" v-on:click="loadFamily(null)" class="btn btn-primary">Add</button>
+                          </div>
+                         
+                          </div>
+                          
+                      </div>
+                      
+                     
+                    </div>
+            @endif
                  
                 </div>
                <div class="col-sm-7">
@@ -184,51 +227,30 @@
                         </div>
                     </div>
                     </div>
+                    <div class="col-sm-12">
+                        <div class="box box-info" v-show="customer.appointments">
+                        <div class="box-header with-border">
+                          <h3 class="box-title">Appointments</h3>
+                        </div>
+                          <div class="box-body">
+                            <div class="table table-responsive">
+                                <table class="table table-bordered">
+                                  <!-- <thead>
+                                  <th>Upcoming Appointments</th>
+                                  </thead> -->
+                                  <tbody>
+                                    <tr v-for="(rw,ky) in customer.appointments">
+                                      <td><% rw.task_name %> <% rw.task_detail %> on <% rw.start_date %> assigned by <% rw.userName %> </td>   
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                          </div>
+                        </div>
+                       </div>
                     @endif
                 </div>
-                @if(!empty($data))
-                <div class="col-sm-12">
-                  <div class="row">
-                    <div class="form-group col-sm-5">
-                      <div class="box box-info">
-                          <div class="box-header with-border">
-                            <h3 class="box-title familyToggle" >Add Family</h3>
-                          </div>
-                          <div class="box-body">
-                            <table class="table table-bordered">
-                              <thead>
-                                <tr>
-                                  <th> Name</th>
-                                  <th>Last Name</th>
-                                  <th>DOB</th>
-                                  <th>Mobile</th>
-                                  <th>Action</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr v-for="(fmly, index) in customer.family">
-                                    <td> <% fmly.first_name %></td>
-                                    <td> <% fmly.last_name %></td>
-                                    <td> <% fmly.dob %></td>
-                                    <td> <span v-show="fmly.mobile">+41</span> <% fmly.mobile %></td>
-                                    <td>
-                                      <a type="button" class="btn btn-default" data-toggle="modal" data-target="#familyModal" v-on:click="loadFamily(fmly)"><i class="fa fa-edit"></i></a> 
-                                      <a type="button" data-toggle="modal" data-target="#deleteFamilyModal" v-on:click="loadFamily(fmly)" class="btn btn-default"><i class="fa fa-trash"></i></a>
-                                    </td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </div>
-                          <div class="box-footer text-right">
-                            <button type="button" data-toggle="modal" data-target="#familyModal" v-on:click="loadFamily(null)" class="btn btn-primary">Add</button>
-                          </div>
-                          </div>
-                      </div>
-                      @endif
-                    </div>
-        
-                </div>
-           
+               
               </div>
            
               <!-- /.box-body -->
@@ -236,7 +258,7 @@
                 
                 @if(!empty($data))
                     <a href="{{ url('/admin/customers/') }}" class="btn btn-primary" >Cancel </a>
-                <!-- <button  class="btn btn-primary  " data-toggle="modal" v-on:click="taskapp.loadTaskDetail(null,currentId)" data-target="#addTask" >Add Task</button> -->
+                <button  class="btn btn-primary  " data-toggle="modal" v-on:click="taskapp.loadTaskDetail(null,currentId)" data-target="#addTask" >Add Task</button>
                     <button type="button" class="btn btn-primary" v-on:click="updateCustomer">Update</button>
                   <!-- <a target="_blank" href="{{ url('/admin/printcustomer/'.$data->id) }}" class="btn btn-primary" >Print</a> -->
                      &nbsp;
@@ -704,9 +726,9 @@
       </div>
  <!-- Vertrag Modal End -->
 </div>
-<!-- <div id="task-app">
+<div id="task-app">
   @include('admin.taskmodal')
-</div> -->
+</div>
 
 @stop
 @section('js')

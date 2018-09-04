@@ -11,6 +11,7 @@ use App\customer;
 use App\customerpolicymember;
 use App\policydetail;
 use App\User;
+use App\task;
 use App\customerlog;
 use DB;
 use Auth;
@@ -288,7 +289,11 @@ class CustomerController extends Controller
         ->where('is_family','1')
         ->where('parent_id',$request->id)
         ->get();
-        
+        $data->appointments = task::select('task_name','task_detail','assigned_id',DB::raw('DATE_FORMAT(tasks.due_date,"%d-%m-%Y %h:%I:%p") as end_date'), DB::raw('DATE_FORMAT(tasks.start_date,"%d-%m-%Y %h:%I:%p") as start_date'),DB::raw('CONCAT_WS(" ",users.first_name,users.last_name) as userName'))->where('customer_id',$request->id)
+        ->leftJoin('users','users.id','=','tasks.assigned_id')           
+        ->whereRaw('CURDATE() >= DATE_SUB(tasks.start_date, INTERVAL 20 DAY) AND CURDATE()<tasks.start_date')
+        ->get();
+
         $insuranceCtgArr = $providerArr = [];
         foreach ($data->policy as $key => $value) {
            $insuranceCtgArr[] = $value->insurance_ctg_id;
@@ -692,5 +697,7 @@ class CustomerController extends Controller
         }
         return response()->json($data,200);
     }
+
+   
    
 }

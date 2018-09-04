@@ -27,7 +27,8 @@ class taskController extends Controller
     public function fetchTaskList()
     {
         $taskList = [];
-        $taskList = DataTables::of(task::leftjoin('users as u','u.id','=','tasks.user_id')->select('tasks.*',DB::raw('DATE_FORMAT(tasks.due_date,"%d-%m-%Y") as due_date'),DB::raw('DATE_FORMAT(tasks.created_at,"%d-%m-%Y") as assigned_on'),DB::raw('tasks.id as taskid' ),'u.id','u.first_name','u.last_name'))->toJson();
+        $taskList = DataTables::of(task::leftjoin('users as u','u.id','=','tasks.user_id')->select('tasks.*',DB::raw('DATE_FORMAT(tasks.due_date,"%d-%m-%Y") as due_date'),DB::raw('DATE_FORMAT(tasks.created_at,"%d-%m-%Y") as assigned_on'),DB::raw('tasks.id as taskid' ),'u.id','u.first_name','u.last_name')->where('tasks.type',NULL)->where('tasks.user_id',Auth::user()->id))
+        ->toJson();
         if($taskList)
           return $taskList;
     
@@ -42,8 +43,9 @@ class taskController extends Controller
     
     public function fetchMyTaskList()
     {
+
         $mytaskList = [];
-        $mytaskList = DataTables::of(task::leftjoin('users as u','u.id','=','tasks.user_id')->select('tasks.*',DB::raw('DATE_FORMAT(tasks.due_date,"%d-%m-%Y") as due_date'),DB::raw('DATE_FORMAT(tasks.created_at,"%d-%m-%Y") as assigned_on'),'u.id','u.first_name','u.last_name',DB::raw('tasks.id as taskid' ))->where('assigned_id','=',Auth::user()->id))->toJson();
+        $mytaskList = DataTables::of(task::leftjoin('users as u','u.id','=','tasks.user_id')->select('tasks.*',DB::raw('DATE_FORMAT(tasks.due_date,"%d-%m-%Y") as due_date'),DB::raw('DATE_FORMAT(tasks.created_at,"%d-%m-%Y") as assigned_on'),'u.id','u.first_name','u.last_name',DB::raw('tasks.id as taskid' ))->where('tasks.type',NULL)->where('assigned_id','=',Auth::user()->id))->toJson();
         if($mytaskList)
           return $mytaskList;
     
@@ -60,8 +62,8 @@ class taskController extends Controller
      $datatask=[
         'task_name' => $request['task_name'],
         'task_detail' => $request['task_detail'],
-        'status' => 'New',
-        'user_id'=> Auth::user()->id,
+        'status' => $request['status'],
+        // 'user_id'=> Auth::user()->id,
         'due_date'=> date('Y-m-d',strtotime($request['due_date'])),
         'assigned_id' => $request['assigned_id'],
         'priority' =>$request['priority'],
@@ -71,6 +73,7 @@ class taskController extends Controller
      $datatask['comment'] = $request['comment'];
      $datatask['task_id'] = $request['taskid'];
      $datataskhistory = $datatask;
+     $datataskhistory['user_id'] =  Auth::user()->id;
    
      $assignto=taskhistory::create($datataskhistory);
      $updateTaskto=task::whereId($datatask['task_id'])->update($tempdatatask);
@@ -129,7 +132,10 @@ class taskController extends Controller
     public function show($id)
     {
         //
-        $task=task::leftjoin('users as u','u.id','=','tasks.user_id')->select('tasks.*',DB::raw('DATE_FORMAT(tasks.due_date,"%d-%m-%Y") as due_date'),DB::raw('DATE_FORMAT(tasks.created_at,"%d-%m-%Y") as assigned_on'),'u.id','u.first_name','u.last_name',DB::raw('tasks.id as taskid' ))->findorfail($id);
+        $task=task::leftjoin('users as u','u.id','=','tasks.user_id')->leftjoin('users as au','au.id','=','tasks.assigned_id')
+        ->select('tasks.*','au.first_name as a_first_name','au.last_name as a_last_name',DB::raw('DATE_FORMAT(tasks.due_date,"%d-%m-%Y") as due_date'),DB::raw('DATE_FORMAT(tasks.created_at,"%d-%m-%Y") as assigned_on'),'u.id','u.first_name','u.last_name',DB::raw('tasks.id as taskid' ))
+        
+        ->where('tasks.type',NULL)->where('assigned_id','=',Auth::user()->id)->findorfail($id);
         return view('admin.taskshow',compact('task'));
     }
 
@@ -173,5 +179,15 @@ class taskController extends Controller
     public function destroy(cr $cr)
     {
         //
+    }
+
+    public function fetchTaskHistory(Request $request)
+    {
+
+        $task=taskhistory::select('taskhistories.*',DB::raw('DATE_FORMAT(taskhistories.due_date,"%d-%m-%Y") as due_date'),DB::raw('DATE_FORMAT(taskhistories.created_at,"%d-%m-%Y") as assigned_on'),'u.id','u.first_name','u.last_name','au.first_name as a_first_name','au.last_name as a_last_name',DB::raw('taskhistories.id as taskid' ))
+        ->leftjoin('users as u','u.id','=','taskhistories.user_id')
+        ->leftjoin('users as au','au.id','=','taskhistories.assigned_id')
+        ->where('taskhistories.task_id','=',$request->id)->get();
+        return response()->json($task,200);
     }
 }

@@ -20,9 +20,11 @@
               <h3 class="box-title"> Tasks Detail</h3>
               <div class="box-tools">
               <a class="btn btn-primary " href="{{ url('admin/mytask-list')}}" >Back</a>
-                    <a class="btn btn-warning " data-toggle="modal" v-on:click="loadTaskDetail({{ $task }})" data-target="#assignTask" > Assign </a>
+                    <a class="btn btn-warning " data-toggle="modal" v-on:click="loadTaskDetail({{ $task }})" data-target="#assignTask" > Add Remarks </a>
               </div>
             </div>
+            
+            <input type="hidden" value="{{ $task->taskid }}" id="tasksId">
             <!-- /.box-header -->
             <div class="box-body ">
               <table class="table table-condensed">
@@ -66,6 +68,7 @@
                   {{ $task->first_name }} {{ $task->last_name }}
                   </td>
                 </tr>
+
                 <tr>
                   <td><label>Priority:</label></td>
                   <td>
@@ -98,15 +101,15 @@
                  
                     <input type="hidden" class="form-control" v-model="tasks.priority" id="exampleInputEmail1" placeholder="Enter Task Name">
                    
-                    <div class="form-group" :class="{ 'has-error': $v.tasks.assigned_id.$error }">
+                    <!-- <div class="form-group" :class="{ 'has-error': $v.tasks.assigned_id.$error }">
                     
                         <label for="exampleInputEmail1">Assign to </label>
                         <select class="form-control"  name="" v-model="$v.tasks.assigned_id.$model" id="">
                         <option value="">-------</option>
                         <option v-for="taskuser in taskUsers" :value="taskuser.id"> <% taskuser.first_name%> <% taskuser.last_name%></option>
                         </select>
-                    </div>
-
+                    </div> -->
+                    <!-- <input type="hidden" class="form-control" v-model="$v.tasks..$model" id="exampleInputEmail1" placeholder="Enter Task Name"> -->
                     <div class="form-group" :class="{ 'has-error': $v.tasks.due_date.$error }">
                         <label for="exampleInputEmail1">Due Date </label>
                         <div class="input-group">
@@ -115,6 +118,15 @@
                         </div>
                         <input readonly type="text" v-model="$v.tasks.due_date.$model" class="form-control"  name="" id="due_date">
                         </div>
+                    </div>
+                    <div v-if="modalAction=='edit'" class="form-group" :class="{ 'has-error': $v.tasks.status.$error }">
+                      <label for="exampleInputEmail1">Status *</label>
+                      <select class="form-control"  name="" v-model="$v.tasks.status.$model" id="">
+                        <option value="New">New</option>
+                        <option value="In progress">In progress</option>
+                        <option value="On Hold">on Hold</option>
+                        <option value="Completed">Completed</option>
+                    </select>
                     </div>
                     <div class="form-group" :class="">
                     <label for="exampleInputEmail1">Comment </label>
@@ -147,21 +159,18 @@
               <table class="table table-hover">
                 <tbody>
                 <tr>
-                  <th>Assign To</th>
-                  <th>Date</th>
-                  <th>time</th>
+                  <th>Modified By</th>
+                  <th>Due Date</th>
                   <th>Status</th>
                   <th>Comment</th>
                 </tr>
-                <tr>
-                  <td>John Doe</td>
-                  <td>11-7-2014</td>
-                  <td>11-7-2014</td>
-                  <td>Approved</td>
-                  <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
+                <tr v-for="(rw,ky) in taskHistory">
+                  <td><% rw.a_first_name + ' ' + rw.a_last_name %></td>
+                  <td><% rw.due_date %></td>
+                  <td><% rw.status %></td>
+                  <td><% rw.comment %></td>
                 </tr>
-               
-              </tbody></table>
+               </tbody></table>
             </div>
             <!-- /.box-body -->
           </div>
