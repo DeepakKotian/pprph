@@ -5,6 +5,13 @@
     <link rel="stylesheet" href="{{ asset('vendor/adminlte/css/auth.css') }}">
     @yield('css')
 @stop
+<style>
+input[type=password]::-ms-reveal,
+input[type=password]::-ms-clear
+{
+    display: none;
+}
+</style>
 
 @section('body_class', 'login-page')
 

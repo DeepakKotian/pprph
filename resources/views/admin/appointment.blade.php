@@ -22,6 +22,8 @@
               <h3 class="box-title">Create Event</h3>
             </div>
             <div class="box-body">
+
+             <input type="hidden" id="user_id" value="{{Auth::user()->id}}" v-model="user_id" >
               <div class="form-group" :class="{ 'has-error': $v.appointment.title.$error }">
                 <label for="title">Title</label>
                 <input id="title" name="title" type="text" v-model="$v.appointment.title.$model" class="form-control" placeholder="Event Title">
@@ -30,13 +32,32 @@
                 <label for="description">Description</label>
                 <textarea class="form-control" name="description" v-model="$v.appointment.description.$model" id="description" rows="5"></textarea>
               </div>
-              <div class="form-group" :class="{ 'has-error': $v.appointment.assigned_id.$error }">
-                  <label for="exampleInputEmail1">With </label>
+
+              <div class="form-group" class="radioroggle">
+                <label class="radio-inline">
+                  <input type="radio" name="optradio" value="1"  :checked="showAssign==false">Own
+                </label>
+                <label class="radio-inline">
+                  <input type="radio" name="optradio" value="2" :checked="showAssign">Other
+                </label>
+              </div>
+
+              <div class="form-group" v-if="showAssign" :class="{ 'has-error': $v.appointment.assigned_id.$error }">
+                  <label for="exampleInputEmail1">Assign To </label>
                   <select class="form-control"  name="assigned_id" v-model="$v.appointment.assigned_id.$model">
-                    <option>Please Selct</option>
+                    <option value="" >Please Selct</option>
                     <option v-for="usr in users" :value="usr.id"> <% usr.first_name%> <% usr.last_name%></option>
                   </select>
               </div>
+
+             <div class="form-group" :class="{ 'has-error': $v.appointment.customer_id.$error }"  >
+                  <label for="exampleInputEmail1">Customer </label>
+                  <select class="form-control"  name="assigned_id" v-model="$v.appointment.customer_id.$model" >
+                    <option value="">Please Selct</option>
+                    <option v-for="cst in customers" :value="cst.id"> <% cst.first_name%> <% cst.last_name%></option>
+                  </select>
+              </div>
+
               <div class="form-group" :class="{ 'has-error': $v.appointment.start_date.$error }">
                 <label for="start_date">Start Date &amp; Time </label>
                 <div class="input-group">

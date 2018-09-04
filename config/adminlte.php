@@ -238,11 +238,11 @@ return [
                
         //     ],
         // ],
-        // [
-        //     'text'    => 'Calendar',
-        //     'icon'    => 'calendar',
-        //     'url'  => 'admin/appointment',
-        // ],
+        [
+            'text'    => 'Calendar',
+            'icon'    => 'calendar',
+            'url'  => 'admin/appointment',
+        ],
         
         // 'LOGOUT',
         // [

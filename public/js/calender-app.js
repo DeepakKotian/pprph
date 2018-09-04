@@ -11,9 +11,12 @@ var calenderapp = new Vue({
         description:'',
         start_time:'',
         end_time:'',
+        customer_id:'',
       },
+      user_id:null,
+      customers:{},
+      showAssign:false,
       users:{
-
       },
       events:[],
       date:'',
@@ -37,17 +40,23 @@ var calenderapp = new Vue({
           },
           description:{
             required:required,
+          },
+          customer_id:{
+            required:required,
           }
         }
     },
     created: function(){
-    
+        this.user_id = $('#user_id').val();
+     
+        
     }, 
     mounted: function(){
         this.date = new Date();
         this.d = this.date.getDate();
         this.m  = this.date.getMonth();
         this.y = this.date.getFullYear();
+        this.loadCustomers();
         this.loadUsers();
         this.loadAppointments();
         let self = this;
@@ -86,6 +95,15 @@ var calenderapp = new Vue({
                 $('#end_date').datepicker('setStartDate', minDate);
                 self.appointment.start_date =  $('#start_date').val(); 
         })
+
+        $('input:radio').click(function() {
+            if ($(this).val() === '1') {
+             self.showAssign=false;
+            } else if ($(this).val() === '2') {
+                self.showAssign=true;
+            } 
+        });
+ 
      },
 
     methods: {
@@ -93,9 +111,20 @@ var calenderapp = new Vue({
         this.$http.get(this.urlPrefix+'fetchappointments').then(
             function(response){
              this.events = response.data;
+    
              this.loadCalender();  
             }
         )
+      },
+      loadCustomers:function(){
+        this.$http.get(this.urlPrefix+'fetchcustomersforappointment').then(
+            function(response){
+                this.customers  = response.data;
+               
+                
+            }
+        )
+        
       },
       loadUsers:function(){
         this.$http.get(this.urlPrefix+'fetchtaskusers').then(
@@ -106,6 +135,7 @@ var calenderapp = new Vue({
       },
 
       loadCalender:function(){ 
+     
             self = this;
             $('#calendar').fullCalendar({
                 header    : {
@@ -119,10 +149,17 @@ var calenderapp = new Vue({
                     week : 'week',
                     day  : 'day'
                 },
+                
                 eventClick: function(calEvent, jsEvent, view) {
                     self.appointment.title = calEvent.title;
                     self.appointment.description = calEvent.description;
                     self.appointment.assigned_id = calEvent.assigned_id;
+                    console.log( self.appointment.assigned_id);
+                    self.showAssign=false;
+                    if(self.user_id !=self.appointment.assigned_id){
+                        self.showAssign=true;
+                    }
+                    self.appointment.customer_id = calEvent.customer_id;
                     self.appointment.start_date = moment(calEvent.start).format('DD-MM-YYYY');
                     self.appointment.end_date = moment(calEvent.end).format('DD-MM-YYYY');
                     self.appointment.start_time = moment(calEvent.start).format('HH')+':'+ moment(calEvent.start).format('MM');
@@ -131,7 +168,10 @@ var calenderapp = new Vue({
                     self.action = 'edit';
                  },
                 events    : self.events,
+              
+                
                 eventRender: function(eventObj, $el) {
+                    
                     var t = moment(eventObj.start).format('HH') + ":" + moment(eventObj.start).format('mm') + " - " + moment(eventObj.end).format('HH') + ":" + moment(eventObj.end).format('mm')
                     $el.popover({
                       title: eventObj.title +' Time- ' +t + ', With:' + eventObj.first_name+' '+ eventObj.last_name,
@@ -145,7 +185,17 @@ var calenderapp = new Vue({
             $('#calendar').fullCalendar( 'removeEventSource', self.events )
             $('#calendar').fullCalendar( 'addEventSource', self.events )
         },
+
         addAppointment:function(){
+       
+            if(this.showAssign==false){
+               this.appointment.assigned_id = this.user_id;
+             }
+            else{
+                this.appointment.assigned_id = '';
+                this.appointment.assigned_id=this.appointment.assigned_id
+            }
+           
             if(this.$v.appointment.$invalid){
                 this.$v.appointment.$touch();
             }else{
@@ -162,6 +212,10 @@ var calenderapp = new Vue({
             }
         },
         updateAppointment:function(){
+            if(this.showAssign==false){
+                this.appointment.assigned_id = this.user_id;
+              }
+             
             if(this.$v.appointment.$invalid){
                 this.$v.appointment.$touch();
             }else{
