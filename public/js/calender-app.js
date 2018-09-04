@@ -187,14 +187,9 @@ var calenderapp = new Vue({
         },
 
         addAppointment:function(){
-       
             if(this.showAssign==false){
                this.appointment.assigned_id = this.user_id;
              }
-            else{
-                this.appointment.assigned_id = '';
-                this.appointment.assigned_id=this.appointment.assigned_id
-            }
            
             if(this.$v.appointment.$invalid){
                 this.$v.appointment.$touch();
