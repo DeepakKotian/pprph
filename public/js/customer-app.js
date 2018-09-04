@@ -31,6 +31,9 @@ var app = new Vue({
         parent_id:null,
         nationality:'',
       },
+      customerlogs:{
+
+      },
       oldCustomerData:{
       },
       sampleDta:[],
@@ -198,6 +201,8 @@ var app = new Vue({
         this.$http.get(this.urlPrefix+'fetchcustomer/'+this.currentId).then(function(response){
         this.oldCustomerData={
                 id:response.data.id,
+                unique_id:response.data.unique_id,
+                status:response.data.status,
                 gender:response.data.gender,
                 email:response.data.email,
                 email_office:response.data.email_office,
@@ -205,14 +210,18 @@ var app = new Vue({
                 last_name:response.data.last_name,
                 language:response.data.language,
                 zip:response.data.zip,
+                company:response.data.company,
+                city:response.data.city,
+                address:response.data.address,
                 dob:response.data.dob,
+                country:response.data.country,
                 gender:response.data.gender,
                 is_family:response.data.is_family,
                 telephone:response.data.telephone,
                 mobile:response.data.mobile,
                 parent_id:response.data.parent_id,
                 nationality:response.data.nationality,
-            };
+             };
 
         this.customer=response.data;
        
@@ -232,7 +241,7 @@ var app = new Vue({
             this.$v.customer.$touch()
         }
         else{
-            this.$http.post(this.urlPrefix+'customer-form/'+this.currentId,this.customer).then(
+            this.$http.post(this.urlPrefix+'customer-form/'+this.currentId,{customer:this.customer,oldCustomerData:this.oldCustomerData}).then(
                 function(response){
                     this.$toaster.success(response.data);
                     this.getCustomerData();
@@ -262,6 +271,17 @@ var app = new Vue({
             this.family.mobile_family = item.mobile;
             this.family.email_family = item.email;
             this.family.id = item.id; 
+            this.oldCustomerData = {
+                family : {
+                    first_name_family:item.first_name,
+                    last_name_family:item.last_name,
+                    dob_family :item.dob,
+                    nationality_family : item.nationality,
+                    mobile_family : item.mobile,
+                    id : item.id,
+                    
+                }
+            }
         }
         this.$v.family.$reset();  
       },
@@ -294,7 +314,7 @@ var app = new Vue({
             this.$v.family.$touch();
         }else{
             console.log(this.family);
-            this.$http.post(this.urlPrefix+'updatefamily',this.family).then(
+            this.$http.post(this.urlPrefix+'updatefamily',{family:this.family,oldFamily:this.oldCustomerData.family}).then(
                 function(response){
                     this.$toaster.success(response.data);
                     this.getCustomerData();
@@ -352,6 +372,7 @@ var app = new Vue({
            this.insurancedata.provider_id='';
            this.policylist = '';
            this.currentCtgName =  item.name;
+           this.$v.insurancedata.$reset();
            $('#insuranceModal').find('.modal-body #selectJSFamily').val('');
            $('#insuranceModal').find('.modal-body #selectJSFamily').trigger('change');
         },
@@ -525,7 +546,7 @@ var app = new Vue({
                 }).then(
                 function(response){
                     this.$toaster.success(response.data);
-                    this.loadDocuments($('#policy_id').val());
+                    this.loadDocuments();
                     $('#documentType').val('');
                     $('#document').val('');
                 }
@@ -538,8 +559,21 @@ var app = new Vue({
                 
             });
         },
+        deletePolicyDocument:function(doc){
+            this.$http.post(this.urlPrefix+'delete-document',  doc).then(function(response){
+                this.loadDocuments();
+                this.$toaster.success(response.data); 
+                this.fetchPolicyList();
+            }
+          )
+        },
+        fetchLogs:function(){
+            this.$http.get(this.urlPrefix+'fetch-logs/'+this.currentId).then(function(response){
+                this.customerlogs = response.data;
+            }
+          )
+        }
       },
-     
     delimiters: ["<%","%>"]
   })
 

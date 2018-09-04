@@ -54,6 +54,7 @@ Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     Route::post('/fetchpolicydetail/{id}', 'Admin\CustomerController@fetchPolicyDetail');
     Route::post('/fetchpolicylist/{id}', 'Admin\CustomerController@fetchPolicyList');
     Route::get('/customer-search', 'Admin\CustomerController@search');
+    Route::get('/fetch-logs/{id}', 'Admin\CustomerController@fetchLogs');
 
     Route::get('/customer-filter-data', 'Admin\CustomerController@getCustomFilterData');
     Route::post('/customer-form/{id}', 'Admin\CustomerController@update');
@@ -84,6 +85,7 @@ Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     Route::get('/documents', 'Admin\documentsController@index');
     Route::get('/document-filter-data', 'Admin\documentsController@getDocFilterData');
     Route::post('/document-detail', 'Admin\documentsController@show');
+    Route::post('/delete-document', 'Admin\documentsController@delete');
 
     //task management
     

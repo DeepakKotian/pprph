@@ -122,8 +122,15 @@ class documentsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function delete(Request $request)
     {
-        //
+        if($request->id){
+            $data = DB::table('policy_documents')
+            ->where('policy_detail_id',$request->policy_detail_id)
+            ->where('document_id',$request->document_id)->delete();
+            return response()->json('Successfully Deleted',200);
+        }
     }
+
+    
 }

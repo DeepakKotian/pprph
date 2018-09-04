@@ -25,7 +25,8 @@
             <div class="box-header with-border">
               <h3 class="box-title">Customer Form</h3>
               <div class="box-tools">
-              <a class="btn btn-primary btn-md pull-right" href="{{ url('admin/customers') }}">Back to List Page</a>
+                <a  style="display:none;" class="btn btn-primary btn-md" data-toggle="modal" data-target="#logsModal" v-on:click="fetchLogs">Logs</a>
+                <a class="btn btn-primary btn-md " href="{{ url('admin/customers') }}">Back to List Page</a>
               </div>
             </div>
             <!-- /.box-header -->
@@ -44,7 +45,7 @@
                     @if($data)
                     <div class="form-group col-sm-4">
                       <label for="id">Customer Id</label>
-                      <input type="text" class="form-control" v-model="customer.id"  id="id"  placeholder="Customer Id" readonly>
+                      <input type="text" class="form-control" v-model="customer.unique_id"  id="id"  placeholder="Customer Id" readonly>
                     </div>
                     @endif
                     <div class="form-group col-sm-4"> 
@@ -446,6 +447,108 @@
     
     </div>
      <!-- Status Modal end-->
+  <!-- logs modal -->
+  <div class="modal fade" id="logsModal" tabindex="-1" role="dialog" aria-labelledby="logsModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                    <div class="modal-header">
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title" id="exampleModalLabel">Logs</h4>
+                    </div>
+                    <div class="modal-body"> 
+                        <ul style="height:500px;overflow:auto;">
+                          <li v-for="(logs, index) in customerlogs">
+                            <h3  v-if="logs.type=='personal'">Personal Info Edited By : <% logs.userName %> on <% logs.updated_at %> </h3>
+                            <h3 v-if="logs.type=='add_family'"> Family Added By : <% logs.userName %> on <% logs.updated_at %> </h3>
+                            <h3 v-if="logs.type=='update_family'"> Family Edited By : <% logs.userName %> on <% logs.updated_at %> </h3>
+                            <div class="form-group" v-if="logs.type=='personal'">
+                              <ul >
+                                <li v-for="(rw,index) in logs.logArr">
+                                    <div v-show="index=='first_name'">
+                                       First Name : "<% rw.old_value %>" to <% rw.new_value %>
+                                    </div>
+                                    <div v-show="index=='last_name'">
+                                       Last name : "<% rw.old_value %>" to <% rw.new_value %>
+                                    </div>
+                                    <div v-show="index=='dob'">
+                                      Dob : "<% rw.old_value %>" to <% rw.new_value %>
+                                    </div>
+                                    <div v-show="index=='language'">
+                                       Language : "<% rw.old_value %>" to <% rw.new_value %>
+                                    </div>
+                                    <div v-show="index=='gender'">
+                                       Sex : "<% rw.old_value %>" to <% rw.new_value %>
+                                    </div>
+                                    <div v-show="index=='company'">
+                                       Company : "<% rw.old_value %>" to <% rw.new_value %>
+                                    </div>
+                                    <div v-show="index=='address'">
+                                       Address: "<% rw.old_value %>" to <% rw.new_value %>
+                                    </div>
+                                    <div v-show="index=='city'">
+                                      City : "<% rw.old_value %>" to <% rw.new_value %>
+                                    </div>
+                                    <div v-show="index=='zip'">
+                                      Postal code : "<% rw.old_value %>" to <% rw.new_value %>
+                                    </div>
+                                    <div v-show="index=='telephone'">
+                                      Telephone : "<% rw.old_value %>" to <% rw.new_value %>
+                                    </div>
+                                    <div v-show="index=='nationality'">
+                                      Nationality : "<% rw.old_value %>" to <% rw.new_value %>
+                                    </div>
+                                    <div v-show="index=='mobile'">
+                                      Mobile : "<% rw.old_value %>" to <% rw.new_value %>
+                                    </div>
+                                    <div v-show="index=='email'">
+                                      Email : "<% rw.old_value %>" to <% rw.new_value %>
+                                    </div>
+                                    <div v-show="index=='email_office'">
+                                      Email office : "<% rw.old_value %>" to <% rw.new_value %>
+                                    </div>
+                                </li>
+                              </ul>
+                            </div>
+                            <div class="form-group" v-if="logs.type=='add_family'">
+                              <ul>
+                                <li>
+                                  <% logs.logArr.dob %>
+                                  <% logs.logArr.first_name %>
+                                  <% logs.logArr.last_name %>
+                                  <% logs.logArr.mobile %>
+                                </li>
+                              </ul>
+                            </div>
+                            <div class="form-group" v-if="logs.type=='update_family'">
+                              <ul>
+                                <li v-for="(fmly,index) in logs.logArr">
+                                   <div v-show="index=='first_name_family'">
+                                      First name : "<% fmly.old_value %>" to <% fmly.new_value %>
+                                    </div>
+                                    <div v-show="index=='last_name_family'">
+                                       Last name : "<% fmly.old_value %>" to <% fmly.new_value %>
+                                    </div>
+                                    <div v-show="index=='dob_family'">
+                                      Dob : "<% fmly.old_value %>" to <% fmly.new_value %>
+                                    </div>
+                                    <div v-show="index=='mobile_family'">
+                                      Mobile : "<% fmly.old_value %>" to <% fmly.new_value %>
+                                    </div>
+                                </li>
+                              </ul>
+                            </div>
+                          </li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">OK</button>
+                    </div>
+            </div>
+      </div>
+    </div>
+    <!-- logsmodal ends -->
      <!-- Antrag Modal -->
     <div class="modal fade" id="antragModal" tabindex="-1" role="dialog" aria-labelledby="antragModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
@@ -535,7 +638,15 @@
                                   <tr v-for="(doc, index) in vertrag.policyDocs">
                                     <td> <% doc.document_name %> </td>
                                     <td> <a class="fa fa-eye" target="_blank" v-bind:href="urlPrefix+'../uploads/vertrag/'+doc.document_name"></a> &nbsp;&nbsp;
-                                    <a class="fa fa-download" download v-bind:href="urlPrefix+'../uploads/vertrag/'+doc.document_name"> </a> </td>
+                                    <a class="fa fa-download" download v-bind:href="urlPrefix+'../uploads/vertrag/'+doc.document_name"> </a> &nbsp;&nbsp;
+                                    <a class="fa fa-trash" target="_blank" v-on:click="$('#docId'+doc.id).show()"></a>
+                                    <div class="alert alert-warning alert-dismissible"  v-bind:id="'docId'+doc.id" role="alert" style="display:none;padding:5px; margin-bottom:0;">
+                                      <button type="button" class="close" v-on:click="$('#docId'+doc.id).hide()" aria-label="Close" style="right:0;">
+                                       <span aria-hidden="true">&times;</span>
+                                      </button>
+                                      <span aria-hidden="true"> <a href="javascript:void(0)" v-on:click="deletePolicyDocument(doc)" style="text-decoration:none"> Yes Delete!  <i class="fa fa-trash"></i> </a> </span>
+                                    </div>
+                                    </td>
                                   </tr>
                                 </tbody>
                               </thead>

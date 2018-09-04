@@ -11,6 +11,7 @@ use App\customer;
 use App\customerpolicymember;
 use App\policydetail;
 use App\User;
+use App\customerlog;
 use DB;
 use Auth;
 use DataTables;
@@ -232,6 +233,7 @@ class CustomerController extends Controller
     public function show($id='')
     {
         $data = [];
+
         if($id!=''){
             $data = customer::select('*')->where('customers.id',$id)->where('customers.is_family','0')->first();
             if(!empty($data)){
@@ -394,45 +396,46 @@ class CustomerController extends Controller
      * @return \Illuminate\Http\Response
      */
     
-    public function update(Request $request, customer $customer)
+    public function update(Request $request)
     {
-        // $a1=$request->customer;
-        // $a1=array_slice($a1, 0,22);
-        // $a2=$request->oldCustomer;
-        // $result=array_diff($a1,$a2);
-   
-
-        if($request->dob != null){
-            $dob= date('Y-m-d h:i:s',strtotime($request->dob));
-         }
-         else{
-             $dob= NULL;
-         }
+        $data = [];
+        $customer = $request->customer;
         
-        // $user = DB::table('customers');
-        //$checkAdmin =  $user->select('customers.email')->where('customers.email',$request->email)->where('customers.id','<>',$request->id)->first();
-        //if(empty($checkAdmin)){
-            $data['first_name'] = $request->first_name;
-            $data['last_name'] = $request->last_name;
-            $data['email'] = $request->email;
-            $data['email_office'] = $request->email_office;
-            $data['telephone'] = $request->telephone;
-            $data['mobile'] = $request->mobile;
-            $data['zip'] = $request->zip;
-            $data['dob'] = $dob;
-            $data['nationality'] = $request->nationality;
-            $data['city'] =   $request->city;
-            $data['status'] =   $request->status;
-            $data['address'] = $request->address;
-            $data['company'] = $request->company;
-            $data['gender'] = $request->gender;
-            $data['language'] = $request->language;
-            if(customer::whereId($request->id)->update($data));
+        $customer = array_slice($customer, 0,22);
+        $oldCustomerData = $request->oldCustomerData;
+        $result = array_diff($customer,$oldCustomerData);
+        $arrCustomer =  [];
+        foreach ($result as $key => $value) {
+            if($key!='created_at' && $key!='updated_at'){
+                    $arrCustomer[$key]['old_value'] =  $oldCustomerData[$key];
+                    $arrCustomer[$key]['new_value'] = $customer[$key];
+                    $data[$key] = $customer[$key];
+            }
+        }
+        if(isset($data['dob'])){
+            if($data['dob']!=null){
+                $data['dob'] = date('Y-m-d h:i:s',strtotime($data['dob']));
+            }
+            else{
+                $data['dob'] = NULL;
+            }
+        }
+
+        if(!empty($arrCustomer)){
+            $arrCustomer['logs'] = serialize($arrCustomer); // serialize should always kept on top to insert only form changes. 
+            $arrCustomer['user_id'] = Auth::user()->id;
+            $arrCustomer['customer_id'] = $customer['id'];
+            $arrCustomer['type'] = 'personal';
+            customerlog::create($arrCustomer);
+        }
+
+        if(!empty($data)){
+            if(customer::whereId($customer['id'])->update($data));
             return response()->json('Successfully updated',200);
-        //}
-        // else{
-        //     return response()->json('Email Aready Taken', 500);
-        // }  
+        }else{
+            return response()->json('No changes done',500);
+        }
+ 
     }
 
     public function storeFamily(Request $request)
@@ -453,27 +456,68 @@ class CustomerController extends Controller
             'nationality' => $request['nationality_family'],
             'mobile' => $request['mobile_family'],
         ]);
-        if($insertData)
+        if($insertData){
+            $arrCustomer['logs'] = serialize([
+                'first_name' => $request['first_name_family'],
+                'last_name' => $request['last_name_family'],
+                'is_family'=>1,
+                'parent_id'=>$request['parent_id'],
+                'dob' => $dob,
+                'nationality' => $request['nationality_family'],
+                'mobile' => $request['mobile_family'],
+            ]); // serialize should always kept on top to insert only form changes. 
+            $arrCustomer['user_id'] = Auth::user()->id;
+            $arrCustomer['customer_id'] = $request['parent_id'];
+            $arrCustomer['type'] = 'add_family';
+            customerlog::create($arrCustomer);
+        }
         return response()->json('Successfully created',200); 
     }
 
     public function updateFamily(Request $request)
     {
-        if($request->dob_family!=null)
-        {
-           $dob= date('Y-m-d h:i:s',strtotime($request->dob_family));
-        }
-        else{
-            $dob=null;
+        $data = [];
+        $family = $request->family;
+        $oldFamily = $request->oldFamily;
+        $result = array_diff( $family,$oldFamily);
+        $arrFamily =  [];
+        foreach ($result as $key => $value) {
+            if($key!='parent_id'){
+                $arrFamily[$key]['old_value'] =  $oldFamily[$key];
+                $arrFamily[$key]['new_value'] = $family[$key];
+                if(isset($family['first_name_family']))
+                $data['first_name'] = $family['first_name_family'];
+                if(isset($family['last_name_family']))
+                $data['last_name'] = $family['last_name_family'];
+                if(isset($family['dob_family']))
+                {
+                    if($family['dob_family']!=null){
+                        $data['dob']= date('Y-m-d h:i:s',strtotime($family['dob_family']));
+                    }else{
+                        $data['dob'] = NULL;
+                    }
+                }
+                if(isset($family['nationality_family']))
+                $data['nationality'] = $family['nationality_family'];
+                if(isset($family['mobile_family']))
+                $data['mobile'] = $family['mobile_family'];
+            }
         }
 
-        $data['first_name'] = $request->first_name_family;
-        $data['last_name'] = $request->last_name_family;
-        $data['dob'] =  $dob;
-        $data['nationality'] = $request->nationality_family;
-        $data['mobile'] = $request->mobile_family;
-        if(customer::whereId($request->id)->update($data));
-        return response()->json('Successfully updated',200);
+        if(!empty($arrFamily)){
+            $arrFamily['logs'] = serialize($arrFamily); // serialize should always kept on top to insert only form changes. 
+            $arrFamily['user_id'] = Auth::user()->id;
+            $arrFamily['customer_id'] = $family['parent_id'];
+            $arrFamily['type'] = 'update_family';
+            customerlog::create($arrFamily);
+        }
+        
+
+        if(!empty($data)){
+            if(customer::whereId($family['id'])->update($data));
+            return response()->json('Successfully updated',200);
+        }
+        return response()->json('No Data Updated',500);
     }
 
     public function deleteFamily(Request $request){
@@ -635,7 +679,18 @@ class CustomerController extends Controller
 
        
     } 
-    
-    
-    
+
+    public function fetchLogs($id){
+        $data = customerlog::select('customerlogs.*','customers.id',DB::raw("CONCAT_WS(' ',users.first_name,users.last_name) as userName"))
+        ->where('customer_id',$id)
+        ->leftJoin('users','users.id','=','customerlogs.user_id')
+        ->leftJoin('customers','customers.id','=','customerlogs.customer_id')
+        ->get();
+  
+        foreach ($data as $key => $value) {
+           $data[$key]->logArr = unserialize($value['logs']); 
+        }
+        return response()->json($data,200);
+    }
+   
 }
