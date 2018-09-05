@@ -117,10 +117,10 @@ Documents List
             }
         },
         columns: [
-            {data: 'id', name: 'id'},
+            {data: 'docId', name: 'docId'},
             {data: 'document_name', name: 'document_name'},
             {data: 'name', name: 'name'},
-            {data: 'id', name: 'id'},
+            {data: 'docId', name: 'docId'},
           
         ],
         columnDefs:[{
@@ -146,7 +146,7 @@ Documents List
  
      $('#documentsTable tbody').on('click', '.btn-view', function (e) {
         var data = oTable.row( $(this).parents('tr') ).data();
-        var document_id = data.document_id;
+        var document_id = data.docId;
         $.ajax({
             url:'{{ url("admin/document-detail") }}',
             type:'POST',
