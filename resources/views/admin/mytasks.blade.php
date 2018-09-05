@@ -28,9 +28,9 @@ Assigned Tasks List <small>View list of Assigned tasks</small>
          <div class="table table-responsive">
             <table class="table table-bordered" id="mytaskTable">
                <thead>
-                  <th>Id</th>
+                  <th>Sl.No</th>
                   <th>Name</th>
-                  <th>Description</th>
+                  <!-- <th>Description</th> -->
                   <th>Assigned By</th>
                   <th>Status</th>
                   <th>Priority</th>
@@ -39,10 +39,10 @@ Assigned Tasks List <small>View list of Assigned tasks</small>
                   <th>Options</th>
                </thead>
                <tbody>
-                  <tr v-for="row in mytaskData">
-                     <td><% row.taskid %></td>
+                  <tr v-for="(row ,ky) in mytaskData">
+                     <td><% ky+1 %></td>
                      <td><% row.task_name %> </td>
-                     <td><% row.task_detail %> </td>
+                     <!-- <td><% row.task_detail %> </td> -->
                      <td><% row.first_name %> <% row.last_name %> </td>
                      <td><% row.status %> </td>
                      <td><% row.priority %> </td>
