@@ -364,9 +364,9 @@ var app = new Vue({
         },
 
         loadDataTable:function(){
-          setTimeout( function(){ $('#insuranceTable').DataTable({ destroy: true, "order": [[0, "desc" ]],}); },500)
-          setTimeout( function(){ $('#providersTable').DataTable({ destroy: true, "order": [[0, "desc" ]],}); },500)
-         setTimeout( function(){ $('#policyMappingTable').DataTable({destroy: true,"order": [[0, "desc" ]],}); },500)
+          setTimeout( function(){ $('#insuranceTable').DataTable({ destroy: true, "order": [[0, "desc" ]],}); },1000)
+          setTimeout( function(){ $('#providersTable').DataTable({ destroy: true, "order": [[0, "desc" ]],}); },1000)
+         setTimeout( function(){ $('#policyMappingTable').DataTable({destroy: true,"order": [[0, "desc" ]],}); },1000)
     
         },
         loadStatusModal:function(item){
