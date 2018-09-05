@@ -104,6 +104,7 @@ var app = new Vue({
                     else{
                      let self = this;
                      $.each(response.data.errors, function(key, value){
+                         console.log(value);
                          self.$toaster.error(value[0]);
                      });
                     }
@@ -274,17 +275,16 @@ var app = new Vue({
                     }
                 ).catch(function(response){
                     console.log(response.data.error);
-                   if(response.data){
-                   
-                    this.$toaster.error(response.data);
-                   }
-                   else{
-                 
+                  
                     let self = this;
                     $.each(response.data.errors, function(key, value){
                         self.$toaster.error(value[0]);
+                        console.log(value);
                     });
-                   }
+                    if(response.data.errors.documnetData){
+                        self.$toaster.error('File size must be Less than 2MB'); 
+                    }
+                   
                   // this.policyMappings.ducumentData=null;
                 });
             } 

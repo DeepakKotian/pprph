@@ -61,6 +61,7 @@
          </div>
          </div>
          <div class="modal-footer">
+            <button class="btn btn-default" data-dismiss="modal" type="button">Cancel</button>
             <button class="btn btn-primary" v-if="modalAction=='edit'" v-on:click="updatetasks()" type="button">Save</button>
             <button class="btn btn-primary" v-if="modalAction=='add'" v-on:click="addTask()" type="button">Save</button>
          </div>

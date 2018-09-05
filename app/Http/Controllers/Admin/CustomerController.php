@@ -579,23 +579,28 @@ class CustomerController extends Controller
 
     public function uploadDocuments(Request $request)
     {
-        
+        if(!$request->file('documentData')->getSize()){
+            return response()->json('Document should not be more than 2MB',500);
+        }
         if($request->documnetType!=0){
             if(empty($request->document_id)){
                     if(!empty($request->file('documentData'))){
                         $file = $request->file('documentData');
                         $docName = $file->getClientOriginalName();
-                        $documentId = DB::table('documents')->insertGetId(['document_name'=>$docName,'customer_id'=>$request->customer_id]);
                         $destinationPath = public_path('/uploads/vertrag');
                         $file->move($destinationPath, $docName);
+                       
+                        $documentId = DB::table('documents')->insertGetId(['document_name'=>$docName,'customer_id'=>$request->customer_id]);
                         DB::table('policy_documents')->insert(['document_id'=>$documentId, 'policy_detail_id'=>$request->policy_id]);
+                        
                     }else{
-                        return response()->json('Document not selected',404);
+                        return response()->json('Document not selected',500);
                     }
                 }else{
                     DB::table('policy_documents')->insert(['document_id'=>$request->document_id,'policy_detail_id'=>$request->policy_id]);
                 }
             return response()->json('Successfully updated document',200);
+           
         }else{
             if($request->hasFile('documentData')){
                 $file = $request->file('documentData');
