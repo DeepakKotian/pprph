@@ -176,16 +176,14 @@ class insuranceController extends Controller
     public function addPolicyMapping(Request $request)
      {
         $pmap = DB::table('insurance_mapped');
-        $duplicate =  $pmap->select('*')->where('insurance_ctg_id',$request['insure_id'])->where('provider_id','=',$request['policy_id'])->first();
+        $duplicate = '';// $pmap->select('*')->where('insurance_ctg_id',$request['insure_id'])->where('provider_id','=',$request['policy_id'])->first();
        
         if(empty($duplicate)){
             $validate = $this->validate(request(),[
                 'insure_id' => 'required',
                 'policy_id' => 'required',
                 'documnetData'=>'size:1000',
-            ],
-            ['documnetData.size'=>'File size must be Less than 2MB']
-            );
+            ]);
             
             if($request->hasFile('documnetData')){
                
@@ -212,7 +210,7 @@ class insuranceController extends Controller
             return redirect()->back()->withErrors($validate->errors());
             }
             else{
-             return response()->json('Policy Already Mapped', 500);
+             return response()->json(['errors'=>'Policy Already Mapped'], 500);
             }  
     }
 
