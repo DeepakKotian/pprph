@@ -290,7 +290,8 @@ class CustomerController extends Controller
         ->where('parent_id',$request->id)
         ->get();
         $data->appointments = task::select('task_name','task_detail','assigned_id',DB::raw('DATE_FORMAT(tasks.due_date,"%d-%m-%Y %h:%I:%p") as end_date'), DB::raw('DATE_FORMAT(tasks.start_date,"%d-%m-%Y %h:%I:%p") as start_date'),DB::raw('CONCAT_WS(" ",users.first_name,users.last_name) as userName'))->where('customer_id',$request->id)
-        ->leftJoin('users','users.id','=','tasks.assigned_id')           
+        ->leftJoin('users','users.id','=','tasks.assigned_id')  
+        ->where('tasks.type','appointment')        
         ->whereRaw('CURDATE() >= DATE_SUB(tasks.start_date, INTERVAL 20 DAY) AND CURDATE()<tasks.start_date')
         ->get();
 
@@ -390,6 +391,14 @@ class CustomerController extends Controller
                customerpolicymember::create(['policy_detail_id'=> $policy->id,'family_member_id'=>$value]);
             }
         }
+        /* if($policy){
+            $arrCustomer['logs'] = serialize($data); // serialize should always kept on top to insert only form changes. 
+            $arrCustomer['user_id'] = Auth::user()->id;
+            $arrCustomer['customer_id'] =  $id;
+            $arrCustomer['type'] = 'add_policy';
+            customerlog::create($arrCustomer);
+        } */
+
         return response()->json('Successfully added new policy',200);
     }
 

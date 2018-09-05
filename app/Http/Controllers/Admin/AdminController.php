@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\User;
 use App\policydetail;
+use App\task;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
@@ -196,11 +197,17 @@ class AdminController extends Controller
 
     public function fetchNotification()
     {
-       $data = policydetail::select('c.first_name','c.last_name','inc.name as ctgName','prd.name as providerName',DB::raw('DATE_FORMAT(end_date, "%d %M") as end_date'))
+       $data['policy'] = policydetail::select('c.first_name','c.last_name','inc.name as ctgName','prd.name as providerName',DB::raw('DATE_FORMAT(end_date, "%d %M") as end_date'))
         ->leftJoin('customers as c','customer_id','=','c.id')
         ->leftJoin('massparameter as inc','inc.id','=','policy_detail.insurance_ctg_id')
         ->leftJoin('massparameter as prd','prd.id','=','policy_detail.provider_id')
         ->whereRaw('CURDATE() >= DATE_SUB(end_date, INTERVAL 20 DAY) AND CURDATE()<end_date')
+        ->get();
+        $data['events'] = task::select('task_name','task_detail','assigned_id',DB::raw('DATE_FORMAT(tasks.due_date,"%d-%m-%Y %h:%I:%p") as end_date'), DB::raw('DATE_FORMAT(tasks.start_date,"%d-%m-%Y %h:%I:%p") as start_date'),DB::raw('CONCAT_WS(" ",users.first_name,users.last_name) as userName'))
+        ->leftJoin('users','users.id','=','tasks.assigned_id')
+        ->where('tasks.user_id',Auth::user()->id)  
+        ->where('tasks.type',NULL)          
+        ->whereRaw('CURDATE() >= DATE_SUB(tasks.start_date, INTERVAL 20 DAY) AND CURDATE()<tasks.start_date')
         ->get();
         return response()->json($data, 200);
     }
