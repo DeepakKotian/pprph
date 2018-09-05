@@ -93,6 +93,7 @@ Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     Route::get('/mytask-list', function () {
         return view('admin.mytasks');
     });
+    Route::post('fetch-initial-task', 'Admin\taskController@fetchInitialTask');
     Route::post('fetchtasklist', 'Admin\taskController@fetchTaskList');
     Route::post('fetchmytasklist', 'Admin\taskController@fetchMyTaskList');
     Route::post('assigntask', 'Admin\taskController@assigntask');

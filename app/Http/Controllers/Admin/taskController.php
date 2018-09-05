@@ -139,20 +139,27 @@ class taskController extends Controller
      * @param  \App\cr  $cr
      * @return \Illuminate\Http\Response
      */
+
     public function show($id)
     {
-        //
-        // $task=task::leftjoin('users as u','u.id','=','tasks.user_id')->leftjoin('users as au','au.id','=','tasks.assigned_id')
-        // ->select('tasks.*','au.first_name as a_first_name','au.last_name as a_last_name',DB::raw('DATE_FORMAT(tasks.due_date,"%d-%m-%Y") as due_date'),DB::raw('DATE_FORMAT(tasks.created_at,"%d-%m-%Y") as assigned_on'),'u.id','u.first_name','u.last_name',DB::raw('tasks.id as taskid' ))
-        
-        // ->where('tasks.type',NULL)->where('assigned_id','=',Auth::user()->id)->findorfail($id);
-        $task=task::leftjoin('users as u','u.id','=','tasks.user_id')->leftjoin('users as au','au.id','=','tasks.assigned_id')
-        ->select('tasks.*','au.first_name as a_first_name','au.last_name as a_last_name',DB::raw('DATE_FORMAT(tasks.due_date,"%d-%m-%Y") as due_date'),DB::raw('DATE_FORMAT(tasks.created_at,"%d-%m-%Y") as assigned_on'),'u.id','u.first_name','u.last_name',DB::raw('tasks.id as taskid' ))
-        
-        ->where('tasks.type',NULL)->findorfail($id);
-        return view('admin.taskshow',compact('task'));
+      
+        $taskinitailId=$id;
+       return  view('admin.taskshow',compact('taskinitailId'));
+
+        // return response()->json([
+        //     'body'=>view('admin.taskshow' ,compact('task'))->render(), 
+        //     //'task' => view('admin.taskshow')->with('task',$task)->render()
+        // ]);
+
+        //return Response()->json($taskData,200);
     }
 
+    public function fetchInitialTask(Request $request){
+        $task=task::leftjoin('users as u','u.id','=','tasks.user_id')->leftjoin('users as au','au.id','=','tasks.assigned_id')
+        ->select('tasks.*','au.first_name as a_first_name','au.last_name as a_last_name',DB::raw('DATE_FORMAT(tasks.due_date,"%d-%m-%Y") as due_date'),DB::raw('DATE_FORMAT(tasks.created_at,"%d-%m-%Y") as assigned_on'),'u.id','u.first_name','u.last_name',DB::raw('tasks.id as taskid' ))
+        ->where('tasks.type',NULL)->findorfail($request->id);
+        return Response()->json($task,200);
+    }
     /**
      * Show the form for editing the specified resource.
      *

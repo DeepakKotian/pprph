@@ -19,13 +19,13 @@
             <div class="box-header">
               <h3 class="box-title"> Task Details</h3>
               <div class="box-tools">
-             
-                    <a class="btn btn-warning " data-toggle="modal" v-on:click="loadTaskDetail({{ $task }})" data-target="#assignTask" > Add Remarks </a>
+                  
+                    <a class="btn btn-warning " data-toggle="modal"  v-on:click="loadAddRemarks(initialTask)" data-target="#assignTask" > Add Remarks </a>
                     <a class="btn btn-primary " href="{{ url()->previous() }}" >Back</a>
               </div>
             </div>
             
-            <input type="hidden" value="{{ $task->taskid }}" id="tasksId">
+            <input type="hidden" value="{{ $taskinitailId }}" id="tasksId">
             <!-- /.box-header -->
             <div class="box-body ">
               <table class="table table-condensed">
@@ -33,47 +33,50 @@
                 <tr>
                   <td><label>Date:</label></td>
                   <td>
-                  {{ $task->assigned_on }}
+                  <% initialTask.assigned_on %>
+             
                  </td>
                  
                 </tr>
                 <tr>
-                  <td><label>Due Date:</label></td>
+                  <td><label >Due Date:</label></td>
                   <td>
-                  {{ $task->due_date }}
+                  <% initialTask.due_date %>
                   </td>
                 </tr>
 
                 <tr>
                   <td><label>Task Name:</label></td>
                   <td>
-                  {{ $task->task_name }}
+                  <% initialTask.task_name %>
                   </td>
                  
                 </tr>
                 <tr>
                   <td><label>Current status:</label></td>
                   <td>
-                  {{ ucfirst($task->status) }}
+                  <% initialTask.status %>
                   </td>
                 </tr>
                 <tr>
                   <td><label>Assigned On:</label></td>
                   <td>
-                  {{ $task->assigned_on }}
+                  
+                  <% initialTask.assigned_on %>
                   </td>
                 </tr>
                 <tr>
                   <td><label>Assigned By:</label></td>
                   <td>
-                  {{ $task->first_name }} {{ $task->last_name }}
+                   <% initialTask.first_name %>  <% initialTask.last_name %>
+
                   </td>
                 </tr>
 
                 <tr>
                   <td><label>Priority:</label></td>
                   <td>
-                  {{ ucfirst($task->priority) }}
+                  <% initialTask.priority %>
                   </td>
                 </tr>
                 
@@ -82,6 +85,7 @@
             </div>
             <!-- /.box-body -->
           </div>
+       
           <!-- assign form -->
     <div class="modal fade" id="assignTask" tabindex="-1" role="dialog" aria-labelledby="addTaskLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -120,7 +124,7 @@
                         <input readonly type="text" v-model="$v.tasks.due_date.$model" class="form-control"  name="" id="due_date">
                         </div>
                     </div>
-                    <div v-if="modalAction=='edit'" class="form-group" :class="{ 'has-error': $v.tasks.status.$error }">
+                    <div v-if="modalAction=='add'" class="form-group" :class="{ 'has-error': $v.tasks.status.$error }">
                       <label for="exampleInputEmail1">Status *</label>
                       <select class="form-control"  name="" v-model="$v.tasks.status.$model" id="">
                         <option value="New">New</option>
@@ -136,7 +140,7 @@
                 </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary" v-if="modalAction=='edit'" v-on:click="assignTask()" type="button">Add</a>
+                    <button class="btn btn-primary" v-if="modalAction=='add'" v-on:click="assignTask()" type="button">Add</a>
                     
                 </div>
             </div>

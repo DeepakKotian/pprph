@@ -21,6 +21,7 @@ var taskapp = new Vue({
       mytaskData:[],
       taskData:[],
       errors:[],
+      initialTask:[],
       currentTasksId:'',
     },
 
@@ -45,7 +46,8 @@ var taskapp = new Vue({
       
     },
     created: function(){
-    
+      
+     
     }, 
     mounted: function(){
        
@@ -63,8 +65,11 @@ var taskapp = new Vue({
         this.loadTaskUser();
         this.loadDatepicker();
        this.loadTaskHistories();
+       this.loadInitialTaskData();
        
      },
+
+    
 
     methods: {
         loadDatepicker:function(){
@@ -77,7 +82,14 @@ var taskapp = new Vue({
                 'changeDate',  function() { self.tasks.due_date = $('#due_date').val(); $('#due_date').datepicker('hide');  }
             )
         },
-
+        loadInitialTaskData:function(){
+        
+            this.$http.post(this.urlPrefix+'fetch-initial-task',{ id: this.currentTasksId} ).then(
+                function(response){
+                  this.initialTask =  response.data;
+                }
+            )
+         },
         assignTask:function(){
         
             this.$http.post(this.urlPrefix+'assigntask',this.tasks).then(
@@ -86,6 +98,7 @@ var taskapp = new Vue({
                     $('#assignTask').modal('hide');
                     this.loadTaskHistories();
                     this.tasks.task_detail="";
+                    this.loadInitialTaskData();
                 }
             )
         
@@ -176,6 +189,18 @@ var taskapp = new Vue({
                 this.tasks.status=item.status;
             }
             this.$v.tasks.$reset();  
+        },
+
+        loadAddRemarks:function(item){
+            this.modalAction='add';
+            this.tasks.task_name=item.task_name;
+            this.tasks.task_detail=item.task_detail;
+            this.tasks.comment="";
+            this.tasks.due_date=item.due_date;
+            this.tasks.assigned_id=item.assigned_id;
+            this.tasks.taskid=item.taskid;
+            this.tasks.priority=item.priority;
+            this.tasks.status=item.status;
         },
 
         loadAllTasks:function(){
