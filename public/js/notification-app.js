@@ -21,7 +21,7 @@ var app = new Vue({
             this.$http.get(this.urlPrefix+'fetchnotification').then(
                 function(response){
                     this.policyNotification  = response.data;
-                    this.countNotify =  response.data.length;
+                    this.countNotify =  response.data.events.length + response.data.policy.length;
                 }
             )
         },

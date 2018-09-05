@@ -67,9 +67,14 @@
                             <li>
                                 <!-- inner menu: contains the actual data -->
                                 <ul class="menu">
-                                <li v-for="(pnRow,index) in policyNotification">
+                                <li v-for="(pnRow,index) in policyNotification.policy">
                                     <a href="#">
                                     <i class="fa fa-users text-aqua"></i> <% pnRow.ctgName %> of <% pnRow.providerName %> is due on <% pnRow.end_date %> for <% pnRow.first_name %> <% pnRow.last_name %>
+                                    </a>
+                                </li>
+                                <li v-for="(apRow,index) in policyNotification.events"> 
+                                    <a href="#">
+                                        <i class="fa fa-users text-aqua"></i> Appointment : <% apRow.task_name %> with <% apRow.userName %> on <% apRow.start_date %> 
                                     </a>
                                 </li>
                                
