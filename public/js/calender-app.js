@@ -135,6 +135,7 @@ var calenderapp = new Vue({
       },
 
       loadCalender:function(){ 
+   
      
             self = this;
             $('#calendar').fullCalendar({
@@ -147,6 +148,8 @@ var calenderapp = new Vue({
                 },
                 
                 eventClick: function(calEvent, jsEvent, view) {
+                  
+                    
                     self.appointment.title = calEvent.title;
                     self.appointment.description = calEvent.description;
                     self.appointment.assigned_id = calEvent.assigned_id;
@@ -164,14 +167,14 @@ var calenderapp = new Vue({
                     self.action = 'edit';
                  },
                  timeFormat: 'H(:mm)',
-                events    : self.events,
-           
+                 events    : self.events,
+                 
                 eventRender: function(eventObj, $el) {
                     
                     var t = moment(eventObj.start).format('HH') + ":" + moment(eventObj.start).format('mm') + " - " + moment(eventObj.end).format('HH') + ":" + moment(eventObj.end).format('mm')
-                  
+                    eventObj.clast_name = eventObj.clast_name!=null?eventObj.clast_name:'';
                     $el.popover({
-                      title: eventObj.title +' Time- ' +t + ', With:' + eventObj.first_name+' '+ eventObj.last_name,
+                      title: eventObj.title +' Time- ' +t + ', With : ' + eventObj.cfirst_name+' '+ eventObj.clast_name,
                       content: eventObj.description,
                       trigger: 'hover',
                       placement: 'top',
@@ -257,7 +260,15 @@ var calenderapp = new Vue({
                    }
                )
            },
+           resetForm:function() {
+            var self = this; 
+            Object.keys(this.appointment).forEach(function(key,index) {
+              self.appointment[key] = '';
+              self.action='';
+            });
+          },
      },
+    
      
     delimiters: ["<%","%>"]
   })

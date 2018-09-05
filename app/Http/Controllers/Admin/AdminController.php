@@ -182,7 +182,7 @@ class AdminController extends Controller
       if (Gate::denies('manage-admin', $fchdata)) {
         return redirect('/admin');
        }
-          else{
+       else{
           return $fchdata;
       }
     }

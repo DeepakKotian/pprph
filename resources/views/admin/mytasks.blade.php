@@ -2,22 +2,22 @@
 @section('title', 'Tasks')
 @section('content_header')   
 <h1>
-   Tasks List <small>View list of tasks</small>
+Assigned Tasks List <small>View list of Assigned tasks</small>
 </h1>
 
 <ol class="breadcrumb">
    <li><a href="{{ url('/admin')}}"><i class="fa fa-dashboard"></i> Home</a></li>
-   <li class="active">Tasks List</li>
+   <li class="active">Assigned Tasks List</li>
 </ol>
 @stop
 @section('content')
 <!-- /.box-header -->
 <div class="row">
-<div class="col-sm-8">
+<div class="col-sm-12">
 <div class="box box-primary" id="task-app" v-cloak>
    <!-- Breadcrumbs-->
    <div class="box-header">
-      <h3 class="box-title">View Tasks List </h3>
+      <h3 class="box-title">View Assigned Task List </h3>
       <div class="box-tools">
          <a class="btn btn-primary btn-md pull-right" data-toggle="modal" v-on:click="loadTaskDetail(null)" data-target="#addTask" >Add New</a>
       </div>

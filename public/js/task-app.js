@@ -199,7 +199,28 @@ var taskapp = new Vue({
           setTimeout( function(){ $('#taskTable').DataTable(); },500)
           setTimeout( function(){ $('#mytaskTable').DataTable(); },500)
           
-        }
+        },
+
+        onDelete:function(data){
+        
+            this.tasks.taskid = data.taskid;
+            
+             
+         },
+         
+         deleteTasks:function(taskId){
+         
+               this.$http.post(this.urlPrefix+'delete-task',{taskId:taskId}).then(
+                   function(response){
+                      $('#taskTable').DataTable().destroy();
+                      this.loadAllTasks();
+                      $('#deleteModal').modal('hide');
+                      this.$toaster.success(response.data);
+                   }
+               )
+           },
+   
+
 
      },
      

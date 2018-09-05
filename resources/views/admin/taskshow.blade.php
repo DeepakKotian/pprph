@@ -2,12 +2,12 @@
 @section('title', 'Task')
 @section('content_header')   
 <h1>
-   Tasks Detail <small> Tasks Detail</small>
+   Tasks Detail <small> Task Details</small>
 </h1>
 
 <ol class="breadcrumb">
    <li><a href="{{ url('/admin')}}"><i class="fa fa-dashboard"></i> Home</a></li>
-   <li class="active"> Tasks Detail</li>
+   <li class="active"> Task Details</li>
 </ol>
 
 @stop
@@ -17,10 +17,11 @@
 <div class="col-sm-4">
 <div class="box box-primary">
             <div class="box-header">
-              <h3 class="box-title"> Tasks Detail</h3>
+              <h3 class="box-title"> Task Details</h3>
               <div class="box-tools">
-              <a class="btn btn-primary " href="{{ url('admin/mytask-list')}}" >Back</a>
+             
                     <a class="btn btn-warning " data-toggle="modal" v-on:click="loadTaskDetail({{ $task }})" data-target="#assignTask" > Add Remarks </a>
+                    <a class="btn btn-primary " href="{{ url()->previous() }}" >Back</a>
               </div>
             </div>
             
@@ -89,7 +90,7 @@
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                     </button>
-                    <h4 class="modal-title"  id="exampleModalLabel"> <span style="text-transform:capitalize"><% modalAction %></span> Assign</h4>
+                    <h4 class="modal-title"  id="exampleModalLabel"> <span style="text-transform:capitalize"><% modalAction %></span> Remarks</h4>
                 </div>
                 <div class="modal-body">
                 <div class="box-body">
@@ -129,13 +130,13 @@
                     </select>
                     </div>
                     <div class="form-group" :class="">
-                    <label for="exampleInputEmail1">Comment </label>
+                    <label for="exampleInputEmail1">Remarks </label>
                     <textarea name="" id="" v-model="tasks.comment" class="form-control" cols="30" rows="3"></textarea>
                     </div>
                 </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary" v-if="modalAction=='edit'" v-on:click="assignTask()" type="button">Assign</a>
+                    <button class="btn btn-primary" v-if="modalAction=='edit'" v-on:click="assignTask()" type="button">Add</a>
                     
                 </div>
             </div>
@@ -146,7 +147,7 @@
 <div class="col-sm-8">
 <div class="box">
             <div class="box-header">
-              <h3 class="box-title">Responsive Hover Table</h3>
+              <h3 class="box-title">Task History</h3>
 
               <div class="box-tools">
                 <div class="input-group input-group-sm" style="width: 150px;">

@@ -131,10 +131,12 @@ class AppointmentController extends Controller
     }
 
     public function deleteAppointment(Request $request){
-        $delete= task::find($request->appointmentId);
-        $delete->delete();
-        if($delete){
-            return response()->json('Deleted Successfully',200); 
+        $deleteappointment= task::find($request->appointmentId);
+        try{
+            $deleteappointment->delete();
+            return response()->json("Deleted successfully");
+        }catch(\Exception $e){
+            return response()->json("Can't be able to delete");
         }
     }
 }

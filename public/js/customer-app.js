@@ -179,7 +179,7 @@ var app = new Vue({
           },
 
         addNewCustomer: function () {
-            console.log(this.$v.customer.mobile);
+           
         if (this.$v.customer.$invalid) {
             this.$v.customer.$touch();
         }else{

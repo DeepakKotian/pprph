@@ -13,7 +13,7 @@
 @section('content')
 <!-- /.box-header -->
 <div class="row">
-<div class="col-sm-6">
+<div class="col-sm-12">
 <div class="box box-primary" id="task-app" v-cloak>
    <!-- Breadcrumbs-->
    <div class="box-header">
@@ -28,19 +28,32 @@
          <div class="table table-responsive">
             <table class="table table-bordered" id="taskTable">
                <thead>
-                  <th>Id</th>
+               <th>Id</th>
                   <th>Name</th>
                   <th>Description</th>
-                  
+                  <th>Assigned By</th>
+                  <th>Assigned to</th>
+                  <th>Status</th>
+                  <th>Priority</th>
+                  <th>Assigned On</th>
+                  <th>Due Date</th>
                   <th>Options</th>
                </thead>
                <tbody>
                   <tr v-for="row in taskData">
-                     <td><% row.taskid %></td>
+                  <td><% row.taskid %></td>
                      <td><% row.task_name %> </td>
                      <td><% row.task_detail %> </td>
+                     <td><% row.first_name %> <% row.last_name %> </td>
+                     <td><% row.a_first_name %> <% row.a_last_name %> </td>
+                     <td><% row.status %> </td>
+                     <td><% row.priority %> </td>
+                     <td><% row.assigned_on %> </td>
+                     <td><% row.due_date %> </td>
                      <td>
                         <a type="button" data-toggle="modal"  data-target="#addTask"  v-on:click="loadTaskDetail(row)" class="btn btn-default"><i class="fa fa-edit"></i></a>
+                        <a type="button" v-bind:href="urlPrefix+'task-list/'+ row.taskid" class="btn btn-default"><i class="glyphicon glyphicon-eye-open"></i></a>
+                        <a type="button"  data-toggle="modal"  data-target="#deleteModal"  v-on:click="onDelete(row)"   class="btn btn-default"><i class="glyphicon glyphicon-trash"></i></a>
                      </td>
                   </tr>
                </tbody>
@@ -59,10 +72,10 @@
             </button>
             <h4 class="modal-title" id="exampleModalLabel">Delete?</h4>
          </div>
-         <div class="modal-body">Are you sure you want to delete <b>   </b> ?</div>
+         <div class="modal-body">Are you sure you want to delete  ?</div>
          <div class="modal-footer">
             <button class="btn btn-secondary" type="button"  data-dismiss="modal">Cancel</button>
-            <button class="btn btn-primary"   v-on:click="deleteUser(currentUserId)" type="button">Yes</a>
+            <button class="btn btn-primary"   v-on:click="deleteTasks(tasks.taskid)" type="button">Yes</a>
          </div>
       </div>
    </div>
