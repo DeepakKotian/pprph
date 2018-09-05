@@ -273,13 +273,13 @@ var app = new Vue({
                         
                     }
                 ).catch(function(response){
-                  
+                    console.log(response.data.error);
                    if(response.data){
                    
                     this.$toaster.error(response.data);
                    }
                    else{
-                   
+                 
                     let self = this;
                     $.each(response.data.errors, function(key, value){
                         self.$toaster.error(value[0]);
