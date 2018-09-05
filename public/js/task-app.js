@@ -72,8 +72,9 @@ var taskapp = new Vue({
             $('#due_date').datepicker({
                 format:'dd-mm-yyyy',
                 todayHighlight: true,
+                startDate:'0',
             }).on(
-                'changeDate',  function() { self.tasks.due_date = $('#due_date').val();  }
+                'changeDate',  function() { self.tasks.due_date = $('#due_date').val(); $('#due_date').datepicker('hide');  }
             )
         },
 
@@ -84,6 +85,7 @@ var taskapp = new Vue({
                     this.$toaster.success(response.data);
                     $('#assignTask').modal('hide');
                     this.loadTaskHistories();
+                    this.tasks.task_detail="";
                 }
             )
         
@@ -163,6 +165,7 @@ var taskapp = new Vue({
             }
            
             if(item !== null){
+
                 this.modalAction='edit';
                 this.tasks.task_name=item.task_name;
                 this.tasks.task_detail=item.task_detail;

@@ -28,9 +28,9 @@
          <div class="table table-responsive">
             <table class="table table-bordered" id="taskTable">
                <thead>
-               <th>Id</th>
+               <th>Sl.No</th>
                   <th>Name</th>
-                  <th>Description</th>
+                  <!-- <th>Description</th> -->
                   <th>Assigned By</th>
                   <th>Assigned to</th>
                   <th>Status</th>
@@ -40,10 +40,10 @@
                   <th>Options</th>
                </thead>
                <tbody>
-                  <tr v-for="row in taskData">
-                  <td><% row.taskid %></td>
+                  <tr v-for="(row,ky) in taskData">
+                  <td><% ky+1 %></td>
                      <td><% row.task_name %> </td>
-                     <td><% row.task_detail %> </td>
+                     <!-- <td><% row.task_detail %> </td> -->
                      <td><% row.first_name %> <% row.last_name %> </td>
                      <td><% row.a_first_name %> <% row.a_last_name %> </td>
                      <td><% row.status %> </td>
