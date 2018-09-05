@@ -214,7 +214,7 @@ return [
         ],
         [
             'text'    => 'Document Management',
-            'icon'    => 'tasks',
+            'icon'    => 'book',
             'submenu' => [
                 [
                     'text' => 'Documents',

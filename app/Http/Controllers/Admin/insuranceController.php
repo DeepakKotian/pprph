@@ -182,11 +182,16 @@ class insuranceController extends Controller
             $validate = $this->validate(request(),[
                 'insure_id' => 'required',
                 'policy_id' => 'required',
-                ]
+                'documnetData'=>'size:1000',
+            ],
+            ['documnetData.size'=>'File size must be Less than 2MB']
             );
             
             if($request->hasFile('documnetData')){
+               
                 $file=$request->file('documnetData');
+                $filesize=$file->getClientSize();
+               
                 $imageName = uniqid().time().'.'.$file->getClientOriginalExtension();
                 $destinationPath = public_path('/uploads/antrag');
                 $file->move($destinationPath, $imageName);
