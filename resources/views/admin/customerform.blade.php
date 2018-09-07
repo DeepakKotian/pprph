@@ -114,22 +114,22 @@
                    
                   </div>
                   <div class="row">
-                    <div class="form-group col-sm-6" :class="{ 'has-error': $v.customer.telephone.$error }">
+                    <div class="form-group col-sm-6" :class="{ 'has-error': (!$v.customer.telephone.validateRequired && $v.customer.telephone.$dirty) }">
                       <label for="telephone">Telephone</label>
                       <div class="input-group">
                       <div class="input-group-addon">
                       +41
                       </div>
-                       <input type="text" class="form-control" name="telephone"  id="telephone" v-mask="'## ### ## ##'" placeholder="Telephone"  v-model="$v.customer.telephone.$model">
+                       <input type="text" class="form-control" name="telephone"  id="telephone" v-mask="'## ### ## ##'" placeholder="Telephone" v-on:blur="$v.customer.telephone.$touch()" v-model="customer.telephone">
                       </div>
                     </div>
-                    <div class="form-group col-sm-6">
+                    <div class="form-group col-sm-6"  :class="{ 'has-error': (!$v.customer.mobile.validateRequired && $v.customer.mobile.$dirty) }">
                       <label for="mobile">Mobile</label>
                       <div class="input-group">
                       <div class="input-group-addon">
                       +41
                       </div>
-                      <input type="text" class="form-control" name="mobile" id="mobile" v-mask="'## ### ## ##'" placeholder="Mobile" v-model="customer.mobile">
+                      <input type="text" class="form-control" name="mobile" id="mobile" v-mask="'## ### ## ##'" placeholder="Mobile" v-model="customer.mobile" v-on:blur="$v.customer.mobile.$touch()" >
                       </div>
                     </div>
                   </div>
@@ -156,6 +156,7 @@
                             <table class="table table-bordered">
                               <thead>
                                 <tr>
+                                  <th>#</th>
                                   <th> Name</th>
                                   <th>Last Name</th>
                                   <th>DOB</th>
@@ -165,6 +166,7 @@
                               </thead>
                               <tbody>
                                 <tr v-for="(fmly, index) in customer.family">
+                                  <td>  <% customer.unique_id +'.'+(index + 1) %></td>
                                     <td> <% fmly.first_name %></td>
                                     <td> <% fmly.last_name %></td>
                                     <td> <% fmly.dob %></td>

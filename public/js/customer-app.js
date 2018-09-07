@@ -26,8 +26,8 @@ var app = new Vue({
         dob:null,
         gender:null,
         is_family:null,
-        telephone:null,
-        mobile:null,
+        telephone:"",
+        mobile:"",
         parent_id:null,
         nationality:'',
         appointments:'',
@@ -84,7 +84,22 @@ var app = new Vue({
             required:required,
           },
           telephone:{
-              required:required,
+              validateRequired(){
+                if( (this.customer.mobile == null || this.customer.mobile == "") && (this.customer.telephone == null || this.customer.telephone =="")){
+                    return false;
+                }
+                else
+                    return true;
+              }
+          },
+          mobile:{
+              validateRequired(){
+                    if( (this.customer.mobile == null || this.customer.mobile == "") && (this.customer.telephone == null || this.customer.telephone =="")){
+                        return false;
+                    }
+                    else
+                        return true;
+              }
           },
       },
       family:{
@@ -237,7 +252,6 @@ var app = new Vue({
       }, 
 
      updateCustomer: function (event) {
-      
         if (this.$v.customer.$invalid) {
             this.$v.customer.$touch()
         }

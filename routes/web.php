@@ -68,7 +68,7 @@ Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     Route::post('/fetchdocuments', 'Admin\CustomerController@fetchDocuments');
     Route::post('/upload-document', 'Admin\CustomerController@uploadDocuments');
     Route::get('/printcustomer/{id}', 'Admin\CustomerController@printCustomer');
-  
+    Route::get('download-pdf','Admin\CustomerController@downloadPDF');
     
     // insurance management
     Route::get('/policy-mapping', 'Admin\insuranceController@policyMapping');
@@ -110,7 +110,7 @@ Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     Route::get('/fetchcustomersforappointment', 'Admin\AppointmentController@fetchCustomersForAppointment');
     Route::post('/deleteappointment', 'Admin\AppointmentController@deleteAppointment');
     
-    Route::get('export-file/{type}', 'Admin\CustomerController@exportFile')->name('export.file');
+    Route::post('export-file', 'Admin\CustomerController@exportFile')->name('export.file');
 
     Route::get('/provision', 'Admin\insuranceController@policyDetail');
     Route::get('/policy-filter-data', 'Admin\insuranceController@policyFilterData');
@@ -123,4 +123,6 @@ Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     Route::post('/fetch-due-insurance', 'Admin\DashboardController@fetchExpiredInsurance');
     
     
+    
+
 });
