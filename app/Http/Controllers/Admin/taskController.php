@@ -63,7 +63,7 @@ class taskController extends Controller
 
     public function fetchTaskUsers()
     {
-        $userList = User::where('role','<>',1)->where('deleted_at','=',null)->get();
+        $userList = User::where('deleted_at','=',null)->get();
         if($userList)
         return $userList;
     }
