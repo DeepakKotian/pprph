@@ -74,13 +74,13 @@
                                 </li>
                                 <li v-for="(apRow,index) in policyNotification.events"> 
                                     <a href="#">
-                                        <i class="fa fa-users text-aqua"></i> Appointment : <% apRow.task_name %> with <% apRow.userName %> on <% apRow.start_date %> 
+                                        <i class="fa fa-users text-aqua"></i> Due Task : <% apRow.task_name %> due on <% apRow.due_date %> 
                                     </a>
                                 </li>
                                
                                 </ul>
                             </li>
-                            <li class="footer"><a href="#">View all</a></li>
+                            <li class="footer"><a href="{{url('/admin')}}">View all</a></li>
                             </ul>
                         </li>
                         <li class="dropdown user user-menu">

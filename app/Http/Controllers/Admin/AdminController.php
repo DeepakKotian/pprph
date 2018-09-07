@@ -203,11 +203,9 @@ class AdminController extends Controller
         ->leftJoin('massparameter as prd','prd.id','=','policy_detail.provider_id')
         ->whereRaw('CURDATE() >= DATE_SUB(end_date, INTERVAL 20 DAY) AND CURDATE()<end_date')
         ->get();
-        $data['events'] = task::select('task_name','task_detail','assigned_id',DB::raw('DATE_FORMAT(tasks.due_date,"%d-%m-%Y %h:%I:%p") as end_date'), DB::raw('DATE_FORMAT(tasks.start_date,"%d-%m-%Y %h:%I:%p") as start_date'),DB::raw('CONCAT_WS(" ",users.first_name,users.last_name) as userName'))
-        ->leftJoin('users','users.id','=','tasks.assigned_id')
-        ->where('tasks.user_id',Auth::user()->id)  
-        ->where('tasks.type',NULL)          
-        ->whereRaw('CURDATE() >= DATE_SUB(tasks.start_date, INTERVAL 20 DAY) AND CURDATE()<tasks.start_date')
+        $data['events'] = task::leftjoin('users as u','u.id','=','tasks.user_id')->leftjoin('users as au','au.id','=','tasks.assigned_id')
+        ->select('tasks.*','au.first_name as a_first_name','au.last_name as a_last_name',DB::raw('DATE_FORMAT(tasks.due_date,"%d-%m-%Y") as taskdue_date'),DB::raw('DATE_FORMAT(tasks.created_at,"%d-%m-%Y") as assigned_on'),'u.first_name','u.last_name',DB::raw('tasks.id as taskid' ))
+        ->where('tasks.type',NULL)->where('tasks.status','<>','Completed')->where('tasks.due_date','=' ,today())->orderby('tasks.created_at','DESC')
         ->get();
         return response()->json($data, 200);
     }
