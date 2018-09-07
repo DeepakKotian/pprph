@@ -26,7 +26,7 @@ Customers List
               <h3 class="box-title">View Customers List </h3>
               <div class="box-tools">
                 <a class="btn btn-primary btn-md pull-right" href="{{ url('admin/customer-form') }}">Add New</a>
-                <!-- <a href="{{ route('export.file',['type'=>'xlsx']) }}">Download Excel xlsx</a> -->
+                <a class="btn btn-primary btn-md" href="javascript:void(0)" id="printGrid"> PDF <i class="fa fa-download"> </i> </a> &nbsp;&nbsp;
               </div>
         </div>
     <div class="box-body">
@@ -197,6 +197,7 @@ a.ui-button:active,
 
 @section('js')
 <script src="{!! asset('js/jquery-ui.js') !!}"></script>
+
 <script>
   var oTable = $('#customerTable').DataTable({
         searching:false,
@@ -304,6 +305,30 @@ a.ui-button:active,
                 window.location.href= urlPrefix+"customer-form/"+ui.item.id;
                 //console.log( "Selected: " + ui.item.value + " aka " + ui.item.id );
             }
+        });
+
+        $('#printGrid').click(function(){
+            $.ajax({
+                    url: '{{ route("export.file") }}',
+                    dataType: 'html',
+                    type:'POST',
+                    data: {
+                        type:'xlsx',
+                        id :$('select[name=id]').val(),
+                        name : $('select[name=name]').val(),
+                        ctg :$('select[name=ctg]').val(),
+                        statusPrd :$('select[name=status_prd]').val(),
+                        status : $('select[name=status]').val(),
+                        searchTerm : $('input[name=searchTerm]').val(),
+                        _token:'{{ csrf_token() }}'
+                    },
+                    success: function( data ) {
+                        console.log(data);
+                        window.location.href = urlPrefix+"download-pdf";
+                    }
+            });
+
+
         });
     });
 

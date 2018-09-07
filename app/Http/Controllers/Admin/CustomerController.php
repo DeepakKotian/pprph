@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
@@ -417,8 +418,9 @@ class CustomerController extends Controller
         
         $customer = array_slice($customer, 0,22);
         $oldCustomerData = $request->oldCustomerData;
-        $result = array_diff($customer,$oldCustomerData);
+        $result = array_diff_assoc($customer,$oldCustomerData);
         $arrCustomer =  [];
+
         foreach ($result as $key => $value) {
             if($key!='created_at' && $key!='updated_at'){
                     $arrCustomer[$key]['old_value'] =  $oldCustomerData[$key];
@@ -493,7 +495,7 @@ class CustomerController extends Controller
         $data = [];
         $family = $request->family;
         $oldFamily = $request->oldFamily;
-        $result = array_diff( $family,$oldFamily);
+        $result = array_diff_assoc( $family,$oldFamily);
         $arrFamily =  [];
         foreach ($result as $key => $value) {
             if($key!='parent_id'){
@@ -677,27 +679,80 @@ class CustomerController extends Controller
     //     })->export('xls');
     // }
 
-    public function exportFile($type){
+    public function exportFile(Request $request){
 
-        $customer = customer::select('id','first_name','last_name','email','city','zip')->where('is_family','=',0)->get();
-        //$insuranceCtg = DB::table('massparameter')->where('type','category')->where('status',1)->get();
+        $jnQry='';
+        $strArr = [];
+        $insuranceCtg = DB::table('massparameter')->where('type','category')->where('status',1)->get();
+        foreach ($insuranceCtg as $key => $value) { //Dynamic queries 
+            $jnQry .= " LEFT JOIN massparameter ctg{$key} ON pd.insurance_ctg_id= ctg{$key}.id  AND ctg{$key}.id=$value->id AND ctg{$key}.type='category' ";
+            $name = preg_replace('/\s+/', '_', $value->name);
+            $strArr[$key] = "(COUNT(IF(pd.insurance_ctg_id = ctg{$key}.id,1,NULL))) ctg{$key}";
+        }
+        $addQry =  implode(',',$strArr);
+        $count = $insuranceCtg->count();
+        $selectQry =  "SELECT c.id, c.first_name, c.last_name,c.status, c.email,c.city,c.nationality,c.zip, {$addQry} FROM customers c LEFT JOIN policy_detail pd ON pd.customer_id = c.id {$jnQry} WHERE c.is_family=0 GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC";      
 
-        return Excel::create('hdtuto_demo', function($excel) use ($customer) {
+        $customer =  DB::select(DB::raw($selectQry));
 
-        $excel->sheet('sheet name', function($sheet) use ($customer)
-        {
-            $objDrawing = new PHPExcel_Worksheet_Drawing;
-            $objDrawing->setPath(public_path('uploads/redicon.png')); //your image path
-            $objDrawing->setCoordinates('A2');
-            $sheet->fromArray($customer);
-            $objDrawing->setWorksheet($sheet);
-        });
+        $data = Datatables::of($customer)
+            ->filter(function ($instance) use ($request) {
+                if ($request->has('id')&& $request->id!=null) {
+                    $instance->collection = $instance->collection->filter(function ($row) use ($request) {
+                         return $row['id'] == $request->get('id') ? true : false;
+                    });
+                }
+                if ($request->has('status')&& $request->status!=null) {
+                    $instance->collection = $instance->collection->filter(function ($row) use ($request) {
+                         return $row['status'] == $request->get('status') ? true : false;
+                    });
+                }
+                if ($request->has('name')&& $request->name!=null) {
+                    $instance->collection = $instance->collection->filter(function ($row) use ($request) {
+                         return $row['id'] == $request->get('name') ? true : false;
+                    });
+                }
+               //To get the product search dynamically
+                if ($request->ctg!=null && $request->statusPrd!=null) { 
+                    $instance->collection = $instance->collection->filter(function ($row) use ($request) {
+                            if( $request->statusPrd==1){
+                                return $row['ctg'.$request->ctg] > 0 ? true : false;
+                            }else{
+                                return $row['ctg'.$request->ctg] > 0 ? false : true;
+                            }
+                    });
+                }
 
-        })->export($type);
-        return Excel::download(new CustomerExports, 'users.xlsx');
+                if ($request->has('searchTerm')&& $request->searchTerm!=null) {
+                    $instance->collection = $instance->collection->filter(function ($row) use ($request) {
+                        return (Str::contains($row['zip'], $request->get('searchTerm')) || Str::contains($row['email'], $request->get('searchTerm')) || Str::contains($row['city'], $request->get('searchTerm')) 
+                        || Str::contains($row['first_name'], $request->get('searchTerm')) || Str::contains($row['last_name'], $request->get('searchTerm')) ) ? true : false;
+                    });
+                }
+            })
+            ->toArray();
+        $customer['table'] = $data['data'];
+        $customer['ctgs'] =  $insuranceCtg;
+        
+        $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('admin.printcustomer', ['data' => $customer]);
+        $filename = date('Y-m-d').'-customer-grid.pdf';
+        file_put_contents(public_path('/uploads/customer/'.$filename), $pdf->output());
+        return $filename;
+      } 
 
-       
-    } 
+    public function downloadPDF(){
+        $filename = date('Y-m-d').'-customer-grid.pdf';
+        $path = public_path('/uploads/customer/'.$filename);
+        header('Content-Transfer-Encoding: binary');  // For Gecko browsers mainly
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s', filemtime($path)) . ' GMT');
+        header('Accept-Ranges: bytes');  // For download resume
+        header('Content-Length: ' . filesize($path));  // File size
+        header('Content-Encoding: none');
+        header('Content-Type: application/pdf');  // Change this mime type if the file is not PDF
+        header('Content-Disposition: attachment; filename=' . $filename);  // Make the browser display the Save As dialog
+        readfile($path); 
+    }
+
 
     public function fetchLogs($id){
         $data = customerlog::select('customerlogs.*','customers.id',DB::raw("CONCAT_WS(' ',users.first_name,users.last_name) as userName"))
