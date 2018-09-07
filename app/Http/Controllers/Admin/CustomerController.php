@@ -70,7 +70,7 @@ class CustomerController extends Controller
     $addQry =  implode(',',$strArr);
     $count = $insuranceCtg->count();
     $selectQry =  "SELECT c.id,c.unique_id, c.first_name, c.last_name,c.status, c.email,c.city,c.nationality,c.zip, {$addQry} FROM customers c LEFT JOIN policy_detail pd ON pd.customer_id = c.id {$jnQry} WHERE c.is_family=0 GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC";      
-
+  
     $customer =  DB::select(DB::raw($selectQry));
 
         return Datatables::of($customer)
