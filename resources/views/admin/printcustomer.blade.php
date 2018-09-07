@@ -18,7 +18,7 @@
    <main>
         <h5>Customer List</h5>
         <table cellspacing="0" width="100%">
-            <thead>
+            <thead style="background-color:#CCC">
                 <tr>
                     <th>Id</th>
                     <th>First Name</th>
@@ -41,10 +41,10 @@
                     <td>{{ $vl['email'] }}</td>
                     <td>{{ $vl['city'] }}</td>
                     <td>{{ $vl['zip'] }}</td>
-                    <td align="center"> @if($vl['zip']>0)
-                            <img style="width:8px;" src="uploads/greenicon.png" alt="">
+                    <td align="center"> @if($vl['status']>0)
+                            <img style="width:8px;" src="uploads/checked.png" alt="">
                         @else
-                            <img style="width:8px;" src="uploads/redicon.png" alt="">
+                            <img style="width:8px;" src="uploads/unchecked.png" alt="">
                         @endif</td>
                     @foreach($data['ctgs'] as $key=> $rowCtg)
                     <td align="center"> 
