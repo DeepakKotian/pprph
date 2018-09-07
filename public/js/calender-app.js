@@ -218,6 +218,7 @@ var calenderapp = new Vue({
                     this.$toaster.success('Added Successfully');
                     window.location.reload();
                 }).catch(function(response){
+                    $(document).find('body .v-toaster .v-toast-error').remove();
                     this.$toaster.error(response.data);
                 });
             }

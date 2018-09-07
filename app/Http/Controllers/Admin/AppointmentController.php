@@ -57,18 +57,29 @@ class AppointmentController extends Controller
             'assigned_id' => $request['assigned_id'],
         ];
         if( $startDate < $endDate){
-
-        $insertData = task::create($data);
-
-        if($insertData){
-            $response = task::leftjoin('users as u','u.id','=','tasks.user_id')
-            ->select('tasks.task_name as title', 'u.first_name','u.last_name','tasks.assigned_id', 'tasks.task_detail as description',DB::raw('tasks.due_date as end, tasks.start_date as start '),
-                             DB::raw('tasks.id as id' ))
-            ->where('type','=','appointment')
-            ->where('tasks.id','=',$insertData->id)
-            ->get();
-            return response()->json($response,200);
+           
+            $duplicate=task::where('type','=','appointment')->where('user_id','=', $id)->where(
+            'customer_id','=', ''.$request["customer_id"].'')->where(
+            'start_date','=', ''.$startDate.'')->where(
+            'due_date','=', ''.$endDate.'')->where(
+            'assigned_id','=', ''.$request["assigned_id"].'')->select('user_id','customer_id','start_date','due_date','assigned_id')->first();
+           if($duplicate){
+            return response()->json('Appoinment Duplicated',400); 
            }
+           else{
+            $insertData = task::create($data);
+
+            if($insertData){
+                $response = task::leftjoin('users as u','u.id','=','tasks.user_id')
+                ->select('tasks.task_name as title', 'u.first_name','u.last_name','tasks.assigned_id', 'tasks.task_detail as description',DB::raw('tasks.due_date as end, tasks.start_date as start '),
+                                DB::raw('tasks.id as id' ))
+                ->where('type','=','appointment')
+                ->where('tasks.id','=',$insertData->id)
+                ->get();
+                return response()->json($response,200);
+            } 
+           }
+           
         }
         else{
             return response()->json('End date and time must greater than start date and time',400); 

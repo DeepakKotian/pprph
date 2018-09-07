@@ -22,14 +22,15 @@ Route::match(['get', 'post'], 'register', function(){
     return redirect('/login');
 });
 
-Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/admin', function () {
-    return view('admin.dashboard');
-})->middleware('auth');
+//Route::get('/home', 'HomeController@index')->name('home');
+// Route::get('/admin', function () {
+//     return view('admin.dashboard');
+// })->middleware('auth');
+
 //Route::get('admin/users', 'Admin\AdminController@usersList');
 
 Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
-    Route::get('/dashboard', 'Admin\AdminController@dashboard');
+    Route::get('/', 'HomeController@index');
     Route::get('/users', 'Admin\AdminController@usersList');
     Route::get('/user-form', 'Admin\AdminController@userForm');
     Route::get('/user-form/{id}', 'Admin\AdminController@userForm');
@@ -115,5 +116,11 @@ Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     Route::get('/policy-filter-data', 'Admin\insuranceController@policyFilterData');
     Route::get('/update-policy-status', 'Admin\insuranceController@policyStatus');
     Route::get('/policy-search', 'Admin\insuranceController@search');
+
+    // dashboard
+    Route::post('/fetch-due-task', 'Admin\DashboardController@fetchDueTask');
+    Route::post('/fetch-due-appointments', 'Admin\DashboardController@fetchDueAppointments');
+    Route::post('/fetch-due-insurance', 'Admin\DashboardController@fetchExpiredInsurance');
+    
     
 });

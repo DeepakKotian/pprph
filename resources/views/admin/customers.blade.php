@@ -26,7 +26,7 @@ Customers List
               <h3 class="box-title">View Customers List </h3>
               <div class="box-tools">
                 <a class="btn btn-primary btn-md pull-right" href="{{ url('admin/customer-form') }}">Add New</a>
-                <!-- <a href="{{ route('export.file',['type'=>'xlsx']) }}">Download Excel xlsx</a> -->
+                <a href="{{ route('export.file',['type'=>'xlsx']) }}">Download Excel xlsx</a>
               </div>
         </div>
     <div class="box-body">

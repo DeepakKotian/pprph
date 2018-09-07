@@ -134,8 +134,6 @@ class insuranceController extends Controller
             if(massparameter::whereId($id)->update($data))
             return response()->json('Successfully updated',200);
         }
-          
-       
 
     }
 
