@@ -34,7 +34,7 @@
                 <p>Customers</p>
             </div>
             <div class="icon">
-                <i class="ion ion-person-add"></i>
+                <i class="fa fa-users"></i>
             </div>
             <a href="{{ url('/admin/customers') }}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
         </div>
