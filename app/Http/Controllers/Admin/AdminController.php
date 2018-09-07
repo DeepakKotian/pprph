@@ -207,7 +207,7 @@ class AdminController extends Controller
         ->leftJoin('users','users.id','=','tasks.assigned_id')
         ->where('tasks.user_id',Auth::user()->id)  
         ->where('tasks.type',NULL)          
-        ->whereRaw('CURDATE() >= DATE_SUB(tasks.start_date, INTERVAL 20 DAY) AND CURDATE()<tasks.start_date')
+        ->whereRaw('CURDATE() >= DATE_SUB(tasks.start_date, INTERVAL 1 DAY) AND CURDATE()<tasks.start_date')
         ->get();
         return response()->json($data, 200);
     }

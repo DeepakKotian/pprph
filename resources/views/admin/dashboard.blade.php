@@ -49,7 +49,7 @@
             <div class="icon">
                 <i class="fa fa-calendar"></i>
             </div>
-            <a href="{{ url('/admin/users') }}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            <a href="{{ url('/admin/appointment') }}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
         </div>
     </div>
 
@@ -63,7 +63,7 @@
             <div class="icon">
                 <i class="fa fa-tasks"></i>
             </div>
-            <a href="{{ url('/admin/users') }}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            <a href="{{ url('/admin/task-list') }}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
         </div>
     </div>
 
