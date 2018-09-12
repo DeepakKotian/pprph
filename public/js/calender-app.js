@@ -108,10 +108,11 @@ var calenderapp = new Vue({
 
     methods: {
       loadAppointments:function(){
+       
         this.$http.get(this.urlPrefix+'fetchappointments').then(
             function(response){
              this.events = response.data;
-    
+            
              this.loadCalender();  
             }
         )
@@ -121,22 +122,34 @@ var calenderapp = new Vue({
             function(response){
                 this.customers  = response.data;
                
-                
             }
         )
         
       },
       loadUsers:function(){
+       
         this.$http.get(this.urlPrefix+'fetchtaskusers').then(
             function(response){
                 this.users  = response.data;
+                this.filteruser(this.users);
             }
         )
       },
 
+      filteruser:function(userarray){
+        let self=this;
+        userarray.forEach(function (item, index) {
+            if (item.id == self.user_id) {
+                self.users.splice(index,self.user_id);
+            }
+        });
+      
+        
+      },
+
       loadCalender:function(){ 
-   
-     
+          
+      
             self = this;
             $('#calendar').fullCalendar({
                
@@ -148,13 +161,10 @@ var calenderapp = new Vue({
                 },
                 
                 eventClick: function(calEvent, jsEvent, view) {
-                  
-                 
-                    
+                    console.log(self.showAssign);
                     self.appointment.title = calEvent.title;
                     self.appointment.description = calEvent.description;
                     self.appointment.assigned_id = calEvent.assigned_id;
-                  
                     self.showAssign=false;
                     if(self.user_id !=self.appointment.assigned_id){
                         self.showAssign=true;
@@ -163,10 +173,10 @@ var calenderapp = new Vue({
                     self.appointment.start_date = moment(calEvent.start).format('DD-MM-YYYY');
                     self.appointment.end_date = moment(calEvent.end).format('DD-MM-YYYY');
                     self.appointment.start_time = moment(calEvent.start).format('HH')+':'+ moment(calEvent.start).format('mm');
-              
                     self.appointment.end_time =  moment(calEvent.end).format('HH')+':'+ moment(calEvent.end).format('mm');
                     self.appointment.id =  calEvent.id;
                     self.action = 'edit';
+                   
                  },
                  timeFormat: 'H(:mm)',
                  events    : self.events,
@@ -199,6 +209,7 @@ var calenderapp = new Vue({
                     right: 'month,agendaWeek,agendaDay, today, prev,next,prevYear,nextYear',
                 },
             })
+         
             $('#calendar').fullCalendar( 'removeEventSource', self.events )
             $('#calendar').fullCalendar( 'addEventSource', self.events )
             
@@ -215,10 +226,11 @@ var calenderapp = new Vue({
                 this.$http.post(this.urlPrefix+'add-appointment',this.appointment).then( 
                 function(response){
                     this.events = response.data;
+                  
                     this.loadCalender();
                    
                     this.$toaster.success('Added Successfully');
-                    window.location.reload();
+                   
                 }).catch(function(response){
                     $(document).find('body .v-toaster .v-toast-error').remove();
                     this.$toaster.error(response.data);
@@ -226,40 +238,44 @@ var calenderapp = new Vue({
             }
         },
         updateAppointment:function(){
+            $('#calendar').fullCalendar('removeEvents', this.appointment.id); 
+        
             if(this.showAssign==false){
                 this.appointment.assigned_id = this.user_id;
               }
-             
+         
             if(this.$v.appointment.$invalid){
                 this.$v.appointment.$touch();
             }else{
                 this.$http.post(this.urlPrefix+'update-appointment',this.appointment).then( 
                     function(response){
+                    
                         this.events = response.data;
+                      
                         this.$v.appointment.$reset();
                         this.$toaster.success('Updated Successfully');
-                 
-                       window.location.reload();
+                        
+                         this.loadCalender();
+                      
                     }).catch(function(response){
                         this.$toaster.error(response.data);
                     });
             }
         },
         onDelete:function(){
-          //console.log(this.appointment.id);
+         
           appintmentId=this.appointment.id;
         
          },
-         
+
          deleteAppintment:function(appointmentId){
-         
+            $('#calendar').fullCalendar('removeEvents', appointmentId); 
                this.$http.post(this.urlPrefix+'deleteappointment',{appointmentId:appointmentId}).then(
                    function(response){
                     
                       $('#deleteModal').modal('hide');
                       this.$toaster.success('Deleted Successfully');
-                    //  this.loadCalender(); 
-                      window.location.reload(); 
+                       this.resetForm();
                    }
                )
            },
