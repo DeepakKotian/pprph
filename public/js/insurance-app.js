@@ -89,7 +89,6 @@ var app = new Vue({
           else{
                 this.$http.post(this.urlPrefix+'insurance-list',this.insurance).then(
                     function(response){
-                      
                         this.$toaster.success(response.data);
                         $('#insuranceTable').DataTable().destroy();
                         this.loadAllInsurance();

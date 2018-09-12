@@ -149,6 +149,7 @@ var calenderapp = new Vue({
                 
                 eventClick: function(calEvent, jsEvent, view) {
                   
+                 
                     
                     self.appointment.title = calEvent.title;
                     self.appointment.description = calEvent.description;
@@ -161,8 +162,9 @@ var calenderapp = new Vue({
                     self.appointment.customer_id = calEvent.customer_id;
                     self.appointment.start_date = moment(calEvent.start).format('DD-MM-YYYY');
                     self.appointment.end_date = moment(calEvent.end).format('DD-MM-YYYY');
-                    self.appointment.start_time = moment(calEvent.start).format('HH')+':'+ moment(calEvent.start).format('MM');
-                    self.appointment.end_time =  moment(calEvent.end).format('HH')+':'+ moment(calEvent.end).format('MM');
+                    self.appointment.start_time = moment(calEvent.start).format('HH')+':'+ moment(calEvent.start).format('mm');
+              
+                    self.appointment.end_time =  moment(calEvent.end).format('HH')+':'+ moment(calEvent.end).format('mm');
                     self.appointment.id =  calEvent.id;
                     self.action = 'edit';
                  },

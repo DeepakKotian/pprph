@@ -189,7 +189,7 @@
                       
                      
                     </div>
-            @endif
+                 @endif
                  
                 </div>
                <div class="col-sm-7">
@@ -260,8 +260,9 @@
                 
                 @if(!empty($data))
                     <a href="{{ url('/admin/customers/') }}" class="btn btn-primary" >Cancel </a>
-                <button  class="btn btn-primary  " data-toggle="modal" v-on:click="taskapp.loadTaskDetail(null,currentId)" data-target="#addTask" >Add Task</button>
+                
                     <button type="button" class="btn btn-primary" v-on:click="updateCustomer">Update</button>
+                    <button  class="btn btn-primary  " data-toggle="modal" v-on:click="taskapp.loadTaskDetail(null,currentId)" data-target="#addTask" >Add Task</button>
                   <!-- <a target="_blank" href="{{ url('/admin/printcustomer/'.$data->id) }}" class="btn btn-primary" >Print</a> -->
                      &nbsp;
                     <div class="btn-group btn-toggle"> 

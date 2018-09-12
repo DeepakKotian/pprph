@@ -39,7 +39,9 @@
       <ul class="nav nav-tabs">
        
         <li class="active"><a href="#settings" data-toggle="tab">Settings</a></li>
+        <li class=""><a href="#passwordChange" data-toggle="tab">Change Password</a></li>
       </ul>
+
       <div class="tab-content">
     
         <div class="tab-pane active" id="settings">
@@ -99,6 +101,35 @@
               </div>
             </div>
           
+        </div>
+        <div class="tab-pane " id="passwordChange">
+       
+        <div class="form-group" :class="{ 'has-error': $v.profilePass.oldPassword.$error }" >
+              <label for="inputName" class="col-sm-2 control-label">Old Password</label>
+              <div class="col-sm-10">
+              <input type="password" name="oldPass" id="" class="form-control col-sm-4"  v-model="$v.profilePass.oldPassword.$model">
+              </div>
+            </div>
+
+            <div class="form-group" :class="{ 'has-error': $v.profilePass.newPassword.$error }" >
+              <label for="inputName" class="col-sm-2 control-label">New Password </label>
+
+              <div class="col-sm-10">
+            <input type="password" name="" id="newPass" class="form-control col-sm-4" v-model="$v.profilePass.newPassword.$model">
+              </div>
+            </div>
+
+            <div class="form-group" :class="{ 'has-error': $v.profilePass.confirmPassword.$error }" >
+              <label for="inputName" class="col-sm-2 control-label">Confirm Password </label>
+              <div class="col-sm-10">
+              <input type="password" name="" id="confirmPass" class="form-control col-sm-4" v-model="$v.profilePass.confirmPassword.$model">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-10">
+                <button type="button" class="btn btn-primary" v-on:click="changePassword(profile.id)">Update</button>    
+              </div>
+            </div>
         </div>
         <!-- /.tab-pane -->
       </div>

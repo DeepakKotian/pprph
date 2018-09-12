@@ -39,9 +39,9 @@ Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     Route::post('/saveuser', 'Admin\AdminController@saveUser');
     Route::post('/userdatatable', 'Admin\AdminController@fetchAllUsers');
     Route::post('/deleteuser', 'Admin\AdminController@deleteUser');
-   
     Route::post('/logout', 'Auth\LoginController@getLogout');
      // profile of login user
+    Route::post('/change-password','Admin\AdminController@changePassword');
     Route::get('/profile', 'Admin\ProfileController@index');
     Route::get('/userdata', 'Admin\ProfileController@userData');
     Route::post('/updateprofile', 'Admin\ProfileController@updateProfile'); // profile of login user

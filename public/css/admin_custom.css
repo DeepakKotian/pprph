@@ -167,7 +167,13 @@
 #providersTable.dataTable thead th:last-child,
 #policyMappingTable.dataTable thead th:last-child,
 #documentsTable.dataTable thead th:last-child,
-#policyDetailTable.dataTable thead th:first-child
+#policyDetailTable.dataTable thead th:first-child,
+#taskTable.dataTable thead th:last-child, 
+#mytaskTable.dataTable thead th:last-child,
+#dueTask.dataTable thead th:last-child,
+#dueAppointments.dataTable thead th:last-child,
+#dueInsurance.dataTable thead th:last-child
+
 {
     pointer-events: none;
 }
@@ -176,7 +182,12 @@
 #providersTable.dataTable thead th:last-child.sorting:after,
 #policyMappingTable.dataTable thead th:last-child.sorting:after,
 #documentsTable.dataTable thead th:last-child.sorting:after,
-#policyDetailTable.dataTable thead th:first-child:after
+#policyDetailTable.dataTable thead th:first-child:after,
+#taskTable.dataTable thead th:last-child.sorting:after,
+#mytaskTable.dataTable thead th:last-child.sorting:after,
+#dueTask.dataTable thead th:last-child.sorting:after,
+#dueAppointments.dataTable thead th:last-child.sorting:after,
+#dueInsurance.dataTable thead th:last-child.sorting:after
 {
     display:none;
 }

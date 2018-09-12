@@ -13,8 +13,19 @@ var app = new Vue({
         phone:'',
         password:"",
         photo:'userdefault.jpg',
+        
       },
-      profile:{ },
+
+      profilePass:{
+        id:'',
+        confirmPassword:'',
+        oldPassword:'',
+        newPassword:'',
+      },
+
+      profile:{
+     
+    },
       usersData:[],
       errors:[],
 
@@ -50,11 +61,22 @@ var app = new Vue({
             first_name:{
               required:required,
             },
-         
             phone:{
- 
                 phoneRegx:phoneRegx,
-            }
+            },
+        },
+          profilePass:{
+            oldPassword:{
+                required:required, 
+            },
+            newPassword:{
+                required:required, 
+            },
+            confirmPassword:{
+                required:required, 
+                confirmPassword:sameAs('newPassword')
+            },
+
           }
     },
     created: function(){
@@ -75,7 +97,7 @@ var app = new Vue({
         addNewUser: function () {
           console.log(this.$v.user);
           if (this.$v.user.$invalid) {
-            this.$v.$touch()
+            this.$v.user.$touch()
         }else{
             this.user.photo= $('#user_photo')[0].files[0];
             let formData= new FormData();
@@ -123,8 +145,7 @@ var app = new Vue({
       }, 
 
       updateUser: function (event) {
-      
-
+    
         if($('#user_photo')[0].files[0])
         {
             this.user.photo= $('#user_photo')[0].files[0];
@@ -138,7 +159,7 @@ var app = new Vue({
         formData.append('photo',this.user.photo);
         formData.append('role',this.user.role);
         if (this.$v.user.$invalid) {
-            this.$v.$touch()
+            this.$v.user.$touch()
         }
         else{
             this.$http.post(this.urlPrefix+'user-form/'+this.currentUserId,formData,{
@@ -223,9 +244,28 @@ var app = new Vue({
         },
 
         loadDataTable:function(){
-        
             setTimeout( function(){ $('#userTable').DataTable({"order": [[0, "desc" ]],}); },1000)
-        }
+        },
+
+        changePassword:function(userId){
+            if (this.$v.profilePass.$invalid) {
+                this.$v.profilePass.$touch();
+              }
+            else{
+                this.profilePass.id=userId;
+                this.$http.post(this.urlPrefix+'change-password',this.profilePass).then(
+                    function(response){
+                    this.$toaster.success(response.data);
+                  
+                    }
+                ).catch(function(response){
+                    let self = this;
+                    $.each(response.data.errors, function(key, value){
+                        self.$toaster.error(value[0]);
+                    });
+                });
+           }
+       }
 
      },
      

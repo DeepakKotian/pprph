@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use App\Mail\UserCreationMail;
+use Illuminate\Support\Facades\Mail;
 use Auth;
 use DataTables;
 use Gate;
@@ -129,10 +131,19 @@ class AdminController extends Controller
             'password' => Hash::make($request['password']),
             'role' => $request['role'],
         ]);
-        if($insertData)
-        return response()->json('Successfully created',200);
-        return redirect()->back()->withErrors($validate->errors());
- 
+
+        $data = new \stdClass();
+        $data->name =  $request['first_name'].' '.$request['last_name'];
+        $data->url =url('/login');
+        $data->email =$request['email'];
+        $data->password=$request['password'];
+        $message="User Created Successfully";
+        $data->message = $message;
+        if($insertData){
+            Mail::to($request['email'])->send(new UserCreationMail($data));
+            return response()->json('Successfully created',200);
+        }
+        
     }
 
     public function updateUser(Request $request,user $user){
@@ -208,6 +219,35 @@ class AdminController extends Controller
         ->where('tasks.type',NULL)->where('tasks.status','<>','Completed')->where('tasks.due_date','=' ,today())->orderby('tasks.created_at','DESC')
         ->get();
         return response()->json($data, 200);
+    }
+
+    public function changePassword(Request $request){
+      
+        $validate = $this->validate(request(),[
+                'oldPassword'=> 'required|min:6',
+                'newPassword'  =>  'required|min:6',
+                'confirmPassword'  =>  'same:newPassword',
+        ]
+        );
+
+        if (Hash::check($request->oldPassword,Auth::user()->password)) {
+            $data['password'] = hash::make($request->newPassword);
+            try{
+                user::whereId($request->id)->update($data);
+                return response()->json("Password Changed ");
+            }
+            catch(\exception $e)
+            {
+                return response()->json("Password Not Changed ");
+               
+            }
+        }
+        else{
+           
+          return response()->json(['errors'=>['password'=>[0=>'Wrong old password']]],400);
+           
+        }
+   
     }
     
 }

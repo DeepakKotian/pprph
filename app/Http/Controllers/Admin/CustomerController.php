@@ -581,9 +581,11 @@ class CustomerController extends Controller
 
     public function uploadDocuments(Request $request)
     {
-        if(!$request->file('documentData')->getSize()){
-            return response()->json('Document should not be more than 2MB',500);
-        }
+        if($request->hasFile('documentData')){
+                if(!$request->file('documentData')->getSize()){
+                    return response()->json('Document should not be more than 2MB',500);
+                }
+       }
         if($request->documnetType!=0){
             if(empty($request->document_id)){
                     if(!empty($request->file('documentData'))){

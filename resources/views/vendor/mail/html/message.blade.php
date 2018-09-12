@@ -8,7 +8,7 @@
 
     {{-- Body --}}
     {{ $slot }}
-
+    
     {{-- Subcopy --}}
     @isset($subcopy)
         @slot('subcopy')
