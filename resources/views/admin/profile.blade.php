@@ -105,14 +105,14 @@
         <div class="tab-pane " id="passwordChange">
        
         <div class="form-group" :class="{ 'has-error': $v.profilePass.oldPassword.$error }" >
-              <label for="inputName" class="col-sm-2 control-label">Old Password</label>
+              <label for="inputName" class="col-sm-2 control-label">Old Password *</label>
               <div class="col-sm-10">
               <input type="password" name="oldPass" id="" class="form-control col-sm-4"  v-model="$v.profilePass.oldPassword.$model">
               </div>
             </div>
 
             <div class="form-group" :class="{ 'has-error': $v.profilePass.newPassword.$error }" >
-              <label for="inputName" class="col-sm-2 control-label">New Password </label>
+              <label for="inputName" class="col-sm-2 control-label">New Password * </label>
 
               <div class="col-sm-10">
             <input type="password" name="" id="newPass" class="form-control col-sm-4" v-model="$v.profilePass.newPassword.$model">
