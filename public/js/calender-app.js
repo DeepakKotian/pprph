@@ -127,7 +127,6 @@ var calenderapp = new Vue({
         
       },
       loadUsers:function(){
-       
         this.$http.get(this.urlPrefix+'fetchtaskusers').then(
             function(response){
                 this.users  = response.data;
@@ -143,13 +142,10 @@ var calenderapp = new Vue({
                 self.users.splice(index,self.user_id);
             }
         });
-      
-        
       },
 
       loadCalender:function(){ 
-          
-      
+    
             self = this;
             $('#calendar').fullCalendar({
                
@@ -161,7 +157,7 @@ var calenderapp = new Vue({
                 },
                 
                 eventClick: function(calEvent, jsEvent, view) {
-                    console.log(self.showAssign);
+                   
                     self.appointment.title = calEvent.title;
                     self.appointment.description = calEvent.description;
                     self.appointment.assigned_id = calEvent.assigned_id;

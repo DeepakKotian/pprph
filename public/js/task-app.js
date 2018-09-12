@@ -64,8 +64,8 @@ var taskapp = new Vue({
         
         this.loadTaskUser();
         this.loadDatepicker();
-       this.loadTaskHistories();
-       this.loadInitialTaskData();
+        this.loadTaskHistories();
+        this.loadInitialTaskData();
        
      },
 
@@ -82,6 +82,7 @@ var taskapp = new Vue({
                 'changeDate',  function() { self.tasks.due_date = $('#due_date').val(); $('#due_date').datepicker('hide');  }
             )
         },
+
         loadInitialTaskData:function(){
         
             this.$http.post(this.urlPrefix+'fetch-initial-task',{ id: this.currentTasksId} ).then(
