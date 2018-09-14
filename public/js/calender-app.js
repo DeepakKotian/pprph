@@ -235,8 +235,6 @@ var calenderapp = new Vue({
         },
         updateAppointment:function(){
            
-            $('#calendar').fullCalendar('removeEvents', this.appointment.id); 
-        
             if(this.showAssign==false){
                 this.appointment.assigned_id = this.user_id;
               }
@@ -244,6 +242,7 @@ var calenderapp = new Vue({
             if(this.$v.appointment.$invalid){
                 this.$v.appointment.$touch();
             }else{
+                $('#calendar').fullCalendar('removeEvents', this.appointment.id); 
                 this.$http.post(this.urlPrefix+'update-appointment',this.appointment).then( 
                     function(response){
                     
