@@ -55,7 +55,7 @@
               <div class="input-group-addon">
                     <i class="fa fa-calendar"></i>
                   </div>
-               <input readonly type="text" v-model="$v.tasks.due_date.$model" class="form-control"  name="" id="due_date">
+               <input readonly type="text" value="" v-model="$v.tasks.due_date.$model" class="form-control"  name="" id="due_date">
                </div>
             </div>
          </div>

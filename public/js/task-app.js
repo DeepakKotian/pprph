@@ -16,7 +16,9 @@ var taskapp = new Vue({
         status:null,
         
       },
-      taskHistory:{},
+      taskHistory:{
+        
+      },
       taskUsers:{},
       mytaskData:[],
       taskData:[],
@@ -47,7 +49,6 @@ var taskapp = new Vue({
     },
     created: function(){
       
-     
     }, 
     mounted: function(){
        
@@ -61,12 +62,11 @@ var taskapp = new Vue({
         }
 
         this.currentTasksId = $('#tasksId').val();
-        
         this.loadTaskUser();
         this.loadDatepicker();
         this.loadTaskHistories();
         this.loadInitialTaskData();
-       
+      
      },
 
     
@@ -78,9 +78,16 @@ var taskapp = new Vue({
                 format:'dd-mm-yyyy',
                 todayHighlight: true,
                 startDate:'0',
+                autoclose: true,
+             
             }).on(
-                'changeDate',  function() { self.tasks.due_date = $('#due_date').val(); $('#due_date').datepicker('hide');  }
+                'changeDate',  function() {  
+                   self.tasks.due_date = $('#due_date').val();
+                 
+                }
             )
+          
+
         },
 
         loadInitialTaskData:function(){
@@ -92,16 +99,20 @@ var taskapp = new Vue({
             )
          },
         assignTask:function(){
-        
-            this.$http.post(this.urlPrefix+'assigntask',this.tasks).then(
-                function(response){
-                    this.$toaster.success(response.data);
-                    $('#assignTask').modal('hide');
-                    this.loadTaskHistories();
-                    this.tasks.task_detail="";
-                    this.loadInitialTaskData();
-                }
-            )
+            if (this.$v.tasks.$invalid) {
+                this.$v.tasks.$touch()
+               }
+              else{
+                this.$http.post(this.urlPrefix+'assigntask',this.tasks).then(
+                    function(response){
+                        this.$toaster.success(response.data);
+                        $('#assignTask').modal('hide');
+                        this.loadTaskHistories();
+                        this.tasks.task_detail="";
+                        this.loadInitialTaskData();
+                    }
+                )
+          }
         
         },
 
@@ -156,6 +167,8 @@ var taskapp = new Vue({
             this.$http.post(this.urlPrefix+'fetchtaskhistory',{id:this.currentTasksId}).then(
                 function(response){
                     this.taskHistory  = response.data;
+                  
+                    
                 }
             )
         },
@@ -188,6 +201,8 @@ var taskapp = new Vue({
                 this.tasks.taskid=item.taskid;
                 this.tasks.priority=item.priority;
                 this.tasks.status=item.status;
+                this.loadDatepicker();
+                $( "#due_date" ).datepicker( "setDate", this.tasks.due_date);  
             }
             this.$v.tasks.$reset();  
         },
@@ -202,6 +217,10 @@ var taskapp = new Vue({
             this.tasks.taskid=item.taskid;
             this.tasks.priority=item.priority;
             this.tasks.status=item.status;
+            this.initialTask.due_date;
+            this.loadDatepicker();
+            $( "#due_date" ).datepicker( "setDate", this.tasks.due_date);    
+          
         },
 
         loadAllTasks:function(){

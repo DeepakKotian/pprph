@@ -77,6 +77,10 @@ Customers List
                            <option value="1">Active</option>
                         </select>
                     </div>
+                    <div class="form-group">
+                  
+                     <button class="btn btn-danger left-15" id="resetFilter" type="reset" > Clear </button>
+                    </div>
                 </form>
             </div>
             <div class="col-12">
@@ -278,6 +282,7 @@ a.ui-button:active,
         oTable.draw();
         e.preventDefault();
     });
+
     $(document).ready(function() {
         $('.selectJS').select2();
 
@@ -303,7 +308,7 @@ a.ui-button:active,
             select: function( event, ui ) {
                 $('#searchTerm').val('');
                 window.location.href= urlPrefix+"customer-form/"+ui.item.id;
-                //console.log( "Selected: " + ui.item.value + " aka " + ui.item.id );
+             
             }
         });
 
@@ -323,15 +328,27 @@ a.ui-button:active,
                         _token:'{{ csrf_token() }}'
                     },
                     success: function( data ) {
-                        console.log(data);
+                     
                         window.location.href = urlPrefix+"download-pdf";
                     }
             });
 
 
         });
-    });
 
+       
+    });
+    $('#resetFilter').bind('click', function(){
+            $('#searchTerm').val('');
+            $('.select2-selection__rendered').text('------');
+            $('select[name=name]')[0].selectedIndex = 0;
+            $('select[name=id]')[0].selectedIndex = 0;
+            $('select[name=ctg]')[0].selectedIndex = 0;
+            $('select[name=status_prd]')[0].selectedIndex = 0;
+            $('select[name=status]')[0].selectedIndex = 0;
+            $('#customerTable').DataTable().search('').draw(); 
+          
+        });
 
 </script>
 @stop

@@ -57,6 +57,11 @@ Policy List
                     <div class="form-group left-15">
                         <button class="btn btn-primary" style="" type="button" id="provisionButton" onclick="this.preventDefault"> Update Status </button>
                     </div>
+
+                    <div class="form-group left-15">
+                       <button type="reset" class="btn btn-danger" id="resetFilter" > Clear </button>
+                    </div>
+                    
                 </form>
             </div>
             <div class="col-12">
@@ -384,6 +389,15 @@ a.ui-button:active,
         });   
     });
 
+  $('#resetFilter').bind('click', function(){
+            $('#searchTerm').val('');
+            $('.select2-selection__rendered').text('------');
+            $('select[name=name]')[0].selectedIndex = 0;
+            $('select[name=id]')[0].selectedIndex = 0;
+         
+            $('#policyDetailTable').DataTable().search('').draw(); 
+          
+        });
 
 </script>
 @stop

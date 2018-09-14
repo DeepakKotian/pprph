@@ -121,7 +121,8 @@
                         <div class="input-group-addon">
                                 <i class="fa fa-calendar"></i>
                         </div>
-                        <input readonly type="text" v-model="$v.tasks.due_date.$model" class="form-control"  name="" id="due_date">
+              
+                        <input readonly type="text"  v-model="$v.tasks.due_date.$model" class="form-control"  name="" id="due_date">
                         </div>
                     </div>
                     <div v-if="modalAction=='add'" class="form-group" :class="{ 'has-error': $v.tasks.status.$error }">
@@ -169,8 +170,10 @@
                   <th>Status</th>
                   <th>Comment</th>
                 </tr>
+               
                 <tr v-for="(rw,ky) in taskHistory">
-                  <td><% rw.a_first_name + ' ' + rw.a_last_name %></td>
+
+                  <td><% rw.a_first_name %> <% rw.a_last_name %></td>
                   <td><% rw.due_date %></td>
                   <td><% rw.status %></td>
                   <td><% rw.comment %></td>
