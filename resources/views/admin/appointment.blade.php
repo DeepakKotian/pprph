@@ -28,7 +28,7 @@
                 <label for="title">Title</label>
                 <input id="title" name="title" type="text" v-model="$v.appointment.title.$model" class="form-control" placeholder="Event Title">
               </div>
-              <div class="form-group" :class="{ 'has-error': $v.appointment.title.$error }">
+              <div class="form-group" :class="{ 'has-error': $v.description.title.$error }">
                 <label for="description">Description</label>
                 <textarea class="form-control" name="description" v-model="$v.appointment.description.$model" id="description" rows="5"></textarea>
               </div>
