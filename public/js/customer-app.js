@@ -46,7 +46,7 @@ var app = new Vue({
         dob_family:null,
         nationality_family:null,
         mobile_family:null,
-        email_family:null,
+        //email_family:null,
       },
       modalAction:'',
       insurancedata:{
@@ -103,9 +103,9 @@ var app = new Vue({
           },
       },
       family:{
-        email_family:{
-            email:email,
-        },
+        // email_family:{
+        //     email:email,
+        // },
         first_name_family:{
             required:required,
           }
@@ -276,7 +276,7 @@ var app = new Vue({
         this.family.dob_family="";
         this.family.nationality_family="";
         this.family.mobile_family = "";
-        this.family.email_family="";
+        //this.family.email_family="";
         if(item !== null){
             this.modalAction='edit';
             this.family.first_name_family = item.first_name;
@@ -284,7 +284,7 @@ var app = new Vue({
             this.family.dob_family = item.dob;
             this.family.nationality_family = item.nationality;
             this.family.mobile_family = item.mobile;
-            this.family.email_family = item.email;
+            //this.family.email_family = item.email;
             this.family.id = item.id; 
             this.oldCustomerData = {
                 family : {
