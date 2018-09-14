@@ -84,7 +84,7 @@ var app = new Vue({
             required:required,
           },
           telephone:{
-              validateRequired(){
+              validateRequired:function (){
                 if( (this.customer.mobile == null || this.customer.mobile == "") && (this.customer.telephone == null || this.customer.telephone =="")){
                     return false;
                 }
@@ -93,7 +93,7 @@ var app = new Vue({
               }
           },
           mobile:{
-              validateRequired(){
+              validateRequired:function (){
                     if( (this.customer.mobile == null || this.customer.mobile == "") && (this.customer.telephone == null || this.customer.telephone =="")){
                         return false;
                     }
@@ -186,7 +186,7 @@ var app = new Vue({
      },
 
     methods: {
-        resetForm() {
+        resetForm: function () {
             var self = this; 
             Object.keys(this.customer).forEach(function(key,index) {
               self.customer[key] = '';
@@ -260,9 +260,7 @@ var app = new Vue({
                 function(response){
                     this.$toaster.success(response.data);
                     this.getCustomerData();
-                    // setTimeout(function(){
-                    //     window.location.href = urlPrefix+'customers';
-                    // },2000)
+                   
                 }
             ).catch(function(response){
                 this.$toaster.error(response.data);
