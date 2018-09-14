@@ -234,6 +234,7 @@ var calenderapp = new Vue({
             }
         },
         updateAppointment:function(){
+           
             $('#calendar').fullCalendar('removeEvents', this.appointment.id); 
         
             if(this.showAssign==false){

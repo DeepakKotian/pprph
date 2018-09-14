@@ -83,7 +83,6 @@ var taskapp = new Vue({
             }).on(
                 'changeDate',  function() {  
                    self.tasks.due_date = $('#due_date').val();
-                 
                 }
             )
           
