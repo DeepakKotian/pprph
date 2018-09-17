@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
@@ -544,7 +543,6 @@ class CustomerController extends Controller
     public function statusUpdate(Request $request){
        
         $data['status']=$request->currentStatusId;
-    
         $json_data = customer::whereId($request->currentCustId)->update($data);
         return response()->json('Successfully '.$request->statusText.'ed', 200);
     }
@@ -740,6 +738,8 @@ class CustomerController extends Controller
         $filename = date('Y-m-d').'-customer-grid.pdf';
         file_put_contents(public_path('/uploads/customer/'.$filename), $pdf->output());
         return $filename;
+     
+   
       } 
 
     public function downloadPDF(){
@@ -768,7 +768,5 @@ class CustomerController extends Controller
         }
         return response()->json($data,200);
     }
-
-   
-   
+ 
 }

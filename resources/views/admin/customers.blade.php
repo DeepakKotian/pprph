@@ -25,8 +25,10 @@ Customers List
         <div class="box-header">
               <h3 class="box-title">View Customers List </h3>
               <div class="box-tools">
+              
                 <a class="btn btn-primary btn-md pull-right" href="{{ url('admin/customer-form') }}">Add New</a>
                 <a class="btn btn-primary btn-md" href="javascript:void(0)" id="printGrid"> PDF <i class="fa fa-download"> </i> </a> &nbsp;&nbsp;
+            
               </div>
         </div>
     <div class="box-body">
@@ -312,7 +314,8 @@ a.ui-button:active,
             }
         });
 
-        $('#printGrid').click(function(){
+       
+ $('#printGrid').click(function(){
             $.ajax({
                     url: '{{ route("export.file") }}',
                     dataType: 'html',
@@ -328,14 +331,15 @@ a.ui-button:active,
                         _token:'{{ csrf_token() }}'
                     },
                     success: function( data ) {
-                     
-                        window.location.href = urlPrefix+"download-pdf";
+                      
+                       
+                       window.location.href = urlPrefix+"download-pdf";
+                      
                     }
             });
 
-
         });
-
+     
        
     });
     $('#resetFilter').bind('click', function(){
