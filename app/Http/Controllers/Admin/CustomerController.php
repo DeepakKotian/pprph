@@ -721,15 +721,6 @@ class CustomerController extends Controller
             ->toArray();
         $customer['table'] = $data['data'];
         $customer['ctgs'] =  $insuranceCtg;
-<<<<<<< HEAD
-        
-        $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('admin.printcustomer', ['data' => $customer]);
-        $filename = date('Y-m-d').'-customer-grid.pdf';
-        file_put_contents(public_path('/uploads/customer/'.$filename), $pdf->output());
-        return $filename;
-     
-   
-=======
         if($request->type=='pdf'){
             $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('admin.printcustomer', ['data' => $customer]);
             $filename = date('Y-m-d').'-customer-grid.pdf';
@@ -837,7 +828,6 @@ class CustomerController extends Controller
           $writer->save('uploads/customer/'.$filename);
           return $filename;
         }
->>>>>>> 01c4a460441d45375b26e84aaf985ec5749db768
       } 
 
     public function downloadPDF(){
