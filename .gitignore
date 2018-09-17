@@ -17,3 +17,6 @@ config/excel.php
 config/excel.php
 config/excel.php
 uploads
+composer.lock
+composer.json
+composer.json

@@ -112,6 +112,8 @@ Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     
     Route::post('export-file', 'Admin\CustomerController@exportFile')->name('export.file');
 
+    Route::get('download-excel','Admin\CustomerController@downloadExcel');
+
     Route::get('/provision', 'Admin\insuranceController@policyDetail');
     Route::get('/policy-filter-data', 'Admin\insuranceController@policyFilterData');
     Route::get('/update-policy-status', 'Admin\insuranceController@policyStatus');

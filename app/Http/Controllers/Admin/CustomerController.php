@@ -18,6 +18,9 @@ use DB;
 use Auth;
 use DataTables;
 use PDF;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 
 class CustomerController extends Controller
 {
@@ -665,22 +668,7 @@ class CustomerController extends Controller
         return response()->json($data,200);
     }
 
-    // public function view()
-    // {
-    //     $filename = 'File Name';
-
-    //     Excel::create($filename, function($excel){
-        
-    //        $excel->sheet('sheet name', function($sheet){
-    //             $objDrawing = new PHPExcel_Worksheet_Drawing;
-    //             $objDrawing->setPath(public_path('uploads/userphoto/userdefault.jpg')); //your image path
-    //             $objDrawing->setCoordinates('A2');
-    //             $objDrawing->setWorksheet($sheet);
-    //        });
-        
-    //     })->export('xls');
-    // }
-
+   
     public function exportFile(Request $request){
 
         $jnQry='';
@@ -735,15 +723,130 @@ class CustomerController extends Controller
             ->toArray();
         $customer['table'] = $data['data'];
         $customer['ctgs'] =  $insuranceCtg;
-        
-        $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('admin.printcustomer', ['data' => $customer]);
-        $filename = date('Y-m-d').'-customer-grid.pdf';
-        file_put_contents(public_path('/uploads/customer/'.$filename), $pdf->output());
-        return $filename;
+        if($request->type=='pdf'){
+            $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('admin.printcustomer', ['data' => $customer]);
+            $filename = date('Y-m-d').'-customer-grid.pdf';
+            file_put_contents(public_path('/uploads/customer/'.$filename), $pdf->output());
+            return $filename;
+        }else{
+         
+         
+           $spreadsheet = new Spreadsheet();
+           $row = 1;
+           $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(1,$row, 'ID');
+           $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(2,$row, 'First Name');
+           $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(3,$row, 'Last Name');
+           $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(4,$row, 'Email');
+           $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(5,$row, 'Postal code');
+           $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(6,$row, 'City');
+           $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(7,$row, 'Status');
+           $column = 8;
+           $ctgs = $customer['ctgs']->toArray();
+
+           foreach ($ctgs as $ky => $val) {
+             $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow($column,$row, $val->name);  
+             $column++;
+           }
+           $row++;
+          
+           $spreadsheet->getActiveSheet()->getStyle("A1:Z1")->getFont()->setBold( true )->setName('Arial');
+           foreach ($customer['table'] as $key => $value) {
+            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(1,$row, $value['id']);
+            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(2,$row, $value['first_name']);
+            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(3,$row, $value['last_name']);
+            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(4,$row, $value['email']);
+            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(5,$row, $value['zip']);
+            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(6,$row, $value['city']);
+            if($value['status']==0){
+                $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+                $objDrawing->setPath(public_path('uploads/unchecked.png')); //your image path
+                $objDrawing->setCoordinates('G'.$row);
+                $objDrawing->setOffsetX(15);
+                $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
+            }else{
+                $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+                $objDrawing->setPath(public_path('uploads/checked.png')); //your image path
+                $objDrawing->setCoordinates('G'.$row);
+                $objDrawing->setOffsetX(15);
+                $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
+            }
+            if($value['ctg0']>0){
+                $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+                $objDrawing->setPath(public_path('uploads/greenicon.png')); //your image path
+                $objDrawing->setOffsetX(15);
+                $objDrawing->setCoordinates('H'.$row);
+                $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
+            }else{
+                $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+                $objDrawing->setPath(public_path('uploads/redicon.png')); //your image path
+                $objDrawing->setOffsetX(15);
+                $objDrawing->setCoordinates('H'.$row);
+                $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
+            }
+            if($value['ctg1']>0){
+                $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+                $objDrawing->setPath(public_path('uploads/greenicon.png')); //your image path
+                $objDrawing->setOffsetX(15);
+                $objDrawing->setCoordinates('I'.$row);
+                $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
+            }else{
+                $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+                $objDrawing->setPath(public_path('uploads/greenicon.png')); //your image path
+                $objDrawing->setOffsetX(15);
+                $objDrawing->setCoordinates('I'.$row);
+                $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
+            }
+            if($value['ctg2']>0){
+                $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+                $objDrawing->setPath(public_path('uploads/greenicon.png')); //your image path
+                $objDrawing->setOffsetX(15);
+                $objDrawing->setCoordinates('J'.$row);
+                $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
+            }else{
+                $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+                $objDrawing->setPath(public_path('uploads/redicon.png')); //your image path
+                $objDrawing->setOffsetX(15);
+                $objDrawing->setCoordinates('J'.$row);
+                $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
+            }
+            if($value['ctg3']>0){
+                $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+                $objDrawing->setPath(public_path('uploads/greenicon.png')); //your image path
+                $objDrawing->setOffsetX(15);
+                $objDrawing->setCoordinates('K'.$row);
+                $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
+            }else{
+                $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+                $objDrawing->setPath(public_path('uploads/redicon.png')); //your image path
+                $objDrawing->setOffsetX(15);
+                $objDrawing->setCoordinates('K'.$row);
+                $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
+            }
+               
+            $row++;
+          }
+          $filename = date('Y-m-d').'-customer-grid.xlsx';
+          $writer = new Xlsx($spreadsheet);
+          $writer->save('uploads/customer/'.$filename);
+          return $filename;
+        }
       } 
 
     public function downloadPDF(){
         $filename = date('Y-m-d').'-customer-grid.pdf';
+        $path = public_path('/uploads/customer/'.$filename);
+        header('Content-Transfer-Encoding: binary');  // For Gecko browsers mainly
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s', filemtime($path)) . ' GMT');
+        header('Accept-Ranges: bytes');  // For download resume
+        header('Content-Length: ' . filesize($path));  // File size
+        header('Content-Encoding: none');
+        header('Content-Type: application/pdf');  // Change this mime type if the file is not PDF
+        header('Content-Disposition: attachment; filename=' . $filename);  // Make the browser display the Save As dialog
+        readfile($path); 
+    }
+
+    public function downloadExcel(){
+        $filename = date('Y-m-d').'-customer-grid.xlsx';
         $path = public_path('/uploads/customer/'.$filename);
         header('Content-Transfer-Encoding: binary');  // For Gecko browsers mainly
         header('Last-Modified: ' . gmdate('D, d M Y H:i:s', filemtime($path)) . ' GMT');

@@ -27,6 +27,7 @@ Customers List
               <div class="box-tools">
                 <a class="btn btn-primary btn-md pull-right" href="{{ url('admin/customer-form') }}">Add New</a>
                 <a class="btn btn-primary btn-md" href="javascript:void(0)" id="printGrid"> PDF <i class="fa fa-download"> </i> </a> &nbsp;&nbsp;
+                <a class="btn btn-primary btn-md" href="javascript:void(0)" id="printExcelGrid"> Excel <i class="fa fa-download"> </i> </a> &nbsp;&nbsp;
               </div>
         </div>
     <div class="box-body">
@@ -318,7 +319,7 @@ a.ui-button:active,
                     dataType: 'html',
                     type:'POST',
                     data: {
-                        type:'xlsx',
+                        type:'pdf',
                         id :$('select[name=id]').val(),
                         name : $('select[name=name]').val(),
                         ctg :$('select[name=ctg]').val(),
@@ -336,6 +337,28 @@ a.ui-button:active,
 
         });
 
+        $('#printExcelGrid').click(function(){
+            $.ajax({
+                    url: '{{ route("export.file") }}',
+                    dataType: 'html',
+                    type:'POST',
+                    data: {
+                        type:'xlsx',
+                        id :$('select[name=id]').val(),
+                        name : $('select[name=name]').val(),
+                        ctg :$('select[name=ctg]').val(),
+                        statusPrd :$('select[name=status_prd]').val(),
+                        status : $('select[name=status]').val(),
+                        searchTerm : $('input[name=searchTerm]').val(),
+                        _token:'{{ csrf_token() }}'
+                    },
+                    success: function( data ) {
+                        window.location.href = urlPrefix+"download-excel";
+                    }
+            });
+
+
+        });
        
     });
     $('#resetFilter').bind('click', function(){
