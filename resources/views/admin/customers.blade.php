@@ -339,9 +339,6 @@ a.ui-button:active,
             });
 
         });
-<<<<<<< HEAD
-     
-=======
 
         $('#printExcelGrid').click(function(){
             $.ajax({
@@ -365,7 +362,6 @@ a.ui-button:active,
 
 
         });
->>>>>>> 01c4a460441d45375b26e84aaf985ec5749db768
        
     });
     $('#resetFilter').bind('click', function(){
