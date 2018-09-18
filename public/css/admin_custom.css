@@ -226,3 +226,6 @@
     #notification-app .dropdown-menu ul.menu {
         max-height: 400px;
     }
+    .treeview-menu li{
+        line-height: 1.4 !important;
+    }

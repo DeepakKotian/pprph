@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-
+use Illuminate\Http\Request;
+use Auth;
 class LoginController extends Controller
 {
     /*
@@ -36,5 +37,17 @@ class LoginController extends Controller
     {
         
         $this->middleware('guest')->except('logout');
+    }
+
+   protected function authenticated(Request $request, $user)
+    {
+        if($user->deleted_at != null) {
+            Auth::logout();
+            return redirect('/login')
+            ->withErrors(array('global' => "Sorry, Your account is deactivated."));
+
+        } else {
+            //Redirect to the intended page after login.
+        }
     }
 }

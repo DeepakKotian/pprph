@@ -65,7 +65,7 @@ class DashboardController extends Controller
     {
         $dueInsurance = [];
      try{
-        $query = policydetail::select('c.id as cstId','c.first_name as cfirst_name','policy_number','c.last_name as clast_name','inc.name as ctgName',DB::raw('DATE_FORMAT(start_date, "%d-%m-%Y") as pstart_date') ,DB::raw('DATE_FORMAT(end_date, "%d-%m-%Y") as pend_date') ,'prd.name as providerName',DB::raw('DATE_FORMAT(end_date, "%d %M") as end_date'))
+        $query = policydetail::select('policy_detail.id as pid','c.id as cstId','c.first_name as cfirst_name','policy_number','c.last_name as clast_name','inc.name as ctgName',DB::raw('DATE_FORMAT(start_date, "%d-%m-%Y") as pstart_date') ,DB::raw('DATE_FORMAT(end_date, "%d-%m-%Y") as pend_date') ,'prd.name as providerName',DB::raw('DATE_FORMAT(end_date, "%d %M") as end_date'))
             ->leftJoin('customers as c','customer_id','=','c.id')
             ->leftJoin('massparameter as inc','inc.id','=','policy_detail.insurance_ctg_id')
             ->leftJoin('massparameter as prd','prd.id','=','policy_detail.provider_id')
