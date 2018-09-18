@@ -679,7 +679,7 @@ class CustomerController extends Controller
         }else{
          
          
-           $spreadsheet = new PHPExcel_Worksheet_Drawing;
+           $spreadsheet = new Spreadsheet();
            $row = 1;
            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(1,$row, 'ID');
            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(2,$row, 'First Name');
