@@ -66,14 +66,14 @@ class CustomerController extends Controller
     $strArr = [];
     $insuranceCtg = DB::table('massparameter')->where('type','category')->where('status',1)->get();
     foreach ($insuranceCtg as $key => $value) { //Dynamic queries 
-        $jnQry .= " LEFT JOIN massparameter ctg{$key} ON pd.insurance_ctg_id= ctg{$key}.id  AND ctg{$key}.id=$value->id AND ctg{$key}.type='category' ";
+        $jnQry .= " LEFT JOIN massparameter ctg{$key} ON pd.insurance_ctg_id= ctg{$key}.id  AND ctg{$key}.id=$value->id AND ctg{$key}.type='category' AND pd.end_date>=CURDATE() ";
         $name = preg_replace('/\s+/', '_', $value->name);
         $strArr[$key] = "(COUNT(IF(pd.insurance_ctg_id = ctg{$key}.id,1,NULL))) ctg{$key}";
     }
     $addQry =  implode(',',$strArr);
     $count = $insuranceCtg->count();
     $selectQry =  "SELECT c.id,c.unique_id, c.first_name, c.last_name,c.status, c.email,c.city,c.nationality,c.zip, {$addQry} FROM customers c LEFT JOIN policy_detail pd ON pd.customer_id = c.id {$jnQry} WHERE c.is_family=0 GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC";      
-  
+
     $customer =  DB::select(DB::raw($selectQry));
 
         return Datatables::of($customer)
@@ -122,61 +122,6 @@ class CustomerController extends Controller
     public function create()
     {
         //
-    }
-
-    public function printCustomerGrid(Request $request)
-    {
-        $jnQry='';
-        $strArr = [];
-        $insuranceCtg = DB::table('massparameter')->where('type','category')->where('status',1)->get();
-        foreach ($insuranceCtg as $key => $value) { //Dynamic queries 
-            $jnQry .= " LEFT JOIN massparameter ctg{$key} ON pd.insurance_ctg_id= ctg{$key}.id  AND ctg{$key}.id=$value->id AND ctg{$key}.type='category' ";
-            $name = preg_replace('/\s+/', '_', $value->name);
-            $strArr[$key] = "(COUNT(IF(pd.insurance_ctg_id = ctg{$key}.id,1,NULL))) ctg{$key}";
-        }
-        $addQry =  implode(',',$strArr);
-        $count = $insuranceCtg->count();
-        $selectQry =  "SELECT c.id, c.first_name, c.last_name,c.status, c.email,c.city,c.nationality,c.zip, {$addQry} FROM customers c LEFT JOIN policy_detail pd ON pd.customer_id = c.id {$jnQry} WHERE c.is_family=0 GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC";      
-
-        $customer =  DB::select(DB::raw($selectQry));
-
-        $data = Datatables::of($customer)
-            ->filter(function ($instance) use ($request) {
-                if ($request->has('id')&& $request->id!=null) {
-                    $instance->collection = $instance->collection->filter(function ($row) use ($request) {
-                         return $row['id'] == $request->get('id') ? true : false;
-                    });
-                }
-                if ($request->has('status')&& $request->status!=null) {
-                    $instance->collection = $instance->collection->filter(function ($row) use ($request) {
-                         return $row['status'] == $request->get('status') ? true : false;
-                    });
-                }
-                if ($request->has('name')&& $request->name!=null) {
-                    $instance->collection = $instance->collection->filter(function ($row) use ($request) {
-                         return $row['id'] == $request->get('name') ? true : false;
-                    });
-                }
-               //To get the product search dynamically
-                if ($request->ctg!=null && $request->statusPrd!=null) { 
-                    $instance->collection = $instance->collection->filter(function ($row) use ($request) {
-                            if( $request->statusPrd==1){
-                                return $row['ctg'.$request->ctg] > 0 ? true : false;
-                            }else{
-                                return $row['ctg'.$request->ctg] > 0 ? false : true;
-                            }
-                    });
-                }
-
-                if ($request->has('searchTerm')&& $request->searchTerm!=null) {
-                    $instance->collection = $instance->collection->filter(function ($row) use ($request) {
-                        return (Str::contains($row['zip'], $request->get('searchTerm')) || Str::contains($row['email'], $request->get('searchTerm')) || Str::contains($row['city'], $request->get('searchTerm')) 
-                        || Str::contains($row['first_name'], $request->get('searchTerm')) || Str::contains($row['last_name'], $request->get('searchTerm')) ) ? true : false;
-                    });
-                }
-            })
-            ->make(true);
-        dd($data);
     }
 
     /**
@@ -674,7 +619,7 @@ class CustomerController extends Controller
         $strArr = [];
         $insuranceCtg = DB::table('massparameter')->where('type','category')->where('status',1)->get();
         foreach ($insuranceCtg as $key => $value) { //Dynamic queries 
-            $jnQry .= " LEFT JOIN massparameter ctg{$key} ON pd.insurance_ctg_id= ctg{$key}.id  AND ctg{$key}.id=$value->id AND ctg{$key}.type='category' ";
+            $jnQry .= " LEFT JOIN massparameter ctg{$key} ON pd.insurance_ctg_id= ctg{$key}.id  AND ctg{$key}.id=$value->id AND ctg{$key}.type='category'  AND pd.end_date>=CURDATE() ";
             $name = preg_replace('/\s+/', '_', $value->name);
             $strArr[$key] = "(COUNT(IF(pd.insurance_ctg_id = ctg{$key}.id,1,NULL))) ctg{$key}";
         }
