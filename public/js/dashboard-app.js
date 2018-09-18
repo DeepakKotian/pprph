@@ -56,10 +56,10 @@ var calenderapp = new Vue({
 
       
 
-        loadDataTable:function(){
+        loadDataTable:function(){  
           setTimeout( function(){ $('#dueTask').DataTable({lengthChange:false, pageLength:3, "searching": false,destroy: true, "order": [[1, "desc" ]]}); },1000)
           setTimeout( function(){ $('#dueAppointments').DataTable({lengthChange:false, pageLength:3, "searching": false,destroy: true, "order": [[1, "desc" ]]}); },1000)
-          setTimeout( function(){ $('#dueInsurance').DataTable({lengthChange:false, pageLength:3, "searching": false,destroy: true, "order": [[1, "desc" ]]}); },1000)
+          setTimeout( function(){ $('#dueInsurance').DataTable({ lengthChange:false, pageLength:3, "searching": false,destroy: true, "order": [[1, "desc" ]]}); },1000)
 
         },
      

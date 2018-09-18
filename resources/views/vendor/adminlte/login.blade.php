@@ -38,7 +38,12 @@ input[type=password]::-ms-clear
         </div>
         <!-- /.login-logo -->
         <div class="login-box-body">
+
             <p class="login-box-msg">{{ trans('adminlte::adminlte.login_message') }}</p>
+            @if ($errors->has('global'))
+                <div id="msgSuccess" class="alert alert-danger">{{ $errors->first('global') }}</div>
+            @endif
+         
             <form action="{{ url(config('adminlte.login_url', 'login')) }}" method="post">
                 {!! csrf_field() !!}
 
