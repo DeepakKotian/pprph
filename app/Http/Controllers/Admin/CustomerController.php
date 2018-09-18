@@ -739,7 +739,7 @@ class CustomerController extends Controller
                 $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
             }else{
                 $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
-                $objDrawing->setPath(public_path('uploads/greenicon.png')); //your image path
+                $objDrawing->setPath(public_path('uploads/redicon.png')); //your image path
                 $objDrawing->setOffsetX(15);
                 $objDrawing->setCoordinates('I'.$row);
                 $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
