@@ -68,13 +68,13 @@
                                 <!-- inner menu: contains the actual data -->
                                 <ul class="menu">
                                 <li v-for="(pnRow,index) in policyNotification.policy">
-                                    <a href="#">
+                                    <a v-bind:href="urlPrefix+'customer-form/'+ pnRow.cstId" >
                                     <i class="fa fa-users text-aqua"></i> <% pnRow.ctgName %> of <% pnRow.providerName %> is due on <% pnRow.end_date %> for <% pnRow.first_name %> <% pnRow.last_name %>
                                     </a>
                                 </li>
                                 <li v-for="(apRow,index) in policyNotification.events"> 
-                                    <a href="#">
-                                        <i class="fa fa-users text-aqua"></i> Due Task : <% apRow.task_name %> due on <% apRow.due_date %> 
+                                    <a v-bind:href="urlPrefix+'task-list/'+ apRow.taskid">
+                                        <i class="fa fa-users text-aqua"></i> Due Task : <% apRow.task_name %> due on <% apRow.taskdue_date %> 
                                     </a>
                                 </li>
                                

@@ -208,7 +208,7 @@ class AdminController extends Controller
 
     public function fetchNotification()
     {
-       $data['policy'] = policydetail::select('c.first_name','c.last_name','inc.name as ctgName','prd.name as providerName',DB::raw('DATE_FORMAT(end_date, "%d %M") as end_date'))
+       $data['policy'] = policydetail::select('c.id as cstId','c.first_name','c.last_name','inc.name as ctgName','prd.name as providerName',DB::raw('DATE_FORMAT(end_date, "%d %M") as end_date'))
         ->leftJoin('customers as c','customer_id','=','c.id')
         ->leftJoin('massparameter as inc','inc.id','=','policy_detail.insurance_ctg_id')
         ->leftJoin('massparameter as prd','prd.id','=','policy_detail.provider_id')
@@ -216,7 +216,7 @@ class AdminController extends Controller
         ->get();
         $data['events'] = task::leftjoin('users as u','u.id','=','tasks.user_id')->leftjoin('users as au','au.id','=','tasks.assigned_id')
         ->select('tasks.*','au.first_name as a_first_name','au.last_name as a_last_name',DB::raw('DATE_FORMAT(tasks.due_date,"%d-%m-%Y") as taskdue_date'),DB::raw('DATE_FORMAT(tasks.created_at,"%d-%m-%Y") as assigned_on'),'u.first_name','u.last_name',DB::raw('tasks.id as taskid' ))
-        ->where('tasks.type',NULL)->where('tasks.status','<>','Completed')->where('tasks.due_date','=' ,today())->orderby('tasks.created_at','DESC')
+        ->where('tasks.type',NULL)->where('assigned_id','=',auth::user()->id)->where('tasks.status','<>','Completed')->where('tasks.due_date','=' ,today())->orderby('tasks.created_at','DESC')
         ->get();
         return response()->json($data, 200);
     }

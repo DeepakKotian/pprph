@@ -192,7 +192,7 @@ var calenderapp = new Vue({
                 
                 
                 dayClick: function (date, jsEvent, view) {
-                       $(this).css('background-color', 'red');
+                     
                         $('#calendar').fullCalendar('gotoDate', date);
                         $('#calendar').fullCalendar('changeView', 'agendaDay');
                    

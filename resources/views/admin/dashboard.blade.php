@@ -72,7 +72,7 @@
     <div class="col-lg-6 col-xs-12">
         <div class="box box-danger">
             <div class="box-header">
-                <h3 class="box-title">Due tasks</h3>
+                <h3 class="box-title text-bold">Due tasks</h3>
                
             </div>
             <!-- /.box-header -->
@@ -117,7 +117,7 @@
     <div class="col-lg-6 col-xs-12">
         <div class="box box-success">
             <div class="box-header">
-                <h3 class="box-title">Appointments</h3>
+                <h3 class="box-title text-bold">Appointments</h3>
                
             </div>
             <!-- /.box-header -->
@@ -160,7 +160,7 @@
     <div class="col-lg-6 col-xs-12">
         <div class="box box-warning">
             <div class="box-header">
-                <h3 class="box-title">Expiring insurance</h3>
+                <h3 class="box-title text-bold">Expiring insurance</h3>
                
             </div>
             <!-- /.box-header -->

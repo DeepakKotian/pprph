@@ -11,6 +11,22 @@ input[type=password]::-ms-clear
 {
     display: none;
 }
+.icheckbox_minimal-blue, .iradio_minimal-blue {
+    display: inline-block;
+    *display: inline;
+    vertical-align: middle;
+    margin: 0;
+    padding: 0;
+    width: 18px;
+    height: 18px;
+    background: url(blue.png) no-repeat;
+    border: none;
+    cursor: pointer;
+    margin-top: 2px !important;
+}
+.rememberpass{
+    margin-top: 5px !important;
+}
 </style>
 
 @section('body_class', 'login-page')
@@ -48,9 +64,11 @@ input[type=password]::-ms-clear
                 </div>
                 <div class="row">
                     <div class="col-xs-8">
-                        <div class="checkbox icheck">
+                        <div class="checkbox rememberpass">
                             <label>
-                                <input type="checkbox" name="remember"> {{ trans('adminlte::adminlte.remember_me') }}
+
+                         
+                                <input class="icheckbox_minimal-blue" type="checkbox" name="remember"  {{ old('remember') ? 'checked' : '' }} > {{ trans('adminlte::adminlte.remember_me') }}
                             </label>
                         </div>
                     </div>
@@ -81,13 +99,13 @@ input[type=password]::-ms-clear
 @section('adminlte_js')
     <script src="{{ asset('vendor/adminlte/plugins/iCheck/icheck.min.js') }}"></script>
     <script>
-        $(function () {
-            $('input').iCheck({
-                checkboxClass: 'icheckbox_square-blue',
-                radioClass: 'iradio_square-blue',
-                increaseArea: '20%' // optional
-            });
-        });
+        // $(function () {
+        //     $('input').iCheck({
+        //         checkboxClass: 'icheckbox_square-blue',
+        //         radioClass: 'iradio_square-blue',
+                
+        //     });
+        // });
     </script>
     @yield('js')
 @stop

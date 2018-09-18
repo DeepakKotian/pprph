@@ -720,16 +720,20 @@ class CustomerController extends Controller
             })
             ->toArray();
         $customer['table'] = $data['data'];
+        
         $customer['ctgs'] =  $insuranceCtg;
         if($request->type=='pdf'){
+           
             $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('admin.printcustomer', ['data' => $customer]);
+      
             $filename = date('Y-m-d').'-customer-grid.pdf';
-            file_put_contents(public_path('/uploads/customer/'.$filename), $pdf->output());
+             file_put_contents(public_path('/uploads/customer/'.$filename), $pdf->output());
+
             return $filename;
         }else{
          
          
-           $spreadsheet = new Spreadsheet();
+           $spreadsheet = new PHPExcel_Worksheet_Drawing;
            $row = 1;
            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(1,$row, 'ID');
            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(2,$row, 'First Name');

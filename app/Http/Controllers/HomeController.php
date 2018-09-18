@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\customer;
+use Auth;
 
 class HomeController extends Controller
 {
@@ -25,7 +26,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $userCount=user::count();
+        $userCount=user::where('deleted_at','=',null)->where('id','<>' ,Auth::user()->id)->count();
         $customerCount=customer::where('is_family','=','0')->count();
         return view('admin.dashboard',compact('userCount','customerCount'));
     }
