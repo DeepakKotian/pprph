@@ -77,6 +77,7 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
+            <div class="table table-responsive">
                 <table id="dueTask" class="table table-bordered table-hover">
                 <thead>
                     <tr>
@@ -109,6 +110,7 @@
                    
                 </tbody>
                 </table>
+                </div>
             </div>
             <!-- /.box-body -->
         </div>
@@ -122,6 +124,7 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
+            <div class="table table-responsive">
                 <table id="dueAppointments" class="table table-bordered table-hover">
                 <thead>
                     <tr>
@@ -150,6 +153,7 @@
                    
                 </tbody>
                 </table>
+                </div>
             </div>
             <!-- /.box-body -->
         </div>
@@ -165,33 +169,35 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-                <table id="dueInsurance" class="table table-bordered table-hover">
-                <thead>
-                    <tr>
-                       <th>#</th>
-                       <th>Policy Nr.</th>
-                       <th>Customer Name</th>
-                        <th>Start Date</th>
-                        <th>End Date</th>
-                        <th>Insurance Name</th>
-                        <th>Provider Name</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(dueInsurance, insureindex) in dueInsurances">
-                        <td><% insureindex+1 %></td>
-                        <td > <% dueInsurance.policy_number %></td>
-                        <td><% dueInsurance.cfirst_name %> <% dueInsurance.clast_name %></td>
-                        <td> <% dueInsurance.pstart_date %></td>
-                        <td> <% dueInsurance.pend_date %></td>
-                        <td><% dueInsurance.ctgName%></td>
-                        <td><% dueInsurance.providerName%></td>
-                        <td> <a type="button"  v-bind:href="urlPrefix+'customer-form/'+ dueInsurance.cstId" class="btn btn-default"><i class="glyphicon glyphicon-eye-open"></i></a></td>
-                    </tr>
-                   
-                </tbody>
-                </table>
+                <div class="table table-responsive">
+                    <table id="dueInsurance" class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                        <th>#</th>
+                        <th>Policy Nr.</th>
+                        <th>Customer Name</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Insurance Name</th>
+                            <th>Provider Name</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(dueInsurance, insureindex) in dueInsurances">
+                            <td><% insureindex+1 %></td>
+                            <td > <% dueInsurance.policy_number %></td>
+                            <td><% dueInsurance.cfirst_name %> <% dueInsurance.clast_name %></td>
+                            <td> <% dueInsurance.pstart_date %></td>
+                            <td> <% dueInsurance.pend_date %></td>
+                            <td><% dueInsurance.ctgName%></td>
+                            <td><% dueInsurance.providerName%></td>
+                            <td> <a type="button"  v-bind:href="urlPrefix+'customer-form/'+ dueInsurance.cstId" class="btn btn-default"><i class="glyphicon glyphicon-eye-open"></i></a></td>
+                        </tr>
+                    
+                    </tbody>
+                    </table>
+                </div>
             </div>
             <!-- /.box-body -->
         </div>
