@@ -14,7 +14,7 @@
 @section('content')
 <!-- /.box-header -->
 <div class="row" id="task-app" v-cloak>
-<div class="col-sm-4">
+<div class="col-lg-4  col-xs-12 col-md-12">
 <div class="box box-primary">
             <div class="box-header">
               <h3 class="box-title"> Task Details</h3>
@@ -149,7 +149,7 @@
    </div>
    <!-- assign form end -->
 </div>
-<div class="col-sm-8">
+<div class="col-lg-8  col-xs-12 col-md-12">
 <div class="box">
             <div class="box-header">
               <h3 class="box-title">Task History</h3>
