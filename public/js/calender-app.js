@@ -176,7 +176,16 @@ var calenderapp = new Vue({
                  },
                  timeFormat: 'H(:mm)',
                  events    : self.events,
-                 
+                 selectable: true,
+                 select: function (start, end, jsEvent, view) {
+                     if (view.name == 'agendaDay') {
+                    self.appointment.start_date = moment(start).format('DD-MM-YYYY');
+                    self.appointment.end_date = moment(end).format('DD-MM-YYYY');
+                    self.appointment.start_time = moment(start).format('HH')+':'+ moment(start).format('mm');
+                    self.appointment.end_time =  moment(end).format('HH')+':'+ moment(end).format('mm');
+                     }
+         
+                 },
                 eventRender: function(eventObj, $el) {
                     
                     var t = moment(eventObj.start).format('HH') + ":" + moment(eventObj.start).format('mm') + " - " + moment(eventObj.end).format('HH') + ":" + moment(eventObj.end).format('mm')
