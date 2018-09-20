@@ -174,6 +174,7 @@
                     <thead>
                         <tr>
                         <th>#</th>
+                        <th class="hide">pid</th>
                         <th>Policy Nr.</th>
                         <th>Customer Name</th>
                             <th>Start Date</th>
@@ -186,6 +187,7 @@
                     <tbody>
                         <tr v-for="(dueInsurance, insureindex) in dueInsurances">
                             <td><% insureindex+1 %></td>
+                            <td class="hide"><% dueInsurance.pid %></td>
                             <td > <% dueInsurance.policy_number %></td>
                             <td><% dueInsurance.cfirst_name %> <% dueInsurance.clast_name %></td>
                             <td> <% dueInsurance.pstart_date %></td>

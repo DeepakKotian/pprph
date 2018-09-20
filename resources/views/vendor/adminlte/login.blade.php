@@ -73,7 +73,7 @@ input[type=password]::-ms-clear
                             <label>
 
                          
-                                <input class="icheckbox_minimal-blue" type="checkbox" name="remember"  {{ old('remember') ? 'checked' : '' }} > {{ trans('adminlte::adminlte.remember_me') }}
+                                <input class="icheckbox_minimal-blue" type="checkbox" name="remember"  checked > {{ trans('adminlte::adminlte.remember_me') }}
                             </label>
                         </div>
                     </div>
