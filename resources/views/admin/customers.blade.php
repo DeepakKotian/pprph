@@ -25,10 +25,10 @@ Customers List
         <div class="box-header">
               <h3 class="box-title">View Customers List </h3>
               <div class="box-tools">
-              
-                <a class="btn btn-primary btn-md pull-right" href="{{ url('admin/customer-form') }}">Add New</a>
-                <a class="btn btn-primary btn-md" href="javascript:void(0)" id="printGrid"> PDF <i class="fa fa-download"> </i> </a> &nbsp;&nbsp;
+              <a class="btn btn-primary btn-md " href="javascript:void(0)" id="printGrid"> PDF <i class="fa fa-download"> </i> </a> &nbsp;&nbsp;
                 <a class="btn btn-primary btn-md" href="javascript:void(0)" id="printExcelGrid"> Excel <i class="fa fa-download"> </i> </a> &nbsp;&nbsp;
+                <a class="btn btn-primary btn-md " href="{{ url('admin/customer-form') }}">Add New</a>
+               
               </div>
         </div>
     <div class="box-body">

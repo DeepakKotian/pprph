@@ -13,7 +13,7 @@ Providers List <small>View list of Providers</small>
 @section('content')
 <!-- /.box-header -->
 <div class="row">
-<div class="col-sm-12 col-md-10 col-lg-6">
+<div class="col-lg-6  col-xs-12 col-md-12">
 <div class="box box-primary" id="insurance-app" v-cloak>
    <!-- Breadcrumbs-->
    <div class="box-header">
@@ -36,7 +36,6 @@ Providers List <small>View list of Providers</small>
                   <tr v-for="row in providersData">
                      <td><% row.id %></td>
                      <td><% row.name %> </td>
-                    
                      <td>
                         <a type="button" data-toggle="modal"  data-target="#addproviders"  v-on:click="loadprovidersmodal(row)" class="btn btn-default"><i class="fa fa-edit"></i></a>
                         <a data-toggle="modal"  class="btn btn-default" v-on:click="loadStatusModal(row)"> <i class="fa fa-square" v-bind:class="{'text-green':row.status==1,'text-red':row.status==0}"></i> </a>

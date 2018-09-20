@@ -11,7 +11,6 @@
 |
 */
 
-
 Route::get('/', function () {
     return redirect('/login');
 });
@@ -123,8 +122,5 @@ Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     Route::post('/fetch-due-task', 'Admin\DashboardController@fetchDueTask');
     Route::post('/fetch-due-appointments', 'Admin\DashboardController@fetchDueAppointments');
     Route::post('/fetch-due-insurance', 'Admin\DashboardController@fetchExpiredInsurance');
-    
-    
-    
 
 });
