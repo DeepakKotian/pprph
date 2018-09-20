@@ -312,9 +312,15 @@ class CustomerController extends Controller
             if($request->family){
                 customerpolicymember::where('policy_detail_id','=',$check->policy_id)->delete();
                 foreach ($request->family as $key => $value) {
-                customerpolicymember::create(['policy_detail_id'=>$check->policy_id,'family_member_id'=>$value]);
+                    customerpolicymember::create(['policy_detail_id'=>$check->policy_id,'family_member_id'=>$value]);
                 }
             }  
+            $arrCustomer['logs'] = serialize($data); // serialize should always kept on top to insert only form changes. 
+            $arrCustomer['user_id'] = Auth::user()->id;
+            $arrCustomer['customer_id'] =  $id;
+            $arrCustomer['type'] = 'update_policy';
+            customerlog::create($arrCustomer);
+
         }
          return response()->json('Successfully updated policy details',200);
     }
@@ -340,13 +346,13 @@ class CustomerController extends Controller
                customerpolicymember::create(['policy_detail_id'=> $policy->id,'family_member_id'=>$value]);
             }
         }
-        /* if($policy){
+        if($policy){
             $arrCustomer['logs'] = serialize($data); // serialize should always kept on top to insert only form changes. 
             $arrCustomer['user_id'] = Auth::user()->id;
             $arrCustomer['customer_id'] =  $id;
             $arrCustomer['type'] = 'add_policy';
             customerlog::create($arrCustomer);
-        } */
+        }
 
         return response()->json('Successfully added new policy',200);
     }
