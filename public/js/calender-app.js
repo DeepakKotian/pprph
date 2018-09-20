@@ -183,8 +183,8 @@ var calenderapp = new Vue({
                     self.appointment.end_date = moment(end).format('DD-MM-YYYY');
                     self.appointment.start_time = moment(start).format('HH')+':'+ moment(start).format('mm');
                     self.appointment.end_time =  moment(end).format('HH')+':'+ moment(end).format('mm');
-                     }
-         
+                 }
+  
                  },
                 eventRender: function(eventObj, $el) {
                     
