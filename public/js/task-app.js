@@ -167,7 +167,6 @@ var taskapp = new Vue({
                 function(response){
                     this.taskHistory  = response.data;
                   
-                    
                 }
             )
         },

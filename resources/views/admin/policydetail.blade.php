@@ -54,9 +54,9 @@ Policy List
                            @endforeach
                         </select>
                     </div>
-                    <div class="form-group left-15">
+                    <!-- <div class="form-group left-15">
                         <button class="btn btn-primary" style="" type="button" id="provisionButton" onclick="this.preventDefault"> Update Status </button>
-                    </div>
+                    </div> -->
 
                     <div class="form-group left-15">
                        <button type="reset" class="btn btn-danger" id="resetFilter" > Clear </button>
@@ -90,6 +90,9 @@ Policy List
                         </tbody>				
                 </table>
              </div>
+            </div>
+            <div class="form-group ">
+                        <button class="btn btn-primary" style="" type="button" id="provisionButton" onclick="this.preventDefault"> Paid </button>
             </div>
         </div>
     </div>

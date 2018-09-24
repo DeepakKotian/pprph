@@ -25,7 +25,7 @@
             <div class="box-header with-border">
               <h3 class="box-title">Customer Form</h3>
               <div class="box-tools">
-                <a  style="display:none;" class="btn btn-primary btn-md" data-toggle="modal" data-target="#logsModal" v-on:click="fetchLogs">Logs</a>
+                <a  class="btn btn-primary btn-md" data-toggle="modal" data-target="#logsModal" v-on:click="fetchLogs">Logs</a>
                 <a class="btn btn-primary btn-md " href="{{ url('admin/customers') }}">Back to List Page</a>
               </div>
             </div>

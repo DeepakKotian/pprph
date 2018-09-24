@@ -281,11 +281,13 @@ var calenderapp = new Vue({
                       $('#deleteModal').modal('hide');
                       this.$toaster.success('Deleted Successfully');
                        this.resetForm();
+                       this.$v.appointment.$reset();
                    }
                )
            },
            resetForm:function() {
             var self = this; 
+       
             Object.keys(this.appointment).forEach(function(key,index) {
               self.appointment[key] = '';
               self.action='';
