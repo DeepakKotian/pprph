@@ -482,13 +482,17 @@
                         </button>
                         <h4 class="modal-title" id="exampleModalLabel">Customer Logs</h4>
                     </div>
-                    <div class="modal-body"> 
+                    <div class="modal-body" v-if="customerlogs==''"> 
+                     <h2>No data found</h2>
+                    </div>
+                    <div class="modal-body nav-tabs-custom" v-if="customerlogs!=''"> 
                         <ul  class="nav nav-tabs">
                           <li class="active"> <a href="#personal"  data-toggle="tab" aria-expanded="true">Personal</a> </li>
                           <li><a href="#family" data-toggle="tab" aria-expanded="true" >Family</a></li>
                           <li><a href="#policy" data-toggle="tab" aria-expanded="true">Products</a></li>
                         </ul>
                         <div class="tab-content">
+                            
                           <div class="tab-pane active" id="personal" style="height:500px; overflow:auto;">
                                 <div class="text" v-for="(logs, index) in customerlogs">
                                   <div class="" v-if="logs.type=='personal'">
