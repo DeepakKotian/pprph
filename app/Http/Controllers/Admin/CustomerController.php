@@ -314,12 +314,16 @@ class CustomerController extends Controller
                 foreach ($request->family as $key => $value) {
                     customerpolicymember::create(['policy_detail_id'=>$check->policy_id,'family_member_id'=>$value]);
                 }
-            }  
+            } 
+            /*$resCtg =  DB::table('massparameter')->select('name')->where('id',$data['insurance_ctg_id'])->where('type','category')->first();
+            $resPrd =  DB::table('massparameter')->select('name')->where('id',$data['provider_id'])->where('type','provider')->first();
+            $data['insuranceName'] = $resCtg->name;
+            $data['providerName'] = $resPrd->name; 
             $arrCustomer['logs'] = serialize($data); // serialize should always kept on top to insert only form changes. 
             $arrCustomer['user_id'] = Auth::user()->id;
             $arrCustomer['customer_id'] =  $id;
             $arrCustomer['type'] = 'update_policy';
-            customerlog::create($arrCustomer);
+            customerlog::create($arrCustomer);*/
 
         }
          return response()->json('Successfully updated policy details',200);
@@ -346,7 +350,13 @@ class CustomerController extends Controller
                customerpolicymember::create(['policy_detail_id'=> $policy->id,'family_member_id'=>$value]);
             }
         }
+       
         if($policy){
+            $resCtg =  DB::table('massparameter')->select('name')->where('id',$data['insurance_ctg_id'])->where('type','category')->first();
+            $resPrd =  DB::table('massparameter')->select('name')->where('id',$data['provider_id'])->where('type','provider')->first();
+            $data['insuranceName'] = $resCtg->name;
+            $data['providerName'] = $resPrd->name; 
+
             $arrCustomer['logs'] = serialize($data); // serialize should always kept on top to insert only form changes. 
             $arrCustomer['user_id'] = Auth::user()->id;
             $arrCustomer['customer_id'] =  $id;
@@ -814,18 +824,19 @@ class CustomerController extends Controller
 
 
     public function fetchLogs($id){
-        $data = customerlog::select('customerlogs.*','customers.id',DB::raw("CONCAT_WS(' ',users.first_name,users.last_name) as userName"))
+        $data = customerlog::select('customerlogs.*','customers.id',DB::raw('DATE_FORMAT(customerlogs.updated_at, "%d-%m-%Y %h:%i %p") as updatedAt'),DB::raw("CONCAT_WS(' ',users.first_name,users.last_name) as userName"))
         ->where('customer_id',$id)
         ->leftJoin('users','users.id','=','customerlogs.user_id')
         ->leftJoin('customers','customers.id','=','customerlogs.customer_id')
-        ->get();
-  
+        ->orderBy('customerlogs.id','DESC')
+        ->limit(100)->get();
+       
         foreach ($data as $key => $value) {
            $data[$key]->logArr = unserialize($value['logs']); 
         }
         return response()->json($data,200);
     }
 
-   
+  
    
 }

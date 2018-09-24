@@ -480,92 +480,126 @@
                         <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                         </button>
-                        <h4 class="modal-title" id="exampleModalLabel">Logs</h4>
+                        <h4 class="modal-title" id="exampleModalLabel">Customer Logs</h4>
                     </div>
                     <div class="modal-body"> 
-                        <ul  class="" style="height:500px;overflow:auto;list-style:none;padding:0;">
-                          <li class="text" v-for="(logs, index) in customerlogs">
-                            <h4 class="panel-heading" v-if="logs.type=='personal'">Personal Info Edited By : <% logs.userName %> on <% logs.updated_at %> </h3>
-                            <h4 class="panel-heading" v-if="logs.type=='add_family'"> Family Added By : <% logs.userName %> on <% logs.updated_at %> </h3>
-                            <h4 class="panel-heading" v-if="logs.type=='update_family'"> Family Edited By : <% logs.userName %> on <% logs.updated_at %> </h3>
-                            <div class="form-group" v-if="logs.type=='personal'">
-                              <ul class="list-group">
-                                <li class="text list-group-item" v-for="(rw,index) in logs.logArr">
-                                    <div v-if="index=='first_name'">
-                                       First Name : "<% rw.old_value %>" to <% rw.new_value %>
-                                    </div>
-                                    <div v-else-if="index=='last_name'">
-                                       Last name : "<% rw.old_value %>" to <% rw.new_value %>
-                                    </div>
-                                    <div v-else-if="index=='dob'">
-                                      Dob : "<% rw.old_value %>" to <% rw.new_value %>
-                                    </div>
-                                    <div v-else-if="index=='language'">
-                                       Language : "<% rw.old_value %>" to <% rw.new_value %>
-                                    </div>
-                                    <div v-else-if="index=='gender'">
-                                       Sex : "<% rw.old_value %>" to <% rw.new_value %>
-                                    </div>
-                                    <div v-else-if="index=='company'">
-                                       Company : "<% rw.old_value %>" to <% rw.new_value %>
-                                    </div>
-                                    <div v-if="index=='address'">
-                                       Address: "<% rw.old_value %>" to <% rw.new_value %>
-                                    </div>
-                                    <div v-else-if="index=='city'">
-                                      City : "<% rw.old_value %>" to <% rw.new_value %>
-                                    </div>
-                                    <div v-else-if="index=='zip'">
-                                      Postal code : "<% rw.old_value %>" to <% rw.new_value %>
-                                    </div>
-                                    <div v-else-if="index=='telephone'">
-                                      Telephone : "<% rw.old_value %>" to <% rw.new_value %>
-                                    </div>
-                                    <div v-else-if="index=='nationality'">
-                                      Nationality : "<% rw.old_value %>" to <% rw.new_value %>
-                                    </div>
-                                    <div v-else-if="index=='mobile'">
-                                      Mobile : "<% rw.old_value %>" to <% rw.new_value %>
-                                    </div>
-                                    <div v-else-if="index=='email'">
-                                      Email : "<% rw.old_value %>" to <% rw.new_value %>
-                                    </div>
-                                    <div v-else-if="index=='email_office'">
-                                      Email office : "<% rw.old_value %>" to <% rw.new_value %>
-                                    </div>
-                                </li>
-                              </ul>
-                            </div>
-                            <div class="form-group" v-if="logs.type=='add_family'">
-                              <ul class="list-group">
-                                <li class="text list-group-item">
-                                  <% logs.logArr.dob %>
-                                  <% logs.logArr.first_name %>
-                                  <% logs.logArr.last_name %>
-                                  <% logs.logArr.mobile %>
-                                </li>
-                              </ul>
-                            </div>
-                            <div class="form-group" v-if="logs.type=='update_family'">
-                              <ul class="list-group">
-                                <li class="text list-group-item" v-for="(fmly,index) in logs.logArr">
-                                   <div v-if="index=='first_name_family'">
-                                      First name : "<% fmly.old_value %>" to <% fmly.new_value %>
-                                    </div>
-                                    <div v-if="index=='last_name_family'">
-                                       Last name : "<% fmly.old_value %>" to <% fmly.new_value %>
-                                    </div>
-                                    <div v-if="index=='dob_family'">
-                                      Dob : "<% fmly.old_value %>" to <% fmly.new_value %>
-                                    </div>
-                                    <div v-if="index=='mobile_family'">
-                                      Mobile : "<% fmly.old_value %>" to <% fmly.new_value %>
-                                    </div>
-                                </li>
-                              </ul>
-                            </div>
-                          </li>
+                        <ul  class="nav nav-tabs">
+                          <li class="active"> <a href="#personal"  data-toggle="tab" aria-expanded="true">Personal</a> </li>
+                          <li><a href="#family" data-toggle="tab" aria-expanded="true" >Family</a></li>
+                          <li><a href="#policy" data-toggle="tab" aria-expanded="true">Products</a></li>
                         </ul>
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="personal" style="height:500px; overflow:auto;">
+                                <div class="text" v-for="(logs, index) in customerlogs">
+                                  <div class="" v-if="logs.type=='personal'">
+                                    <h4 class="panel-heading" style="margin: 0; background: #eee;" v-if="logs.type=='personal'"> Edited By : <b> <% logs.userName %> </b> <span class="pull-right text-info">   On : <% logs.updatedAt %></span>   </h4>
+                                    <ul class="list-group">
+                                      <li class="text list-group-item" v-for="(rw,index) in logs.logArr">
+                                          <div v-if="index=='first_name'">
+                                            First Name : "<% rw.old_value %>" to "<% rw.new_value %>"
+                                          </div>
+                                          <div v-else-if="index=='last_name'">
+                                            Last name : "<% rw.old_value %>" to "<% rw.new_value %>"
+                                          </div>
+                                          <div v-else-if="index=='dob'">
+                                            Dob : "<% rw.old_value %>" to "<% rw.new_value %>"
+                                          </div>
+                                          <div v-else-if="index=='language'">
+                                            Language : "<% rw.old_value %>" to "<% rw.new_value %>"
+                                          </div>
+                                          <div v-else-if="index=='gender'">
+                                            Sex : "<% rw.old_value %>" to "<% rw.new_value %>"
+                                          </div>
+                                          <div v-else-if="index=='company'">
+                                            Company : "<% rw.old_value %>" to "<% rw.new_value %>"
+                                          </div>
+                                          <div v-if="index=='address'">
+                                            Address: "<% rw.old_value %>" to "<% rw.new_value %>"
+                                          </div>
+                                          <div v-else-if="index=='city'">
+                                            City : "<% rw.old_value %>" to "<% rw.new_value %>"
+                                          </div>
+                                          <div v-else-if="index=='zip'">
+                                            Postal code : "<% rw.old_value %>" to "<% rw.new_value %>"
+                                          </div>
+                                          <div v-else-if="index=='telephone'">
+                                            Telephone : "<% rw.old_value %>" to "<% rw.new_value %>"
+                                          </div>
+                                          <div v-else-if="index=='nationality'">
+                                            Nationality : "<% rw.old_value %>" to "<% rw.new_value %>"
+                                          </div>
+                                          <div v-else-if="index=='mobile'">
+                                            Mobile : "<% rw.old_value %>" to "<% rw.new_value %>"
+                                          </div>
+                                          <div v-else-if="index=='email'">
+                                            Email : "<% rw.old_value %>" to "<% rw.new_value %>"
+                                          </div>
+                                          <div v-else-if="index=='email_office'">
+                                            Email office : "<% rw.old_value %>" to "<% rw.new_value %>"
+                                          </div>
+                                      </div>
+                                  </div>
+                                </li>
+                          </div>
+                          <div class="tab-pane" id="family" style="height:500px; overflow:auto;">
+                            <div class="text" v-for="(logs, index) in customerlogs">
+                            <h4 class="panel-heading"  style="margin-bottom: 0;background: #eee;" v-if="logs.type=='add_family'"> Added By  : <b><% logs.userName %> </b>  <span class="pull-right text-info">   On : <% logs.updatedAt %></span>  </h4>
+                            <h4 class="panel-heading"  style="margin-bottom: 0;background: #eee;" v-if="logs.type=='update_family'">Edited By :<b> <% logs.userName %> </b> <span class="pull-right text-info">   On: <% logs.updatedAt %></span>  </h4>
+                              <div class="form-group" v-if="logs.type=='add_family'">
+
+                                  <ul class="list-group">
+                                    <li class="text list-group-item">
+                                      <% logs.logArr.dob %>
+                                      <% logs.logArr.first_name %>
+                                      <% logs.logArr.last_name %>
+                                      <% logs.logArr.mobile %>
+                                    </li>
+                                  </ul>
+                                </div>
+                                <div class="form-group" v-if="logs.type=='update_family'">
+                                  <ul class="list-group">
+                                    <li class="text list-group-item" v-for="(fmly,index) in logs.logArr">
+                                      <div v-if="index=='first_name_family'">
+                                          First name : "<% fmly.old_value %>" to "<% fmly.new_value %>"
+                                        </div>
+                                        <div v-if="index=='last_name_family'">
+                                          Last name : "<% fmly.old_value %>" to "<% fmly.new_value %>"
+                                        </div>
+                                        <div v-if="index=='dob_family'">
+                                          Dob : "<% fmly.old_value %>" to "<% fmly.new_value %>"
+                                        </div>
+                                        <div v-if="index=='mobile_family'">
+                                          Mobile : "<% fmly.old_value %>" to "<% fmly.new_value %>"
+                                        </div>
+                                    </li>
+                                  </ul>
+                                </div>
+                              </div>
+                          </div>
+                          <div class="tab-pane" id="policy" style="height:500px; overflow:auto;">
+                            <div class="text" v-for="(logs, index) in customerlogs">
+                              <h4 class="panel-heading"  style="margin-bottom: 0;background: #eee;" v-if="logs.type=='add_policy'"> Added By  : <b><% logs.userName %> </b>  <span class="pull-right text-info">   On : <% logs.updatedAt %></span>  </h4>
+                              <div class="form-group" v-if="logs.type=='add_policy'">
+                                  <ul class="list-group">
+                                      <li class="text list-group-item" >
+                                          <div>
+                                             Insurance name : <% logs.logArr.insuranceName %>
+                                          </div>
+                                          <div>
+                                            Provider name : <% logs.logArr.providerName %>
+                                          </div>
+                                          <div>
+                                            Start Date : <% logs.logArr.start_date %>
+                                          </div>
+                                          <div>
+                                            End Date : <% logs.logArr.start_date %>
+                                          </div>
+                                      </li>
+                                    </ul>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-secondary" type="button" data-dismiss="modal">OK</button>
