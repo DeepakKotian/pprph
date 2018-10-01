@@ -19,7 +19,7 @@
 <body>
   <header align="center"> <h4 align="center" style="color:#FFF;">Prophos - Customer Detail</h4>  </header>
    <main>
-        <h3> Customer Id :  {{ $data['id'] }} </h3>
+        <h3> Customer Id :  {{ $data['unique_id'] }} </h3>
         <table cellspacing="0" width="100%" border="0">
             <tbody>
                 <tr>
