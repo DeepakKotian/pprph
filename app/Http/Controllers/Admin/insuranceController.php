@@ -24,7 +24,8 @@ class insuranceController extends Controller
         $this->middleware('auth');
 
     }
-    
+   
+
     public function index()
     {
         //
@@ -32,7 +33,7 @@ class insuranceController extends Controller
         if (Gate::denies('manage-admin', $insuranceList)) {
             return redirect('/admin');
         }
-            else{
+         else{
             return $insuranceList;
         }
     }
