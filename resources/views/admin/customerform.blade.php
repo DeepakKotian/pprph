@@ -26,7 +26,9 @@
               <h3 class="box-title">Customer Form</h3>
               <div class="box-tools">
                 <a  class="btn btn-primary btn-md" data-toggle="modal" data-target="#logsModal" v-on:click="fetchLogs">Logs</a>
+                <a href="{{ url('admin/printcustomer/'.$data->id) }}" class="btn btn-primary btn-md"> Print </a>
                 <a class="btn btn-primary btn-md " href="{{ url('admin/customers') }}">Back to List Page</a>
+
               </div>
             </div>
             <!-- /.box-header -->
@@ -544,6 +546,7 @@
                                       </div>
                                   </div>
                                 </li>
+                                </ul>
                           </div>
                           <div class="tab-pane" id="family" style="height:500px; overflow:auto;">
                             <div class="text" v-for="(logs, index) in customerlogs">

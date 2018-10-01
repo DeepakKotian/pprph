@@ -599,8 +599,26 @@ class CustomerController extends Controller
 
     public function printCustomer($id)
     {
+        // $path = public_path('js/countries.json'); 
+        // $jsonCountry = json_decode(file_get_contents($path), true); 
+       
         $data = customer::select('*')->where('customers.id',$id)->where('customers.is_family','0')->first();
-        $pdf = PDF::loadView('admin.printcustomer', ['data' => $data]);
+        $data->policy = DB::table('policy_detail')->selectRaw("policy_detail.start_date,policy_detail.end_date,inc.name as insuranceName, prd.name as providerName")
+        ->leftJoin('massparameter as inc', function ($join) {
+            $join->on('inc.id', '=', 'policy_detail.insurance_ctg_id');
+            $join->where('inc.type', '=', 'category');
+        })->leftJoin('massparameter as prd', function ($join) {
+            $join->on('prd.id', '=', 'policy_detail.provider_id');
+            $join->where('prd.type', '=', 'provider');
+        })
+         ->where('end_date','>=',date('Y-m-d'))
+        ->where('customer_id',$id)
+        ->get();
+        $data->family = customer::select(['id','first_name','last_name','mobile','email',DB::raw('DATE_FORMAT(dob, "%d-%m-%Y") as dob'),'nationality'])
+        ->where('is_family','1')
+        ->where('parent_id',$id)
+        ->get();
+        $pdf = PDF::loadView('admin.printcustomerdetail', ['data' => $data]);
         return $pdf->stream($data->first_name.'-'.$data->first_name.'-detail.pdf');
         //return $pdf->download('customer'.$id.'.pdf'); //To download 
     }

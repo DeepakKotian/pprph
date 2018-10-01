@@ -3,7 +3,7 @@
   <style>
     @page { margin: 100px 25px; }
     body{font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;}
-    header { position: fixed; top: -50px;  background-color: #3c8dbc; height: 50px; }
+    header { posi3tion: fixed; top: -50px;  background-color: #3c8dbc; height: 50px; }
     footer { position: fixed; bottom: -50px; background-color: #3c8dbc; height: 50px; }
     /* p { page-break-after: always; }
     p:last-child { page-break-after: never; } */
@@ -37,7 +37,7 @@
                <tr>
                     <td>{{ $vl['id'] }}</td>
                     <td>{{ $vl['first_name'] }}</td>
-                    <td>{{$vl['last_name'] }}</td>
+                    <td>{{ $vl['last_name'] }}</td>
                     <td>{{ $vl['email'] }}</td>
                     <td>{{ $vl['city'] }}</td>
                     <td>{{ $vl['zip'] }}</td>
@@ -63,6 +63,6 @@
         
 
   </main>
-  <footer>Hello </footer>
+  <footer style="color:#FFF;"> <a align="center"> &copy; Prophos </a>  </footer>
 </body>
 </html>
