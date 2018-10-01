@@ -26,7 +26,9 @@
               <h3 class="box-title">Customer Form</h3>
               <div class="box-tools">
                 <a  class="btn btn-primary btn-md" data-toggle="modal" data-target="#logsModal" v-on:click="fetchLogs">Logs</a>
+                <a href="{{ url('admin/printcustomer/'.$data->id) }}" class="btn btn-primary btn-md"> Print </a>
                 <a class="btn btn-primary btn-md " href="{{ url('admin/customers') }}">Back to List Page</a>
+
               </div>
             </div>
             <!-- /.box-header -->
@@ -482,13 +484,17 @@
                         </button>
                         <h4 class="modal-title" id="exampleModalLabel">Customer Logs</h4>
                     </div>
-                    <div class="modal-body"> 
+                    <div class="modal-body" v-if="customerlogs==''"> 
+                     <h2>No data found</h2>
+                    </div>
+                    <div class="modal-body nav-tabs-custom" v-if="customerlogs!=''"> 
                         <ul  class="nav nav-tabs">
                           <li class="active"> <a href="#personal"  data-toggle="tab" aria-expanded="true">Personal</a> </li>
                           <li><a href="#family" data-toggle="tab" aria-expanded="true" >Family</a></li>
                           <li><a href="#policy" data-toggle="tab" aria-expanded="true">Products</a></li>
                         </ul>
                         <div class="tab-content">
+                            
                           <div class="tab-pane active" id="personal" style="height:500px; overflow:auto;">
                                 <div class="text" v-for="(logs, index) in customerlogs">
                                   <div class="" v-if="logs.type=='personal'">
@@ -540,6 +546,7 @@
                                       </div>
                                   </div>
                                 </li>
+                                </ul>
                           </div>
                           <div class="tab-pane" id="family" style="height:500px; overflow:auto;">
                             <div class="text" v-for="(logs, index) in customerlogs">
