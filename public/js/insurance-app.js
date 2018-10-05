@@ -273,17 +273,12 @@ var app = new Vue({
                         
                     }
                 ).catch(function(response){
-                    console.log(response.data.error);
+                    console.log(response.data.errors);
                   
                     let self = this;
                     $.each(response.data.errors, function(key, value){
                         self.$toaster.error(value[0]);
-                        console.log(value);
                     });
-                    if(response.data.errors.documnetData){
-                        self.$toaster.error('File size must be Less than 2MB'); 
-                    }
-                   
                   // this.policyMappings.ducumentData=null;
                 });
             } 
