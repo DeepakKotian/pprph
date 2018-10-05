@@ -545,11 +545,11 @@ class CustomerController extends Controller
 
     public function uploadDocuments(Request $request)
     {
-        if($request->hasFile('documentData')){
+        if($request->documentData!='undefined'){
                 if(!$request->file('documentData')->getSize()){
                     return response()->json('Document should not be more than 2MB',500);
                 }
-       }
+        }
         if($request->documnetType!=0){
             if(empty($request->document_id)){
                     if(!empty($request->file('documentData'))){
@@ -570,7 +570,7 @@ class CustomerController extends Controller
             return response()->json('Successfully updated document',200);
            
         }else{
-            if($request->hasFile('documentData')){
+            if($request->documentData!='undefined'){
                 $file = $request->file('documentData');
                 $docName = $file->getClientOriginalName();
                 $destinationPath = public_path('/uploads/vertrag');
@@ -729,6 +729,7 @@ class CustomerController extends Controller
              $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow($column,$row, $val->name);  
              $column++;
            }
+           $arrAlpha =  ['0'=>'H','1'=>'I','2'=>'J','3'=>'K','4'=>'L','5'=>'M'];
            $row++;
           
            $spreadsheet->getActiveSheet()->getStyle("A1:Z1")->getFont()->setBold( true )->setName('Arial');
@@ -752,58 +753,73 @@ class CustomerController extends Controller
                 $objDrawing->setOffsetX(15);
                 $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
             }
-            if($value['ctg0']>0){
-                $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
-                $objDrawing->setPath(public_path('uploads/greenicon.png')); //your image path
-                $objDrawing->setOffsetX(15);
-                $objDrawing->setCoordinates('H'.$row);
-                $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
-            }else{
-                $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
-                $objDrawing->setPath(public_path('uploads/redicon.png')); //your image path
-                $objDrawing->setOffsetX(15);
-                $objDrawing->setCoordinates('H'.$row);
-                $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
+            foreach ($ctgs as $ky => $val) {
+                if($value['ctg'.$ky]>0){
+                    $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+                    $objDrawing->setPath(public_path('uploads/greenicon.png')); //your image path
+                    $objDrawing->setOffsetX(15);
+                    $objDrawing->setCoordinates($arrAlpha[$ky].$row);
+                    $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
+                }else{
+                    $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+                    $objDrawing->setPath(public_path('uploads/redicon.png')); //your image path
+                    $objDrawing->setOffsetX(15);
+                    $objDrawing->setCoordinates($arrAlpha[$ky].$row);
+                    $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
+                }
             }
-            if($value['ctg1']>0){
-                $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
-                $objDrawing->setPath(public_path('uploads/greenicon.png')); //your image path
-                $objDrawing->setOffsetX(15);
-                $objDrawing->setCoordinates('I'.$row);
-                $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
-            }else{
-                $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
-                $objDrawing->setPath(public_path('uploads/redicon.png')); //your image path
-                $objDrawing->setOffsetX(15);
-                $objDrawing->setCoordinates('I'.$row);
-                $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
-            }
-            if($value['ctg2']>0){
-                $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
-                $objDrawing->setPath(public_path('uploads/greenicon.png')); //your image path
-                $objDrawing->setOffsetX(15);
-                $objDrawing->setCoordinates('J'.$row);
-                $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
-            }else{
-                $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
-                $objDrawing->setPath(public_path('uploads/redicon.png')); //your image path
-                $objDrawing->setOffsetX(15);
-                $objDrawing->setCoordinates('J'.$row);
-                $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
-            }
-            if($value['ctg3']>0){
-                $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
-                $objDrawing->setPath(public_path('uploads/greenicon.png')); //your image path
-                $objDrawing->setOffsetX(15);
-                $objDrawing->setCoordinates('K'.$row);
-                $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
-            }else{
-                $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
-                $objDrawing->setPath(public_path('uploads/redicon.png')); //your image path
-                $objDrawing->setOffsetX(15);
-                $objDrawing->setCoordinates('K'.$row);
-                $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
-            }
+            // if($value['ctg0']>0){
+            //     $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+            //     $objDrawing->setPath(public_path('uploads/greenicon.png')); //your image path
+            //     $objDrawing->setOffsetX(15);
+            //     $objDrawing->setCoordinates('H'.$row);
+            //     $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
+            // }else{
+            //     $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+            //     $objDrawing->setPath(public_path('uploads/redicon.png')); //your image path
+            //     $objDrawing->setOffsetX(15);
+            //     $objDrawing->setCoordinates('H'.$row);
+            //     $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
+            // }
+            // if($value['ctg1']>0){
+            //     $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+            //     $objDrawing->setPath(public_path('uploads/greenicon.png')); //your image path
+            //     $objDrawing->setOffsetX(15);
+            //     $objDrawing->setCoordinates('I'.$row);
+            //     $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
+            // }else{
+            //     $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+            //     $objDrawing->setPath(public_path('uploads/redicon.png')); //your image path
+            //     $objDrawing->setOffsetX(15);
+            //     $objDrawing->setCoordinates('I'.$row);
+            //     $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
+            // }
+            // if($value['ctg2']>0){
+            //     $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+            //     $objDrawing->setPath(public_path('uploads/greenicon.png')); //your image path
+            //     $objDrawing->setOffsetX(15);
+            //     $objDrawing->setCoordinates('J'.$row);
+            //     $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
+            // }else{
+            //     $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+            //     $objDrawing->setPath(public_path('uploads/redicon.png')); //your image path
+            //     $objDrawing->setOffsetX(15);
+            //     $objDrawing->setCoordinates('J'.$row);
+            //     $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
+            // }
+            // if($value['ctg3']>0){
+            //     $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+            //     $objDrawing->setPath(public_path('uploads/greenicon.png')); //your image path
+            //     $objDrawing->setOffsetX(15);
+            //     $objDrawing->setCoordinates('K'.$row);
+            //     $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
+            // }else{
+            //     $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+            //     $objDrawing->setPath(public_path('uploads/redicon.png')); //your image path
+            //     $objDrawing->setOffsetX(15);
+            //     $objDrawing->setCoordinates('K'.$row);
+            //     $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
+            // }
                
             $row++;
           }
