@@ -181,7 +181,6 @@ class insuranceController extends Controller
             $validate = $this->validate(request(),[
                 'insure_id' => 'required',
                 'policy_id' => 'required',
-                'documnetData'=>'size:1000',
             ]);
             
             if($request->hasFile('documnetData')){
