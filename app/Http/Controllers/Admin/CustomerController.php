@@ -768,59 +768,7 @@ class CustomerController extends Controller
                     $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
                 }
             }
-            // if($value['ctg0']>0){
-            //     $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
-            //     $objDrawing->setPath(public_path('uploads/greenicon.png')); //your image path
-            //     $objDrawing->setOffsetX(15);
-            //     $objDrawing->setCoordinates('H'.$row);
-            //     $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
-            // }else{
-            //     $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
-            //     $objDrawing->setPath(public_path('uploads/redicon.png')); //your image path
-            //     $objDrawing->setOffsetX(15);
-            //     $objDrawing->setCoordinates('H'.$row);
-            //     $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
-            // }
-            // if($value['ctg1']>0){
-            //     $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
-            //     $objDrawing->setPath(public_path('uploads/greenicon.png')); //your image path
-            //     $objDrawing->setOffsetX(15);
-            //     $objDrawing->setCoordinates('I'.$row);
-            //     $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
-            // }else{
-            //     $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
-            //     $objDrawing->setPath(public_path('uploads/redicon.png')); //your image path
-            //     $objDrawing->setOffsetX(15);
-            //     $objDrawing->setCoordinates('I'.$row);
-            //     $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
-            // }
-            // if($value['ctg2']>0){
-            //     $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
-            //     $objDrawing->setPath(public_path('uploads/greenicon.png')); //your image path
-            //     $objDrawing->setOffsetX(15);
-            //     $objDrawing->setCoordinates('J'.$row);
-            //     $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
-            // }else{
-            //     $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
-            //     $objDrawing->setPath(public_path('uploads/redicon.png')); //your image path
-            //     $objDrawing->setOffsetX(15);
-            //     $objDrawing->setCoordinates('J'.$row);
-            //     $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
-            // }
-            // if($value['ctg3']>0){
-            //     $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
-            //     $objDrawing->setPath(public_path('uploads/greenicon.png')); //your image path
-            //     $objDrawing->setOffsetX(15);
-            //     $objDrawing->setCoordinates('K'.$row);
-            //     $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
-            // }else{
-            //     $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
-            //     $objDrawing->setPath(public_path('uploads/redicon.png')); //your image path
-            //     $objDrawing->setOffsetX(15);
-            //     $objDrawing->setCoordinates('K'.$row);
-            //     $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
-            // }
-               
+                
             $row++;
           }
           $filename = date('Y-m-d').'-customer-grid.xlsx';
