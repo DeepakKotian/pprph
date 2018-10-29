@@ -41,7 +41,7 @@ Documents List
                     <table class="table table-bordered" id="documentsTable">
                             <thead>
                                 <tr>
-                                    <th>Document Id</th>
+                                    <th>Sl No</th>
                                     <th>Document </th>
                                     <th>Customer Name</th>
                                     <th>Action</th>                           
@@ -131,6 +131,18 @@ Documents List
                     if(type === 'display'){
                         data = '<p align="center"><a href="javascript:void(0)" class="btn-view btn btn-default"> <span class="fa fa-eye" rel="ctg_'+meta.row+'_'+meta.col+'"></span> </a>';
                         data += '</p>';
+                        //<a href=""> <span class="fa fa-trash"></span> </a> 
+                    }
+            
+               return data;
+            }
+       },{
+            targets: 0,
+            data: null,
+            render: function(data, type, full, meta){
+                console.log();
+                    if(type === 'display'){
+                        data = meta.row+1;
                         //<a href=""> <span class="fa fa-trash"></span> </a> 
                     }
             

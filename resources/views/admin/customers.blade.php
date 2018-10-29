@@ -71,14 +71,26 @@ Customers List
                            <option value="1">Active</option>
                         </select>
                     </div>
+                   
+                    @if(Auth::user()->role == 1)  <!-- Only admin can see -->
                     <div class="form-group">
+                        <label class="left-15" for="id">Created By</label>
+                        <select class="form-control selectJS" name="user_id">
+                           <option value="">------</option>
+                           @foreach($users as $key=> $rw)
+                           <option value="{{ $rw->id }}">   {{ $rw->first_name }} {{ $rw->last_name }}</option>
+                           @endforeach
+                        </select>
+                    </div>
+                    @endif
+                    <!-- <div class="form-group">
                         <label class="left-15" for="selectJS">Status</label>
                         <select class="form-control selectJS" name="status">
                            <option value="">------</option>
                            <option value="0">Inactive</option>
                            <option value="1">Active</option>
                         </select>
-                    </div>
+                    </div> -->
                     <div class="form-group">
                   
                      <button class="btn btn-danger left-15" id="resetFilter" type="reset" > Clear </button>
@@ -96,7 +108,7 @@ Customers List
                                 <th>Email</th>
                                 <th>City</th>
                                 <th>Postcode</th>
-                                <th>Status</th>
+                                <th>Telephone</th>
                                 @foreach($insuranceCtg as $key=> $rowCtg)
                                 <th> {{ $rowCtg->name }}</th>
                                 @endforeach
@@ -217,7 +229,7 @@ a.ui-button:active,
                 d.name = $('select[name=name]').val();
                 d.ctg = $('select[name=ctg]').val();
                 d.statusPrd = $('select[name=status_prd]').val();
-                d.status = $('select[name=status]').val();
+                d.user_id = $('select[name=user_id]').val();
                 d.searchTerm = $('input[name=searchTerm]').val();
             }
         },
@@ -228,7 +240,7 @@ a.ui-button:active,
             {data: 'email', name: 'email'},
             {data: 'city', name: 'city'},
             {data: 'zip', name: 'zip'},
-            {data: 'status', name: 'status'},
+            {data: 'telephone', name: 'telephone'},
             @foreach($insuranceCtg as $key=> $rowCtg)
             {data: 'ctg{{ $key }}', name: 'ctg{{ $key }}'},
             @endforeach
@@ -251,24 +263,24 @@ a.ui-button:active,
                return data;
             }
        },
-       {
-            targets: [6],
-            data: null,
-            render: function(data, type, full, meta){
-                if(data>0){
-                    if(type === 'display'){
-                        data = '<span class="fa fa-check text-green" rel="ctg_'+meta.row+'_'+meta.col+'"></span>';
-                       // data = '<input type="checkbox" class="icheckbox" name="ctg_'+meta.row+'_'+meta.col+'" value="'+data+'" checked >';
-                    }
-                }else{
-                    if(type === 'display'){
-                        data = '<span class="fa fa-times text-red" rel="ctg_'+meta.row+'_'+meta.col+'"></span>';
-                       // data = '<input type="checkbox"  class="icheckbox" name="ctg_'+meta.row+'_'+meta.col+'"  value="'+data+'">';
-                    }
-                }
-               return data;
-            }
-       }
+       //{
+            // targets: [6],
+            // data: null,
+            // render: function(data, type, full, meta){
+            //     if(data>0){
+            //         if(type === 'display'){
+            //             data = '<span class="fa fa-check text-green" rel="ctg_'+meta.row+'_'+meta.col+'"></span>';
+            //            // data = '<input type="checkbox" class="icheckbox" name="ctg_'+meta.row+'_'+meta.col+'" value="'+data+'" checked >';
+            //         }
+            //     }else{
+            //         if(type === 'display'){
+            //             data = '<span class="fa fa-times text-red" rel="ctg_'+meta.row+'_'+meta.col+'"></span>';
+            //            // data = '<input type="checkbox"  class="icheckbox" name="ctg_'+meta.row+'_'+meta.col+'"  value="'+data+'">';
+            //         }
+            //     }
+            //    return data;
+            // }
+       //}
     ]       
     });
 
@@ -326,7 +338,7 @@ a.ui-button:active,
                         name : $('select[name=name]').val(),
                         ctg :$('select[name=ctg]').val(),
                         statusPrd :$('select[name=status_prd]').val(),
-                        status : $('select[name=status]').val(),
+                        user_id : $('select[name=user_id]').val(),
                         searchTerm : $('input[name=searchTerm]').val(),
                         _token:'{{ csrf_token() }}'
                     },
@@ -351,7 +363,7 @@ a.ui-button:active,
                         name : $('select[name=name]').val(),
                         ctg :$('select[name=ctg]').val(),
                         statusPrd :$('select[name=status_prd]').val(),
-                        status : $('select[name=status]').val(),
+                        user_id : $('select[name=user_id]').val(),
                         searchTerm : $('input[name=searchTerm]').val(),
                         _token:'{{ csrf_token() }}'
                     },
@@ -371,7 +383,7 @@ a.ui-button:active,
             $('select[name=id]')[0].selectedIndex = 0;
             $('select[name=ctg]')[0].selectedIndex = 0;
             $('select[name=status_prd]')[0].selectedIndex = 0;
-            $('select[name=status]')[0].selectedIndex = 0;
+            $('select[name=user_id]')[0].selectedIndex = 0;
             $('#customerTable').DataTable().search('').draw(); 
           
         });

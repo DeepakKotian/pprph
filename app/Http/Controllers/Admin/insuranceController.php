@@ -284,6 +284,9 @@ class insuranceController extends Controller
             if ($request->has('name')&& $request->name!=null) {
                 $instance->where('customers.id',$request->get('name'));
             }
+            if ($request->has('status')&& $request->status!=null) {
+                $instance->where('policy_detail.status',$request->get('status'));
+            }
             if ($request->has('searchTerm')&& $request->searchTerm!=null) {
                     $instance->whereRaw("
                         customers.first_name like '%{$request->searchTerm}%' 

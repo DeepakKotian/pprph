@@ -37,6 +37,14 @@ Policy List
                             <div class="input-group-btn"><button type="submit" class="btn btn-primary btn-flat"> <i class="fa fa-search"></i> </button></div> </div>
                   </div>
                   <div class="form-group">
+                        <label class="left-15" for="id">Open / Provision </label>
+                        <select class="form-control selectJS" name="status">
+                           <option value="">------</option>
+                           <option value="0">Open</option>
+                           <option value="1">Provision</option>
+                        </select>
+                    </div>
+                  <div class="form-group">
                         <label class="left-15" for="id">Name Search</label>
                         <select class="form-control selectJS" name="name">
                            <option value="">------</option>
@@ -54,6 +62,7 @@ Policy List
                            @endforeach
                         </select>
                     </div>
+                  
                     <!-- <div class="form-group left-15">
                         <button class="btn btn-primary" style="" type="button" id="provisionButton" onclick="this.preventDefault"> Update Status </button>
                     </div> -->
@@ -266,7 +275,7 @@ a.ui-button:active,
             data: function (d) {
                 d.id = $('select[name=id]').val();
                 d.name = $('select[name=name]').val();
-                d.statusPrd = $('select[name=status_prd]').val();
+                d.status = $('select[name=status]').val();
                 d.searchTerm = $('input[name=searchTerm]').val();
             }
         },
@@ -279,8 +288,8 @@ a.ui-button:active,
             {data: 'email', name: 'email'},
             {data: 'city', name: 'city'},
             {data: 'zip', name: 'zip'},
-            {data: 'insuranceName', name: 'status'},
-            {data: 'providerName', name: 'status'},
+            {data: 'insuranceName', name: 'insuranceName'},
+            {data: 'providerName', name: 'providerName'},
             {data: 'activation_date', name: 'activation_date'},
             {data: 'start_date', name: 'end_date'},
             {data: 'end_date', name: 'end_date'},

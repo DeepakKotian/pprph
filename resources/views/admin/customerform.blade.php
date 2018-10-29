@@ -25,6 +25,7 @@
             <div class="box-header with-border">
               <h3 class="box-title">Customer Form</h3>
               <div class="box-tools">
+                <a  class="btn btn-primary btn-md" data-toggle="modal" data-target="#uploadModal" v-on:click="fetchCustomerDocs">Upload</a>
                 <a  class="btn btn-primary btn-md" data-toggle="modal" data-target="#logsModal" v-on:click="fetchLogs">Logs</a>
                 @if($data)
                 <a href="{{ url('admin/printcustomer/'.$data->id) }}" class="btn btn-primary btn-md"> Print </a>
@@ -208,8 +209,9 @@
                             <thead>
                               <tr>
                                 <th> Insurance Name</th>
-                                <th>Antrag</th>
+                                <!-- <th>Antrag</th> -->
                                 <th>Vertrag  </th>
+                                <th>Provision  </th>
                               </tr>
                             </thead>
                             <tbody>
@@ -219,12 +221,16 @@
                                
                                    <a href="" data-toggle="modal" :class="{'text-green':customer.policyArr.indexOf(item.id)>=0, 'text-red':customer.policyArr.indexOf(item.id)<0}" data-target="#insuranceModal" v-on:click="loadInsuranceModal(item)" ><% item.name %></a>
                                 </td>
-                                <td>
+                                <!-- <td>
                                   <button  v-on:click="loadAntragModal(item)"  data-toggle="modal" data-target="#antragModal"  type="button" class="btn btn-default btn-sm">
                                   <i class="fa fa-square " :class="'text-green'"  ></i></button>
-                                </td>
+                                </td> -->
                                 <td>
                                 <button  type="button" class="btn btn-default btn-sm" v-on:click="loadVertragModal(item)">
+                                  <i class="fa fa-square " :class="{'text-green':customer.policyArr.indexOf(item.id)>=0, 'text-red':customer.policyArr.indexOf(item.id)<0}" ></i></button></button>
+                                </td>
+                                <td>
+                                  <button  type="button" class="btn btn-default btn-sm" v-on:click="loadVertragModal(item)">
                                   <i class="fa fa-square " :class="{'text-green':customer.policyArr.indexOf(item.id)>=0, 'text-red':customer.policyArr.indexOf(item.id)<0}" ></i></button></button>
                                 </td>
                              </tr>
@@ -233,6 +239,7 @@
                         </div>
                     </div>
                     </div>
+                 
                     <div class="col-sm-12">
                         <div class="box box-info" v-show="customer.appointments!=''">
                         <div class="box-header with-border">
@@ -438,11 +445,16 @@
                       </h4>
                     </div>
                     <div class="modal-body">
-                      Are you sure you want to delete  ?
+                    <div class="">
+                      Are you sure you want to delete/save as customer ?
+                   </div>
+    
+                  
                     </div>
                     <div class="modal-footer">
                       <button class="btn btn-secondary" type="button"  data-dismiss="modal">Cancel</button>
                       <button class="btn btn-primary"  type="button" data-dismiss="modal"  v-on:click="deleteFamily">Delete</button>
+                      <button class="btn btn-primary"  type="button" data-dismiss="modal"  v-on:click="saveAsCustomer">SaveAsCustomer</button>
                     </div>
                  </div>
                 </div>
@@ -655,6 +667,82 @@
       </div>
  <!-- Antrag Modal End -->
 
+
+<!-- upload modal -->
+<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content modal-lg">
+                    <div class="modal-header">
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title" id="exampleModalLabel">Documents </h4>
+                    </div>
+                    <div class="modal-body">
+                      <div class="row">
+                        <div class="form-group col-sm-12">
+                            <h4>Uploaded Documents </h4>
+                          <div class="table table-responsive">
+                            <table class="table table-bordered">
+                              <thead>
+                                <tr>
+                                  <th>File Name</th>
+                                  <th>Actions</th>
+                                </tr>
+                                <tbody>
+                                 <tr  v-for="(custDoc, index) in customerDocs">
+                                   <td>
+                                      <% custDoc.title || custDoc.document_name %>
+                                   </td>
+                                   <td>
+                                   <a class="fa fa-eye" target="_blank" v-bind:href="urlPrefix+'../uploads/vertrag/'+custDoc.document_name"></a> &nbsp;&nbsp;
+                                    <a class="fa fa-download" download v-bind:href="urlPrefix+'../uploads/vertrag/'+custDoc.document_name"> </a> &nbsp;&nbsp;
+                                    <a class="fa fa-trash" target="_blank" v-on:click="$('#custdocId'+custDoc.id).show()"></a>
+                                      <div class="alert alert-warning alert-dismissible"  v-bind:id="'custdocId'+custDoc.id" role="alert" style="display:none;padding:5px; margin-bottom:0;">
+                                        <button type="button" class="close" v-on:click="$('#custdocId'+custDoc.id).hide()" aria-label="Close" style="right:0;">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <span aria-hidden="true"> <a href="javascript:void(0)" v-on:click="deleteCustomerDocument(custDoc)" style="text-decoration:none"> Yes Delete!  <i class="fa fa-trash"></i> </a> </span>
+                                      </div>
+                                   </td>
+                                 </tr>
+                                </tbody>
+                              </thead>
+                            </table>
+                          </div>
+
+                          <div class="documentAddCust">
+                                <div class="form-group col-sm-12 uploadDoc">
+                                  <div class="row">
+                                    <div class="col-xs-6">
+                                      <label for="">Document Title</label>
+                                      <input type="text"  name="customerDocumentTitle" v-model="customerDocumentTitle" class="form-control" name="" id=""> 
+                                    </div>
+                                    <div class="col-xs-6">
+                                      <label for="uploadDoc">Upload Document: </label> 
+                                      <div class="input-group">
+                                      <div class="input-group-btn">
+                                        <button type="button" id="uploadFile"  v-on:click="$('#customerDocument').click()"  class="btn btn-primary">Choose file</button>
+                                      </div> 
+                                      <input type="text"  readonly class="form-control input-rounded" v-model="currentCustomerDoc">
+                                      <input type="file" id="customerDocument" class="filestyle" v-on:change="uploadCustomerFile" style="display: none;">
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                      </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-primary documentAdd" v-on:click="uploadCustomerDocument"  type="button">Save</a>
+                    </div>
+            </div>
+
+        </div>
+      </div>
+<!-- upload modal ends -->
 
  <!-- Vertrag Modal -->
  <div class="modal fade" id="vertragModal" tabindex="-1" role="dialog" aria-labelledby="vertragModalLabel" aria-hidden="true">

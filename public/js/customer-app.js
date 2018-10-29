@@ -13,6 +13,15 @@ var app = new Vue({
       policylist:'',
       policyAction:'',
       currentCtgName:'',
+<<<<<<< HEAD
+=======
+      customerDocs:{
+
+      },
+      customerDocument:'',
+      customerDocumentTitle:'',
+      currentCustomerDoc:'',
+>>>>>>> 979d312b718e24013763a7ab1d9047e19b43d0ca
       customer:{
         id:null,
         gender:null,
@@ -530,6 +539,9 @@ var app = new Vue({
         uploadFile: function(){
          this.currentVertragDoc = $('#document')[0].files[0].name;
         },
+        uploadCustomerFile: function(){
+            this.currentCustomerDoc = $('#customerDocument')[0].files[0].name;
+        },
         checkDocumentType:function(event){
             if(event.target.value==0){
                 $('.otherdocs').hide();
@@ -583,7 +595,41 @@ var app = new Vue({
             }
           )
         },
-
+        uploadCustomerDocument:function(){
+            this.customerDocument = $('#customerDocument')[0].files[0];
+            let formData= new FormData();
+            formData.append('documentData',this.customerDocument);
+            formData.append('title',this.customerDocumentTitle);
+            formData.append('customer_id',this.currentId);
+             this.$http.post(this.urlPrefix+'upload-customer-document',formData,{
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+                }).then(
+                function(response){
+                    this.$toaster.success(response.data);
+                    this.fetchCustomerDocs();
+                    this.customerDocument = '';
+                    this.customerDocumentTitle= '';
+                    this.currentCustomerDoc ='';
+                }
+            ).catch(function(response){
+                let self = this;
+                self.$toaster.error(response.data);
+                // $.each(response.data.errors, function(key, value){
+                //     self.$toaster.error(value[0]);
+                // });
+                
+            });
+        },
+        deleteCustomerDocument:function(doc){
+            this.$http.post(this.urlPrefix+'delete-customer-document',  doc).then(function(response){
+                this.fetchCustomerDocs();
+                this.$toaster.success(response.data); 
+                $('#custdocId'+doc.id).hide();
+            }
+          )
+        },
         fetchLogs:function(){
             this.$http.get(this.urlPrefix+'fetch-logs/'+this.currentId).then(function(response){
                 this.customerlogs = response.data;
@@ -640,6 +686,15 @@ var app = new Vue({
             )
         },
        
+        fetchCustomerDocs:function(){
+            this.$http.get(this.urlPrefix+'fetch-customer-docs/'+this.currentId).then(function(response){
+                this.customerDocs = response.data;
+            }
+          ) 
+        },
+        saveAsCustomer:function(){
+            
+        }
       },
     delimiters: ["<%","%>"]
   })
