@@ -17,7 +17,8 @@ class CreateDocumentsTable extends Migration
             $table->increments('id');
             $table->integer('customer_id');
             $table->string('document_name');
-            $table->integer('type');
+            $table->string('title');
+            $table->integer('type'); //not used anywhere
             $table->timestamps();
         });
     }

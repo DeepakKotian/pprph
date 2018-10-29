@@ -46,7 +46,8 @@ class CustomerController extends Controller
             $arrClm[]= $i;
         }
         $arrClms = implode(',',$arrClm);
-        return view('admin.customers',compact(['customer','insuranceCtg','arrClms']));
+        $users = User::select('*')->get();
+        return view('admin.customers',compact(['customer','insuranceCtg','arrClms','users']));
     }
 
     public function getCustomFilterData(Request $request)
@@ -68,11 +69,16 @@ class CustomerController extends Controller
     foreach ($insuranceCtg as $key => $value) { //Dynamic queries 
         $jnQry .= " LEFT JOIN massparameter ctg{$key} ON pd.insurance_ctg_id= ctg{$key}.id  AND ctg{$key}.id=$value->id AND ctg{$key}.type='category' AND pd.end_date>=CURDATE() ";
         $name = preg_replace('/\s+/', '_', $value->name);
-        $strArr[$key] = "(COUNT(IF(pd.insurance_ctg_id = ctg{$key}.id,1,NULL))) ctg{$key}";
+        $strArr[$key] = "(COUNT(IF(pd.insurance_ctg_id = ctg{$key}.id,1,NULL))) ctg{$key}"; // (COUNT(IF(ctg{$key}.status=1,1,NULL))) status{$key}
     }
     $addQry =  implode(',',$strArr);
     $count = $insuranceCtg->count();
-    $selectQry =  "SELECT c.id,c.unique_id, c.first_name, c.last_name,c.status, c.email,c.city,c.nationality,c.zip, {$addQry} FROM customers c LEFT JOIN policy_detail pd ON pd.customer_id = c.id {$jnQry} WHERE c.is_family=0 GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC";      
+    $customWhere = '';
+    if(Auth::user()->role !== 1)
+    {
+      $customWhere = " AND c.user_id =".Auth::user()->id;
+    }
+    $selectQry =  "SELECT c.id,c.unique_id, c.first_name,c.user_id, c.last_name,c.status, c.email,c.city,c.nationality,c.zip,c.telephone, {$addQry} FROM customers c LEFT JOIN policy_detail pd ON pd.customer_id = c.id {$jnQry} WHERE c.is_family=0 {$customWhere} GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC";      
 
     $customer =  DB::select(DB::raw($selectQry));
 
@@ -83,9 +89,9 @@ class CustomerController extends Controller
                          return $row['id'] == $request->get('id') ? true : false;
                     });
                 }
-                if ($request->has('status')&& $request->status!=null) {
+                if ($request->has('user_id')&& $request->user_id!=null) {
                     $instance->collection = $instance->collection->filter(function ($row) use ($request) {
-                         return $row['status'] == $request->get('status') ? true : false;
+                         return $row['user_id'] == $request->get('user_id') ? true : false;
                     });
                 }
                 if ($request->has('name')&& $request->name!=null) {
@@ -107,7 +113,7 @@ class CustomerController extends Controller
                 if ($request->has('searchTerm')&& $request->searchTerm!=null) {
                     $instance->collection = $instance->collection->filter(function ($row) use ($request) {
                         return (Str::contains($row['zip'], $request->get('searchTerm')) || Str::contains($row['email'], $request->get('searchTerm')) || Str::contains($row['city'], $request->get('searchTerm')) 
-                        || Str::contains($row['first_name'], $request->get('searchTerm')) || Str::contains($row['last_name'], $request->get('searchTerm')) ) ? true : false;
+                        || Str::contains($row['first_name'], $request->get('searchTerm')) || Str::contains($row['telephone'], $request->get('searchTerm')) || Str::contains($row['last_name'], $request->get('searchTerm')) ) ? true : false;
                     });
                 }
             })
@@ -168,6 +174,7 @@ class CustomerController extends Controller
             'company' => $request['company'],
             'gender' => $request['gender'],
             'language' => $request['language'],
+            'user_id'=> Auth::user()->id,
         ]);
         if($insertData)
         return response()->json('Successfully created',200);
@@ -659,7 +666,12 @@ class CustomerController extends Controller
         }
         $addQry =  implode(',',$strArr);
         $count = $insuranceCtg->count();
-        $selectQry =  "SELECT c.id, c.first_name, c.last_name,c.status, c.email,c.city,c.nationality,c.zip, {$addQry} FROM customers c LEFT JOIN policy_detail pd ON pd.customer_id = c.id {$jnQry} WHERE c.is_family=0 GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC";      
+        $customWhere = '';
+        if(Auth::user()->role !== 1)
+        {
+          $customWhere = " AND c.user_id =".Auth::user()->id;
+        }
+        $selectQry =  "SELECT c.id, c.first_name,c.user_id, c.last_name,c.status, c.email,c.city,c.nationality,c.zip,c.telephone, {$addQry} FROM customers c LEFT JOIN policy_detail pd ON pd.customer_id = c.id {$jnQry} WHERE c.is_family=0 {$customWhere} GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC";      
 
         $customer =  DB::select(DB::raw($selectQry));
 
@@ -670,9 +682,9 @@ class CustomerController extends Controller
                          return $row['id'] == $request->get('id') ? true : false;
                     });
                 }
-                if ($request->has('status')&& $request->status!=null) {
+                if ($request->has('user_id')&& $request->user_id!=null) {
                     $instance->collection = $instance->collection->filter(function ($row) use ($request) {
-                         return $row['status'] == $request->get('status') ? true : false;
+                         return $row['user_id'] == $request->get('user_id') ? true : false;
                     });
                 }
                 if ($request->has('name')&& $request->name!=null) {
@@ -721,7 +733,7 @@ class CustomerController extends Controller
            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(4,$row, 'Email');
            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(5,$row, 'Postal code');
            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(6,$row, 'City');
-           $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(7,$row, 'Status');
+           $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(7,$row, 'Telephone');
            $column = 8;
            $ctgs = $customer['ctgs']->toArray();
 
@@ -740,7 +752,8 @@ class CustomerController extends Controller
             $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(4,$row, $value['email']);
             $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(5,$row, $value['zip']);
             $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(6,$row, $value['city']);
-            if($value['status']==0){
+            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(7,$row, $value['telephone']);
+            /* if($value['status']==0){
                 $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
                 $objDrawing->setPath(public_path('uploads/unchecked.png')); //your image path
                 $objDrawing->setCoordinates('G'.$row);
@@ -752,7 +765,7 @@ class CustomerController extends Controller
                 $objDrawing->setCoordinates('G'.$row);
                 $objDrawing->setOffsetX(15);
                 $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
-            }
+            } */
             foreach ($ctgs as $ky => $val) {
                 if($value['ctg'.$ky]>0){
                     $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
@@ -819,6 +832,14 @@ class CustomerController extends Controller
         return response()->json($data,200);
     }
 
+    public function saveAsCustomer(Request $request){
+        $data = customer::select('unique_id')->where('customers.is_family','0')->orderBy('id','desc')->first();
+        if(!empty($data)){
+            $uniqueId = $data->unique_id;
+        }
+        $uniqueId = $uniqueId+1;
+
+    }
   
    
 }

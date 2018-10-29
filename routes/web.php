@@ -55,6 +55,9 @@ Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     Route::post('/fetchpolicylist/{id}', 'Admin\CustomerController@fetchPolicyList');
     Route::get('/customer-search', 'Admin\CustomerController@search');
     Route::get('/fetch-logs/{id}', 'Admin\CustomerController@fetchLogs');
+    Route::get('/fetch-customer-docs/{id}', 'Admin\documentsController@fetchCustomerDocs');
+    Route::post('/delete-customer-document', 'Admin\documentsController@deleteCustomerDocument');
+    Route::post('/upload-customer-document', 'Admin\documentsController@uploadCustomerDocument');
 
     Route::get('/customer-filter-data', 'Admin\CustomerController@getCustomFilterData');
     Route::post('/customer-form/{id}', 'Admin\CustomerController@update');

@@ -132,5 +132,38 @@ class documentsController extends Controller
         }
     }
 
+    public function fetchCustomerDocs($id){
+        if($id){
+            $data = DB::table('documents')
+            ->where('customer_id',$id)
+            ->get();
+            return response()->json($data,200); 
+        }
+    }
+
+    public function deleteCustomerDocument(Request $request)
+    {
+        if($request->id){
+            $data = DB::table('policy_documents')
+            ->where('document_id',$request->id)->delete();
+            DB::table('documents')
+            ->where('id',$request->id)->delete();
+            return response()->json('Successfully Deleted',200);
+        }
+    }
+
+    public function uploadCustomerDocument(Request $request){
+        if(!empty($request->file('documentData'))){
+            $file = $request->file('documentData');
+            $docName = $file->getClientOriginalName();
+            $destinationPath = public_path('/uploads/vertrag');
+            $file->move($destinationPath, $docName);
+            $documentId = DB::table('documents')->insertGetId(['document_name'=>$docName,'title'=> $request->title, 'customer_id'=>$request->customer_id]);
+            return response()->json('Successfully Added',200);
+         }else{
+            return response()->json('Document not selected',500);
+        }
+    }
+
     
 }
