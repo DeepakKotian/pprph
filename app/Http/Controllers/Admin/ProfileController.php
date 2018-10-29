@@ -50,7 +50,7 @@ class ProfileController extends Controller
             $data['last_name'] = $request->last_name;
             $data['email'] = $request->email;
             $data['phone'] = $request->phone;
-            $data['role'] = $request->role;
+           // $data['role'] = $request->role;
             if(user::whereId($userid)->update($data));
             return response()->json('Successfully updated',200);
         }

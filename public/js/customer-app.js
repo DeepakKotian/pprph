@@ -13,7 +13,6 @@ var app = new Vue({
       policylist:'',
       policyAction:'',
       currentCtgName:'',
-
       customer:{
         id:null,
         gender:null,
@@ -33,8 +32,12 @@ var app = new Vue({
         appointments:'',
       },
       customerlogs:{
-
       },
+      notes:{},
+      singleNote:{ 
+          description:"",
+          noteId:""
+       },
       oldCustomerData:{
       },
       sampleDta:[],
@@ -580,12 +583,63 @@ var app = new Vue({
             }
           )
         },
+
         fetchLogs:function(){
             this.$http.get(this.urlPrefix+'fetch-logs/'+this.currentId).then(function(response){
                 this.customerlogs = response.data;
             }
           )
-        }
+        },
+
+        loadNotesDetail:function(note){
+            //this.modalAction='';
+            if(note!=null){
+                this.modalAction='update';
+                this.singleNote.description=note.description;
+                this.singleNote.noteId=note.id;
+            }
+            else{
+                this.modalAction='add'
+                this.singleNote.description="";
+                this.singleNote.noteId="";
+                this.fetchNotes();
+            }
+        },
+        /*notes section*/
+        fetchNotes:function(){
+            this.$http.post(this.urlPrefix+'fetch-notes',{ custId:this.currentId}).then(function(response){
+                this.notes = response.data; 
+            }
+        )
+        },
+
+        addNote:function(){
+            this.$http.post(this.urlPrefix+'notes',{ singleNote:this.singleNote,custId:this.currentId} ).then(function(response){
+                this.singleNote.description="";
+                this.singleNote.noteId="";
+                this.fetchNotes();
+            }).catch(function(response){
+
+           });
+        },
+        editNote:function(){
+            this.$http.put(this.urlPrefix+'notes/'+this.singleNote.noteId,{ singleNote:this.singleNote,custId:this.currentId} ).then(function(response){
+                this.fetchNotes();
+                this.modalAction='add'
+                this.singleNote.description="";
+                this.singleNote.noteId="";
+            }).catch(function(response){
+
+           });
+        },
+        deleteNote:function(noteId){
+            this.$http.delete(this.urlPrefix+'notes/'+noteId).then(function(response){
+                    this.fetchNotes();
+                    this.modalAction='add'
+                }
+            )
+        },
+       
       },
     delimiters: ["<%","%>"]
   })

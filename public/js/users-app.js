@@ -23,9 +23,7 @@ var app = new Vue({
         newPassword:'',
       },
 
-      profile:{
-     
-    },
+      profile:{},
       usersData:[],
       errors:[],
 
@@ -55,9 +53,9 @@ var app = new Vue({
                 required:required,
                 email:email,
             },
-            role:{
-              required:required,
-            },
+            // role:{
+            //   required:required,
+            // },
             first_name:{
               required:required,
             },
@@ -192,7 +190,7 @@ var app = new Vue({
         formData.append('email',this.profile.email);
         formData.append('phone',this.profile.phone?this.profile.phone:"" );
         formData.append('photo',this.profile.photo);
-        formData.append('role',this.profile.role);
+       // formData.append('role',this.profile.role);
      
         if (this.$v.profile.$invalid) {
             this.$v.profile.$touch()

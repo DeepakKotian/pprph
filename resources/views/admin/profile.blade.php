@@ -66,7 +66,7 @@
               <label for="inputName" class="col-sm-2 control-label">Phone </label>
 
               <div class="col-sm-10">
-              <input type="text" name="phone" class="form-control col-sm-4" v-model.trim.lazy="$v.profile.phone.$model" id="phone"  placeholder="Enter Phone">
+              <input type="text" name="phone" class="form-control col-sm-4"  v-model.trim.lazy="$v.profile.phone.$model" id="phone"  placeholder="Enter Phone">
               <span v-if="!$v.profile.phone.phoneRegx" :class="{ 'help-block': !$v.profile.phone.phoneRegx } " > Enter Valid Phone Number </span>
               </div>
             </div>
@@ -80,7 +80,7 @@
               </div>
             </div>
            
-            <div class="form-group" :class="{ 'has-error': $v.profile.role.$error }">
+            <!-- <div class="form-group" :class="{ 'has-error': $v.profile.role.$error }">
               <label for="inputName" class="col-sm-2 control-label">Role *</label>
 
               <div class="col-sm-10">
@@ -91,7 +91,7 @@
                   
                         </select>
               </div>
-            </div>
+            </div> -->
             
             <div class="form-group">
               <div class="col-sm-offset-2 col-sm-10">

@@ -127,7 +127,7 @@ Documents List
             targets: -1,
             data: null,
             render: function(data, type, full, meta){
-                console.log();
+                
                     if(type === 'display'){
                         data = '<p align="center"><a href="javascript:void(0)" class="btn-view btn btn-default"> <span class="fa fa-eye" rel="ctg_'+meta.row+'_'+meta.col+'"></span> </a>';
                         data += '</p>';

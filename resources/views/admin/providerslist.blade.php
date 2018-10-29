@@ -28,13 +28,13 @@ Providers List <small>View list of Providers</small>
          <div class="table table-responsive">
             <table class="table table-bordered" id="providersTable">
                <thead>
-                  <th>Id</th>
+                  <th>Sl.no</th>
                   <th>Name</th>
                   <th>Options</th>
                </thead>
                <tbody>
-                  <tr v-for="row in providersData">
-                     <td><% row.id %></td>
+                  <tr v-for="(row,index) in providersData">
+                     <td><% index+1 %></td>
                      <td><% row.name %> </td>
                      <td>
                         <a type="button" data-toggle="modal"  data-target="#addproviders"  v-on:click="loadprovidersmodal(row)" class="btn btn-default"><i class="fa fa-edit"></i></a>

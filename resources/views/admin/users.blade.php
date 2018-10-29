@@ -26,16 +26,16 @@
             <table class="table table-bordered" id="userTable">
                <thead>
                   
-                  <th>Id</th>
+                  <th>Sl.no</th>
                   <th>Name</th>
                   <th>Email</th>
                   <th>User Type</th>
                   <th>Options</th>
                </thead>
                <tbody>
-                  <tr v-for="row in usersData">
+                  <tr v-for="(row,index) in usersData">
                   
-                     <td><% row.id %></td>
+                     <td><% index+1 %></td>
                      <td><% row.first_name %> <% row.last_name %></td>
                      <td><% row.email %></td>
                      <td><% row.role | role-type %>  </td>

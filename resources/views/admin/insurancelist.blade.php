@@ -28,13 +28,13 @@
          <div class="table table-responsive">
             <table class="table table-bordered" id="insuranceTable">
                <thead>
-                  <th>Id</th>
+                  <th>Sl.no</th>
                   <th>Name</th>
                   <th>Options</th>
                </thead>
                <tbody>
-                  <tr v-for="row in insuranceData">
-                     <td><% row.id %></td>
+                  <tr v-for="(row,index) in insuranceData">
+                     <td><% index+1 %></td>
                      <td><% row.name %> </td>
                     
                      <td>

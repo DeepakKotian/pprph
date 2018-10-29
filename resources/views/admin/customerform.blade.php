@@ -269,12 +269,11 @@
                     <button  class="btn btn-primary  " data-toggle="modal" v-on:click="taskapp.loadTaskDetail(null,currentId)" data-target="#addTask" >Add Task</button>
                   <!-- <a target="_blank" href="{{ url('/admin/printcustomer/'.$data->id) }}" class="btn btn-primary" >Print</a> -->
                      &nbsp;
-                    <div class="btn-group btn-toggle"> 
-                    <button type="button" class="btn"  data-toggle="modal" data-target="#statusModal" class="btn btn-success" v-on:click="onStatus(1)" v-bind:class="'btn-success'"  v-bind:disabled="customer.status==1"   >ACTIVE</button>
-                    <button  type="button" class="btn" data-toggle="modal" data-target="#statusModal" class="btn btn-danger" v-on:click="onStatus(0)" v-bind:class="'btn-danger'" v-bind:disabled="customer.status==0" >DEACTIVE</button>
-                
-                 
-                  </div>
+                    <!-- <div class="btn-group btn-toggle"> 
+                      <button type="button" class="btn"  data-toggle="modal" data-target="#statusModal" class="btn btn-success" v-on:click="onStatus(1)" v-bind:class="'btn-success'"  v-bind:disabled="customer.status==1"   >ACTIVE</button>
+                      <button  type="button" class="btn" data-toggle="modal" data-target="#statusModal" class="btn btn-danger" v-on:click="onStatus(0)" v-bind:class="'btn-danger'" v-bind:disabled="customer.status==0" >DEACTIVE</button>
+                   </div> -->
+                   <button  class="btn btn-primary  " data-toggle="modal" v-on:click="loadNotesDetail(null)" data-target="#addNotes" >Notes</button>
                 @else
                   <button type="reset" v-on:click="resetForm" class="btn btn-info">Reset</button>
                   <button type="button" class="btn btn-primary" v-on:click="addNewCustomer">Save</button>
@@ -648,7 +647,7 @@
                   </div>
                     <div class="modal-footer">
                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                        <button class="btn btn-primary" data-dismiss="modal"  type="button">Yes</a>
+                        <button class="btn btn-primary" data-dismiss="modal"  type="button">Yes</button>
                     </div>
             </div>
 
@@ -749,7 +748,7 @@
                                     <div class="input-group-btn">
                                       <button type="button" id="uploadFile"  v-on:click="$('#document').click()"  class="btn btn-primary">Choose file</button>
                                     </div> 
-                                    <input type="text"  readonly class="form-control input-rounded" v-model="currentVertragDoc"   id="editDocumentfile"  >
+                                    <input type="text"  readonly class="form-control input-rounded" v-model="currentVertragDoc" id="editDocumentfile"  >
                                     <input type="file" id="document" class="filestyle" v-on:change="uploadFile" style="display: none;">
                                   </div>
                                 </div>
@@ -770,7 +769,66 @@
 
         </div>
       </div>
+
  <!-- Vertrag Modal End -->
+ <!-- notes Modal -->
+ <div class="modal fade" id="addNotes" tabindex="-1" role="dialog" aria-labelledby="notesModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                    <div class="modal-header">
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title" id="exampleModalLabel"> Notes</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                       
+                            <!-- <div class="form-group col-lg-12">
+                              <label for="providerSlct">Title:</label>
+                              <input type="text" class="form-control" name="" id="">
+                            </div> -->
+                            <div class="form-group col-lg-12">
+                              <textarea name="" id=""  class="form-control" v-model="singleNote.description" cols="30" rows="3"></textarea>
+                            </div>
+                       
+                            <div class="form-group col-lg-12">
+                              <button class="btn btn-primary pull-right"  v-if="modalAction=='add'" v-on:click="addNote()" type="button">Add</button>
+                              <button class="btn btn-primary pull-right"  v-if="modalAction=='update'" v-on:click="editNote()" type="button">Update</button>
+                              
+                            </div>
+                           
+                        </div>
+                        <div class="row" >
+                            <div class="form-group col-sm-12">
+                              <table class="table table-bordered">
+                                <thead>
+                                  <tr>
+                                    <th>Notes</th>
+                                    <th>Action</th>
+                                  </tr>
+                                </thead>
+                                <tr v-for="note in notes">
+
+                                  <td> <% note.description %> </td>
+                               
+                                  <td>
+                                    <a href="javascript:void(0)" v-on:click="loadNotesDetail(note)" class="fa fa-edit"></a> &nbsp;
+                                    <a href="javascript:void(0)" v-on:click="deleteNote(note.id)"class="fa fa-trash"></a>
+                                  </td>
+                                </tr>
+                              </table>
+                            </div>
+          
+                         </div>
+                    </div>
+                   
+            </div>
+
+        </div>
+      </div>
+ 
+ <!-- notes modal end -->
 </div>
 <div id="task-app">
   @include('admin.taskmodal')
