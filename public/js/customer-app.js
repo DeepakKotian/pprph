@@ -13,15 +13,12 @@ var app = new Vue({
       policylist:'',
       policyAction:'',
       currentCtgName:'',
-<<<<<<< HEAD
-=======
       customerDocs:{
 
       },
       customerDocument:'',
       customerDocumentTitle:'',
       currentCustomerDoc:'',
->>>>>>> 979d312b718e24013763a7ab1d9047e19b43d0ca
       customer:{
         id:null,
         gender:null,
