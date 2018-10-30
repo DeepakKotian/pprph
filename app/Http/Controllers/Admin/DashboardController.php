@@ -80,4 +80,29 @@ class DashboardController extends Controller
         }
     
     }
+
+    public function fetchprovision(){
+        $dueProvisions=[];
+        try{
+        $query = policydetail::select('policy_detail.id as pid','c.id as custId','policy_number','policy_detail.id as policy_detail_id','policy_detail.status as status',DB::raw('DATE_FORMAT(start_date, "%d-%m-%Y") as start_date'),DB::raw('DATE_FORMAT(end_date, "%d-%m-%Y") as end_date'),'c.first_name as cfirst_name','c.last_name as clast_name','telephone', DB::raw('DATE_FORMAT(policy_detail.created_at, "%d-%m-%Y") as activation_date'), 'inc.name as insuranceName','prd.name as providerName')
+                            ->leftJoin('customers as c','customer_id','=','c.id')
+                            ->leftJoin('users','users.id','=','c.user_id')
+                            ->leftJoin('massparameter as inc','inc.id','=','policy_detail.insurance_ctg_id')
+                            ->leftJoin('massparameter as prd','prd.id','=','policy_detail.provider_id')
+                            ->where('policy_detail.status','=', 0)
+                            ->orderBy('policy_detail_id','asc');
+        if(Auth::user()->role !== 1)
+            {
+                $query->where('users.id',Auth::user()->id);
+            }  
+        $dueProvisions = DataTables::of($query)
+            ->toJson();
+            return $dueProvisions;
+        }
+        catch(\exception $e){
+            return response()->json("No data found"); 
+        }
+       
+    }
+  
 }

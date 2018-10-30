@@ -178,7 +178,7 @@
                                     <td> <span v-show="fmly.mobile">+41</span> <% fmly.mobile %></td>
                                     <td>
                                       <a type="button" class="btn btn-default" data-toggle="modal" data-target="#familyModal" v-on:click="loadFamily(fmly)"><i class="fa fa-edit"></i></a> 
-                                      <a type="button" data-toggle="modal" data-target="#deleteFamilyModal" v-on:click="loadFamily(fmly)" class="btn btn-default"><i class="fa fa-trash"></i></a>
+                                      <a type="button" data-toggle="modal" data-target="#deleteFamilyModal" v-on:click="loadFamily(fmly)" class="btn btn-default"><i class="fa fa-share"></i></a>
                                     </td>
                                 </tr>
                               </tbody>
@@ -438,7 +438,7 @@
                 <div class="modal-dialog" role="document">
                   <div class="modal-content">
                      <div class="modal-header">
-                      <h4 class="modal-title"> <span style="text-transform:capitalize;"> Delete Family Member
+                      <h4 class="modal-title"> <span style="text-transform:capitalize;"> Move Family Member
                       <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                       </button>
@@ -446,15 +446,15 @@
                     </div>
                     <div class="modal-body">
                     <div class="">
-                      Are you sure you want to delete/save as customer ?
+                      Are you sure you want to move as customer ?
                    </div>
     
                   
                     </div>
                     <div class="modal-footer">
                       <button class="btn btn-secondary" type="button"  data-dismiss="modal">Cancel</button>
-                      <button class="btn btn-primary"  type="button" data-dismiss="modal"  v-on:click="deleteFamily">Delete</button>
-                      <button class="btn btn-primary"  type="button" data-dismiss="modal"  v-on:click="saveAsCustomer">SaveAsCustomer</button>
+                      <!-- <button class="btn btn-primary"  type="button" data-dismiss="modal"  v-on:click="deleteFamily">Delete</button> -->
+                      <button class="btn btn-primary"  type="button" data-dismiss="modal"  v-on:click="saveAsCustomer">Yes</button>
                     </div>
                  </div>
                 </div>

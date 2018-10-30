@@ -125,6 +125,8 @@ Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     Route::post('/fetch-due-task', 'Admin\DashboardController@fetchDueTask');
     Route::post('/fetch-due-appointments', 'Admin\DashboardController@fetchDueAppointments');
     Route::post('/fetch-due-insurance', 'Admin\DashboardController@fetchExpiredInsurance');
+    Route::post('/fetch-due-provisions', 'Admin\DashboardController@fetchprovision');
+    
 
     //notes
     Route::resource('notes', 'Admin\NotesController');

@@ -386,7 +386,6 @@ class CustomerController extends Controller
     {
         $data = [];
         $customer = $request->customer;
-        
         $customer = array_slice($customer, 0,22);
         $oldCustomerData = $request->oldCustomerData;
         $result = array_diff_assoc($customer,$oldCustomerData);

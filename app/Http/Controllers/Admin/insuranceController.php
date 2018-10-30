@@ -167,7 +167,7 @@ class insuranceController extends Controller
             else{
               
             return $fchmappingList;
-            dd($fchmappingList);
+      
         }
     
     }
