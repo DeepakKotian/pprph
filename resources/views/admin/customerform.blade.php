@@ -184,7 +184,7 @@
                                     <td> <span v-show="fmly.mobile">+41</span> <% fmly.mobile %></td>
                                     <td>
                                       <a type="button" class="btn btn-default" data-toggle="modal" data-target="#familyModal" v-on:click="loadFamily(fmly)"><i class="fa fa-edit"></i></a> 
-                                      <a type="button" data-toggle="modal" data-target="#deleteFamilyModal" v-on:click="loadFamily(fmly)" class="btn btn-default"><i class="fa fa-trash"></i></a>
+                                      <a type="button" data-toggle="modal" data-target="#deleteFamilyModal" v-on:click="loadFamily(fmly)" class="btn btn-default"><i class="fa fa-share"></i></a>
                                     </td>
                                 </tr>
                               </tbody>
@@ -444,7 +444,7 @@
                 <div class="modal-dialog" role="document">
                   <div class="modal-content">
                      <div class="modal-header">
-                      <h4 class="modal-title"> <span style="text-transform:capitalize;"> Delete Family Member
+                      <h4 class="modal-title"> <span style="text-transform:capitalize;"> Move Family Member
                       <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                       </button>

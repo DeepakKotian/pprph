@@ -205,7 +205,51 @@
         </div>
         <!-- /.box -->
     </div>
- 
+    <div class="col-lg-6 col-xs-12">
+        <div class="box box-warning">
+            <div class="box-header">
+                <h3 class="box-title text-bold">Open provisions</h3>
+               
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div class="table table-responsive">
+                    <table id="dueprovisions" class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th class="hide">pid</th>
+                            <th>Policy Nr.</th>
+                            <th>Customer Name</th>
+                            <th>Activation Date</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Product</th>
+                            <th>Provider</th>
+                           
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(dueProvision, provisionindex) in dueProvisions">
+                            <td><% provisionindex+1 %></td>
+                            <td class="hide"><% dueProvision.pid %></td>
+                            <td><% dueProvision.policy_number %></td>
+                            <td><% dueProvision.cfirst_name %> <% dueProvision.clast_name %></td>
+                            <td><% dueProvision.activation_date %></td>
+                            <td> <% dueProvision.start_date %></td>
+                            <td> <% dueProvision.end_date %></td>
+                            <td><% dueProvision.insuranceName %></td>
+                            <td><% dueProvision.providerName %></td>
+                        </tr>
+                    
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+    </div>
  </div>
 </div>
 @stop

@@ -5,13 +5,15 @@ var calenderapp = new Vue({
       dueTasks:[],
       dueAppointments:[],
       dueInsurances:[],
+      dueProvisions:[],
     },
   
     created: function(){
         this.loadAllDueTask();
         this.loadAllDueAppointments();
         this.loadAllDueInsurance();
-    }, 
+        this.loadAllProvisions();
+    },
     mounted: function(){
    
     },
@@ -54,15 +56,31 @@ var calenderapp = new Vue({
         self.loadDataTable();
     },
 
-        loadDataTable:function(){  
-          setTimeout( function(){ $('#dueTask').DataTable({lengthChange:false, pageLength:3, "searching": false,destroy: true, "order": [[1, "desc" ]]}); },1000)
-          setTimeout( function(){ $('#dueAppointments').DataTable({lengthChange:false, pageLength:3, "searching": false,destroy: true, "order": [[1, "desc" ]]}); },1000)
-          setTimeout( function(){ $('#dueInsurance').DataTable({ columnDefs: [ {
-            targets: [ 2 ],
-            orderData: [ 1 ]
+    loadAllProvisions:function(){
+        let self = this;
+        this.$http.post(this.urlPrefix+'fetch-due-provisions').then(
+            function(response){
+              $('#dueprovisions').DataTable().destroy();
+              self.dueProvisions=  response.data.data;
+            }
+        )
+        self.loadDataTable();
+    },
+
+    loadDataTable:function(){  
+        setTimeout( function(){ $('#dueTask').DataTable({lengthChange:false, pageLength:3, "searching": false,destroy: true, "order": [[1, "desc" ]]}); },1000)
+        setTimeout( function(){ $('#dueAppointments').DataTable({lengthChange:false, pageLength:3, "searching": false,destroy: true, "order": [[1, "desc" ]]}); },1000)
+        setTimeout( function(){ $('#dueInsurance').DataTable({ columnDefs: [ {
+        targets: [ 2 ],
+        orderData: [ 1 ]
         }],lengthChange:false, pageLength:3, "searching": false,destroy: true, "order": [[1, "asc" ]]}); },1000)
 
-        },
+        setTimeout( function(){ $('#dueprovisions').DataTable({columnDefs: [{
+            targets: [ 2 ],
+            orderData: [ 1 ]
+            }],lengthChange:false, pageLength:3, "searching": false,destroy: true, "order": [[1, "asc" ]]}); },1500)
+
+    },
      
      },
     
