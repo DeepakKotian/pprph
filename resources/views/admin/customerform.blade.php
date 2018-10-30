@@ -101,10 +101,16 @@
                   <div class="row">
                     <div class="form-group col-sm-4" :class="{ 'has-error': $v.customer.zip.$error }">
                       <label for="zip">Zip*</label>
-                      <input type="text" class="form-control" name="zip"  id="zip" v-mask="'######'" placeholder="Postal Code" v-model="$v.customer.zip.$model">
+                      <!-- <select  class="form-control selectJS" id="zip" placeholder="zip" v-model="$v.customer.zip.$model">
+                         <option v-for="postcode in customer.postcode" v-bind:value="postcode.plz"> <% postcode.plz %> </option>
+                      </select> -->
+                      <input type="text" class="form-control" name="zip" v-on:blur="postCodeMap" id="zip" v-mask="'######'" placeholder="Postal Code" v-model="$v.customer.zip.$model">
                     </div>
                     <div class="form-group col-sm-4">
                       <label for="city">City</label>
+                      <!-- <select  class="form-control selectJS" id="city" placeholder="city" v-model="customer.city">
+                         <option v-for="postcodeCity in customer.postcodeCity" v-bind:value="postcodeCity.city"> <% postcodeCity.city %> </option>
+                      </select> -->
                       <input type="text" class="form-control" name="city"   id="city" placeholder="City" v-model="customer.city">
                     </div>
                     <div class="form-group col-sm-4">
@@ -446,7 +452,7 @@
                     </div>
                     <div class="modal-body">
                     <div class="">
-                      Are you sure you want to delete/save as customer ?
+                      Are you sure you want to delete/<span v-show="family.unique_id_family"> edit </span> <span v-show="family.unique_id_family==null"> save </span> as customer ?
                    </div>
     
                   
@@ -454,7 +460,8 @@
                     <div class="modal-footer">
                       <button class="btn btn-secondary" type="button"  data-dismiss="modal">Cancel</button>
                       <button class="btn btn-primary"  type="button" data-dismiss="modal"  v-on:click="deleteFamily">Delete</button>
-                      <button class="btn btn-primary"  type="button" data-dismiss="modal"  v-on:click="saveAsCustomer">SaveAsCustomer</button>
+                      <a v-bind:href="urlPrefix+'customer-form/'+family.id" v-show="family.unique_id_family" class="btn btn-primary"  type="button">Edit As Customer</a>
+                      <button v-show="family.unique_id_family==null" class="btn btn-primary"  type="button" data-dismiss="modal"  v-on:click="saveAsCustomer">Save As Customer</button>
                     </div>
                  </div>
                 </div>

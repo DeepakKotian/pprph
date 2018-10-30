@@ -38,12 +38,8 @@ var app = new Vue({
         appointments:'',
       },
       customerlogs:{
+
       },
-      notes:{},
-      singleNote:{ 
-          description:"",
-          noteId:""
-       },
       oldCustomerData:{
       },
       sampleDta:[],
@@ -55,7 +51,6 @@ var app = new Vue({
         dob_family:null,
         nationality_family:null,
         mobile_family:null,
-        unique_id_family:'',
         //email_family:null,
       },
       modalAction:'',
@@ -247,7 +242,6 @@ var app = new Vue({
                 mobile:response.data.mobile,
                 parent_id:response.data.parent_id,
                 nationality:response.data.nationality,
-                user_id:response.data.user_id,
              };
 
         this.customer=response.data;
@@ -293,7 +287,7 @@ var app = new Vue({
             this.family.dob_family = item.dob;
             this.family.nationality_family = item.nationality;
             this.family.mobile_family = item.mobile;
-            this.family.unique_id_family = item.unique_id;
+            //this.family.email_family = item.email;
             this.family.id = item.id; 
             this.oldCustomerData = {
                 family : {
@@ -635,54 +629,6 @@ var app = new Vue({
             }
           )
         },
-
-        loadNotesDetail:function(note){
-            //this.modalAction='';
-            if(note!=null){
-                this.modalAction='update';
-                this.singleNote.description=note.description;
-                this.singleNote.noteId=note.id;
-            }
-            else{
-                this.modalAction='add'
-                this.singleNote.description="";
-                this.singleNote.noteId="";
-                this.fetchNotes();
-            }
-        },
-        /*notes section*/
-        fetchNotes:function(){
-            this.$http.post(this.urlPrefix+'fetch-notes',{ custId:this.currentId}).then(function(response){
-                this.notes = response.data; 
-            }
-         )
-        },
-        addNote:function(){
-            this.$http.post(this.urlPrefix+'notes',{ singleNote:this.singleNote,custId:this.currentId} ).then(function(response){
-                this.singleNote.description="";
-                this.singleNote.noteId="";
-                this.fetchNotes();
-            }).catch(function(response){
-
-           });
-        },
-        editNote:function(){
-            this.$http.put(this.urlPrefix+'notes/'+this.singleNote.noteId,{ singleNote:this.singleNote,custId:this.currentId} ).then(function(response){
-                this.fetchNotes();
-                this.modalAction='add'
-                this.singleNote.description="";
-                this.singleNote.noteId="";
-            }).catch(function(response){
-
-           });
-        },
-        deleteNote:function(noteId){
-            this.$http.delete(this.urlPrefix+'notes/'+noteId).then(function(response){
-                    this.fetchNotes();
-                    this.modalAction='add'
-                }
-            )
-        },
         fetchCustomerDocs:function(){
             this.$http.get(this.urlPrefix+'fetch-customer-docs/'+this.currentId).then(function(response){
                 this.customerDocs = response.data;
@@ -690,16 +636,7 @@ var app = new Vue({
           ) 
         },
         saveAsCustomer:function(){
-            this.$http.post(this.urlPrefix+'save-as-customer',this.family).then(function(response){
-                window.location.href = urlPrefix+'customer-form/'+response.data;
-            }
-          ) 
-        },
-        postCodeMap:function(){
-            this.$http.post(this.urlPrefix+'postcode-map',this.customer).then(function(response){
-                this.customer.city = response.data;
-            }
-          ) 
+            
         }
       },
     delimiters: ["<%","%>"]

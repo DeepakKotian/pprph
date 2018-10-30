@@ -249,6 +249,8 @@ a.ui-button:active,
             targets: [{{ $arrClms }}],
             data: null,
             render: function(data, type, full, meta){
+                var index = meta.col - 7;
+                //  console.log(data);
                 if(data>0){
                     if(type === 'display'){
                         data = '<span class="fa fa-square text-green" rel="ctg_'+meta.row+'_'+meta.col+'"></span>';
