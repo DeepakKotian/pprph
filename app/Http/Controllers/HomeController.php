@@ -26,8 +26,13 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $userCount=user::where('deleted_at','=',null)->where('id','<>' ,Auth::user()->id)->count();
-        $customerCount=customer::where('is_family','=','0')->count();
+        $userCount = user::where('deleted_at','=',null)->where('id','<>' ,Auth::user()->id)->count();
+        $customerCount = customer::where('is_family','=','0');
+        if(Auth::user()->role !== 1)
+        {
+            $customerCount->where('user_id',Auth::user()->id);
+        } 
+        $customerCount = $customerCount->count();
         return view('admin.dashboard',compact('userCount','customerCount'));
     }
 }
