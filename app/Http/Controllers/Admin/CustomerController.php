@@ -417,6 +417,7 @@ WHERE c.is_family=0  GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC
                     $data[$key] = $customer[$key];
             }
         }
+        
         if(isset($data['dob'])){
             if($data['dob']!=null){
                 $data['dob'] = date('Y-m-d h:i:s',strtotime($data['dob']));
