@@ -218,28 +218,29 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th class="hide">pid</th>
-                            <th>Policy Nr.</th>
+                            <!-- <th class="hide">pid</th>
+                            <th>Policy Nr.</th> -->
                             <th>Customer Name</th>
                             <th>Activation Date</th>
                             <th>Start Date</th>
                             <th>End Date</th>
                             <th>Product</th>
                             <th>Provider</th>
-                           
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(dueProvision, provisionindex) in dueProvisions">
                             <td><% provisionindex+1 %></td>
-                            <td class="hide"><% dueProvision.pid %></td>
-                            <td><% dueProvision.policy_number %></td>
+                            <!-- <td class="hide"><% dueProvision.pid %></td>
+                            <td><% dueProvision.policy_number %></td> -->
                             <td><% dueProvision.cfirst_name %> <% dueProvision.clast_name %></td>
                             <td><% dueProvision.activation_date %></td>
                             <td> <% dueProvision.start_date %></td>
                             <td> <% dueProvision.end_date %></td>
                             <td><% dueProvision.insuranceName %></td>
                             <td><% dueProvision.providerName %></td>
+                            <th><a type="button" href="{{url('/admin/provision')}}" class="btn btn-default"><i class="glyphicon glyphicon-eye-open"></i> </th>
                         </tr>
                     
                     </tbody>

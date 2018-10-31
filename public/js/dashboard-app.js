@@ -75,10 +75,12 @@ var calenderapp = new Vue({
         orderData: [ 1 ]
         }],lengthChange:false, pageLength:3, "searching": false,destroy: true, "order": [[1, "asc" ]]}); },1000)
 
-        setTimeout( function(){ $('#dueprovisions').DataTable({columnDefs: [{
-            targets: [ 2 ],
-            orderData: [ 1 ]
-            }],lengthChange:false, pageLength:3, "searching": false,destroy: true, "order": [[1, "asc" ]]}); },1500)
+        setTimeout( function(){ $('#dueprovisions').DataTable({
+            // columnDefs: [{
+            // targets: [ 2 ],
+            // orderData: [ 1 ]
+            // }],
+            lengthChange:false, pageLength:3, "searching": false,destroy: true, "order": [[0, "asc" ]]}); },1500)
 
     },
      
