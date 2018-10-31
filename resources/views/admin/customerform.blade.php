@@ -29,11 +29,9 @@
                   @if($data->parent_id!=0)
                   <a href="{{ url('admin/customer-form/'.$data->parent_id) }}" class="btn btn-primary btn-md"> Go to Parent Customer  </a>
                   @endif
-                @endif
-                <a  class="btn btn-primary btn-md" data-toggle="modal" data-target="#uploadModal" v-on:click="fetchCustomerDocs">Documents</a>
-                <a  class="btn btn-primary btn-md" data-toggle="modal" data-target="#logsModal" v-on:click="fetchLogs">Logs</a>
-                @if($data)
-                <a href="{{ url('admin/printcustomer/'.$data->id) }}" class="btn btn-primary btn-md"> Print </a>
+                  <a  class="btn btn-primary btn-md" data-toggle="modal" data-target="#uploadModal" v-on:click="fetchCustomerDocs">Documents</a>
+                  <a  class="btn btn-primary btn-md" data-toggle="modal" data-target="#logsModal" v-on:click="fetchLogs">Logs</a>
+                  <a href="{{ url('admin/printcustomer/'.$data->id) }}" class="btn btn-primary btn-md"> Print </a>
                 @endif
                 <a class="btn btn-primary btn-md " href="{{ url('admin/customers') }}">Back to List Page</a>
 
