@@ -244,8 +244,8 @@ WHERE c.is_family=0  GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC
         ->where('customer_id',$request->id)
         ->groupBy('massparameter.id')
         ->get();
-        $data->postcode = DB::table('postcode_city')->select('city','plz')->get();
-        $data->postcodeCity = DB::table('postcode_city')->select('city','plz')->groupBy('city')->get();
+        // $data->postcode = DB::table('postcode_city')->select('city','plz')->get();
+        // $data->postcodeCity = DB::table('postcode_city')->select('city','plz')->groupBy('city')->get();
         $data->family = customer::select(['id','first_name','last_name','unique_id','mobile','email',DB::raw('DATE_FORMAT(dob, "%d-%m-%Y") as dob'),'nationality'])
         // ->where('is_family','1')
         ->where('parent_id',$request->id)
@@ -255,14 +255,28 @@ WHERE c.is_family=0  GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC
         ->where('tasks.type','appointment')        
         ->whereRaw('CURDATE() >= DATE_SUB(tasks.start_date, INTERVAL 20 DAY) AND CURDATE()<tasks.start_date')
         ->get();
+        
+        $data->provision = policydetail::select( DB::raw('COUNT(insurance_ctg_id) insCount, (COUNT(IF(policy_detail.status=1,1,NULL))) as statusCount '),'insurance_ctg_id as id','provider_id')
+        ->leftJoin('customers','customer_id','=','customers.id')
+        ->where('end_date','>=',date('Y-m-d'))
+        ->where('customers.id',$request->id)->groupBy('insurance_ctg_id')->get();
 
-        $insuranceCtgArr = $providerArr = [];
-        foreach ($data->policy as $key => $value) {
+        $insuranceCtgArr = $providerArr =  $provisionArr = [];
+        foreach ($data->policy as $key => $value) { //Looping policy array and adding insurance category and providers
            $insuranceCtgArr[] = $value->insurance_ctg_id;
            $providerArr[] =  $value->provider_id;
         }
+
+        foreach ($data->provision as $ky => $val) { //Looping Provision array and Checking With Insurance count and status count of policy
+            if($val['insCount']==$val['statusCount']){
+                $provisionArr[] = $val['id'];
+            }
+        }
+
         $data->policyArr =  $insuranceCtgArr;
         $data->providerArr =  $providerArr;
+        $data->provisionArr =  $provisionArr;
+
             if(!empty($data)){
                 $data->id = $request->id;
             }
@@ -667,7 +681,7 @@ WHERE c.is_family=0  GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC
         foreach ($insuranceCtg as $key => $value) { //Dynamic queries 
             $jnQry .= " LEFT JOIN massparameter ctg{$key} ON pd.insurance_ctg_id= ctg{$key}.id  AND ctg{$key}.id=$value->id AND ctg{$key}.type='category'  AND pd.end_date>=CURDATE() ";
             $name = preg_replace('/\s+/', '_', $value->name);
-            $strArr[$key] = "(COUNT(IF(pd.insurance_ctg_id = ctg{$key}.id,1,NULL))) ctg{$key}";
+            $strArr[$key] = "(COUNT(IF(pd.insurance_ctg_id = ctg{$key}.id,1,NULL))) ctg{$key},(COUNT(IF( pd.insurance_ctg_id = ctg{$key}.id AND pd.status=1,1,NULL))) status{$key}";
         }
         $addQry =  implode(',',$strArr);
         $count = $insuranceCtg->count();
@@ -778,6 +792,19 @@ WHERE c.is_family=0  GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC
                     $objDrawing->setOffsetX(15);
                     $objDrawing->setCoordinates($arrAlpha[$ky].$row);
                     $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
+                    if($value['ctg'.$ky]==$value['status'.$ky]){
+                        $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+                        $objDrawing->setPath(public_path('uploads/checked.png')); //your image path
+                        $objDrawing->setCoordinates($arrAlpha[$ky].$row);
+                        $objDrawing->setOffsetX(35);
+                        $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
+                    }else{
+                        $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+                        $objDrawing->setPath(public_path('uploads/unchecked.png')); //your image path
+                        $objDrawing->setCoordinates($arrAlpha[$ky].$row);
+                        $objDrawing->setOffsetX(35);
+                        $objDrawing->setWorksheet($spreadsheet->getActiveSheet());
+                    }
                 }else{
                     $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
                     $objDrawing->setPath(public_path('uploads/redicon.png')); //your image path

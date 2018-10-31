@@ -51,6 +51,11 @@
                     <td align="center"> 
                         @if($vl['ctg'.$key]>0)
                             <img style="width:8px;" src="uploads/greenicon.png" alt="">
+                            @if($vl['status'.$key]==$vl['ctg'.$key])
+                                <img style="width:8px;" src="uploads/checked.png" alt="">
+                            @else
+                                <img style="width:8px;" src="uploads/unchecked.png" alt="">
+                            @endif
                         @else
                             <img style="width:8px;" src="uploads/redicon.png" alt="">
                         @endif

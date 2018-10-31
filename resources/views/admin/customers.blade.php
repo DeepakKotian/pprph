@@ -250,19 +250,24 @@ a.ui-button:active,
             data: null,
             render: function(data, type, full, meta){
                 var index = meta.col - 7;
-                //  console.log(data);
+                var dataStr ='';
                 if(data>0){
                     if(type === 'display'){
-                        data = '<span class="fa fa-square text-green" rel="ctg_'+meta.row+'_'+meta.col+'"></span>';
+                        dataStr = '<span class="fa fa-square text-green" rel="ctg_'+meta.row+'_'+meta.col+'"></span>';
+                        if(data==full["status"+index]){
+                            dataStr+= '&nbsp;<span class="fa fa-check text-green" rel="ctg_'+meta.row+'_'+meta.col+'"></span>';
+                        }else{
+                            dataStr+= '&nbsp;<span class="fa fa-times text-red" rel="ctg_'+meta.row+'_'+meta.col+'"></span>';
+                        }
                        // data = '<input type="checkbox" class="icheckbox" name="ctg_'+meta.row+'_'+meta.col+'" value="'+data+'" checked >';
                     }
                 }else{
                     if(type === 'display'){
-                        data = '<span class="fa fa-square text-red" rel="ctg_'+meta.row+'_'+meta.col+'"></span>';
+                        dataStr = '<span class="fa fa-square text-red" rel="ctg_'+meta.row+'_'+meta.col+'"></span>';
                        // data = '<input type="checkbox"  class="icheckbox" name="ctg_'+meta.row+'_'+meta.col+'"  value="'+data+'">';
                     }
                 }
-               return data;
+               return dataStr;
             }
        },
        //{
