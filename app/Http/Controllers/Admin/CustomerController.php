@@ -398,6 +398,7 @@ class CustomerController extends Controller
                     $data[$key] = $customer[$key];
             }
         }
+        
         if(isset($data['dob'])){
             if($data['dob']!=null){
                 $data['dob'] = date('Y-m-d h:i:s',strtotime($data['dob']));
