@@ -183,8 +183,9 @@
                                     <td> <% fmly.dob %></td>
                                     <td> <span v-show="fmly.mobile">+41</span> <% fmly.mobile %></td>
                                     <td>
-                                      <a type="button" class="btn btn-default" data-toggle="modal" data-target="#familyModal" v-on:click="loadFamily(fmly)"><i class="fa fa-edit"></i></a> 
-                                      <a type="button" data-toggle="modal" data-target="#deleteFamilyModal" v-on:click="loadFamily(fmly)" class="btn btn-default"><i class="fa fa-share"></i></a>
+                                      <a type="button" class="btn btn-default" data-toggle="modal" data-target="#familyModal"  v-show="fmly.unique_id==null" v-on:click="loadFamily(fmly)"><i class="fa fa-edit"></i></a> 
+                                      <a v-bind:href="urlPrefix+'customer-form/'+fmly.id" v-show="fmly.unique_id" class="btn btn-default"  type="button"><i class="fa fa-edit"></i></a>
+                                      <a type="button" data-toggle="modal" v-show="fmly.unique_id==null" data-target="#deleteFamilyModal" v-on:click="loadFamily(fmly)" class="btn btn-default"><i class="fa fa-share"></i></a>
                                     </td>
                                 </tr>
                               </tbody>
@@ -233,11 +234,11 @@
                                 </td> -->
                                 <td>
                                 <button  type="button" class="btn btn-default btn-sm" v-on:click="loadVertragModal(item)">
-                                  <i class="fa fa-square " :class="{'text-green':customer.policyArr.indexOf(item.id)>=0, 'text-red':customer.policyArr.indexOf(item.id)<0}" ></i></button></button>
+                                  <i class="fa fa-square " :class="{'text-green':customer.policyArr.indexOf(item.id)>=0, 'text-red':customer.policyArr.indexOf(item.id)<0}" ></i></button>
                                 </td>
                                 <td>
-                                  <button  type="button" class="btn btn-default btn-sm" v-on:click="loadVertragModal(item)">
-                                  <i class="fa fa-square " :class="{'text-green':customer.policyArr.indexOf(item.id)>=0, 'text-red':customer.policyArr.indexOf(item.id)<0}" ></i></button></button>
+                                  <a  type="button" class="btn btn-default btn-sm" href="{{ url('admin/provision?id='.$data->id) }}">
+                                  <i class="fa fa-square " :class="{'text-green':customer.provisionArr.indexOf(item.id)>=0, 'text-red':customer.provisionArr.indexOf(item.id)<0}"></i></a>
                                 </td>
                              </tr>
                             </tbody>
@@ -444,7 +445,7 @@
                 <div class="modal-dialog" role="document">
                   <div class="modal-content">
                      <div class="modal-header">
-                      <h4 class="modal-title"> <span style="text-transform:capitalize;"> Move Family Member
+                      <h4 class="modal-title"> <span style="text-transform:capitalize;"> Save As Customer
                       <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                       </button>
@@ -452,15 +453,12 @@
                     </div>
                     <div class="modal-body">
                     <div class="">
-                      Are you sure you want to delete/<span v-show="family.unique_id_family"> edit </span> <span v-show="family.unique_id_family==null"> save </span> as customer ?
+                      Are you sure you want to save as customer ?
                    </div>
-    
-                  
                     </div>
                     <div class="modal-footer">
                       <button class="btn btn-secondary" type="button"  data-dismiss="modal">Cancel</button>
-                      <button class="btn btn-primary"  type="button" data-dismiss="modal"  v-on:click="deleteFamily">Delete</button>
-                      <a v-bind:href="urlPrefix+'customer-form/'+family.id" v-show="family.unique_id_family" class="btn btn-primary"  type="button">Edit As Customer</a>
+                      <!-- <button class="btn btn-primary"  type="button" data-dismiss="modal"  v-on:click="deleteFamily">Delete</button> -->
                       <button v-show="family.unique_id_family==null" class="btn btn-primary"  type="button" data-dismiss="modal"  v-on:click="saveAsCustomer">Save As Customer</button>
                     </div>
                  </div>

@@ -36,6 +36,7 @@ Policy List
                             <input type="text" class="form-control" name="searchTerm" id="searchTerm" placeholder="Quick Search">
                             <div class="input-group-btn"><button type="submit" class="btn btn-primary btn-flat"> <i class="fa fa-search"></i> </button></div> </div>
                   </div>
+                
                   <div class="form-group">
                         <label class="left-15" for="id">Open / Provision </label>
                         <select class="form-control selectJS" name="status">
@@ -49,7 +50,13 @@ Policy List
                         <select class="form-control selectJS" name="name">
                            <option value="">------</option>
                            @foreach($customer as $key=> $row)
-                           <option value="{{ $row->id }}">   {{ $row->first_name }} {{ $row->last_name }}</option>
+                           {{  $selected ='' }}
+                           @if(app('request')->input('id'))
+                                @if(app('request')->input('id') == $row->id  )
+                                    {{ $selected = 'selected' }}
+                                @endif
+                           @endif
+                           <option value="{{ $row->id }}"  {{ $selected }}>   {{ $row->first_name }} {{ $row->last_name }}</option>
                            @endforeach
                         </select>
                     </div>
