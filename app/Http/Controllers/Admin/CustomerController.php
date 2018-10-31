@@ -37,7 +37,12 @@ class CustomerController extends Controller
     
     public function index()
     {
-        $customer = customer::select(['id','unique_id','first_name','last_name'])->where('is_family','=',0)->get();
+        $customer = customer::select(['id','unique_id','first_name','last_name'])->where('is_family','=',0);
+        if(Auth::user()->role !== 1)
+        {
+            $customer->where('customers.user_id',Auth::user()->id);
+        } 
+        $customer = $customer->get();
         $insuranceCtg = DB::table('massparameter')->where('type','category')->where('status',1)->get();
         
         $arrClm = [];

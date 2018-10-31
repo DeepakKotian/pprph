@@ -265,7 +265,12 @@ class insuranceController extends Controller
         $customer =  policydetail::select(['customers.id','customers.unique_id','customers.first_name','customers.last_name'])
         ->leftJoin('customers','customer_id','=','customers.id')
         ->groupBy('customers.id')
-        ->where('is_family','=',0)->get();
+        ->where('is_family','=',0);
+        if(Auth::user()->role !== 1)
+        {
+            $customer->where('customers.user_id',Auth::user()->id);
+        }  
+        $customer = $customer->get();
         $insuranceCtg = DB::table('massparameter')->where('type','category')->where('status',1)->get();
         return view('admin.policydetail',compact(['customer','insuranceCtg']));
     }
@@ -276,6 +281,10 @@ class insuranceController extends Controller
         ->leftJoin('customers','customer_id','=','customers.id')
         ->leftJoin('massparameter as inc','inc.id','=','policy_detail.insurance_ctg_id')
         ->leftJoin('massparameter as prd','prd.id','=','policy_detail.provider_id');
+        if(Auth::user()->role !== 1)
+        {
+            $policyDetail->where('customers.user_id',Auth::user()->id);
+        }  
         return Datatables::of($policyDetail) 
             ->filter(function ($instance) use ($request) {
             if ($request->has('id')&& $request->id!=null) {
