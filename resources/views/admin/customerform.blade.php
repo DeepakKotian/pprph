@@ -240,7 +240,9 @@
                                   <i class="fa fa-square " :class="{'text-green':customer.policyArr.indexOf(item.id)>=0, 'text-red':customer.policyArr.indexOf(item.id)<0}" ></i></button>
                                 </td>
                                 <td>
-                                  <a  type="button" class="btn btn-default btn-sm" href="{{ url('admin/provision?id='.$data->id) }}">
+                                  <a v-show="customer.policyArr.indexOf(item.id)>=0"  type="button" class="btn btn-default btn-sm" href="{{ url('admin/provision?id='.$data->id) }}">
+                                  <i class="fa fa-square " :class="{'text-green':customer.provisionArr.indexOf(item.id)>=0, 'text-red':customer.provisionArr.indexOf(item.id)<0}"></i></a>
+                                  <a v-show="customer.policyArr.indexOf(item.id)<0"  type="button" class="btn btn-default btn-sm" href="javascript:void(0)">
                                   <i class="fa fa-square " :class="{'text-green':customer.provisionArr.indexOf(item.id)>=0, 'text-red':customer.provisionArr.indexOf(item.id)<0}"></i></a>
                                 </td>
                              </tr>
