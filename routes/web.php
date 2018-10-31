@@ -58,6 +58,8 @@ Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     Route::get('/fetch-customer-docs/{id}', 'Admin\documentsController@fetchCustomerDocs');
     Route::post('/delete-customer-document', 'Admin\documentsController@deleteCustomerDocument');
     Route::post('/upload-customer-document', 'Admin\documentsController@uploadCustomerDocument');
+    Route::post('/save-as-customer', 'Admin\CustomerController@saveAsCustomer');
+    Route::post('/postcode-map', 'Admin\CustomerController@postCodeMap');
 
     Route::get('/customer-filter-data', 'Admin\CustomerController@getCustomFilterData');
     Route::post('/customer-form/{id}', 'Admin\CustomerController@update');

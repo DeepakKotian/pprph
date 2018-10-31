@@ -53,23 +53,26 @@ class CustomerController extends Controller
     public function getCustomFilterData(Request $request)
     {
 
-        /*  SELECT cust.id, cust.first_name, 
-        (COUNT(IF(pd.insurance_ctg_id=auto.id,1, NULL))) 'Auto',
-        (COUNT(IF(pd.insurance_ctg_id=LI.id,1, NULL))) 'Krankenkasse',
-        (COUNT(IF(pd.insurance_ctg_id=HI.id,1, NULL))) 'Lebensversicherung'
-        FROM customers cust
-            LEFT JOIN policy_detail pd ON pd.customer_id = cust.id 
-            LEFT  JOIN massparameter auto ON  pd.insurance_ctg_id=auto.id and auto.id=1 and auto.type='category'
-                LEFT OUTER JOIN massparameter HI ON  pd.insurance_ctg_id=HI.id and HI.id=2 and HI.type='category'   
-                LEFT OUTER JOIN massparameter LI ON  pd.insurance_ctg_id=LI.id and LI.id=3 and LI.type='category'
-        GROUP BY cust.id, cust.first_name */
+        /*  SELECT c.id,c.unique_id, c.first_name,c.user_id, c.last_name,c.status, c.email,c.city,c.nationality,c.zip,c.telephone,
+(COUNT(IF(pd.insurance_ctg_id = ctg0.id,1,NULL))) ctg0, (COUNT(IF( pd.insurance_ctg_id = ctg0.id AND pd.status=1,1,NULL))) status0,
+(COUNT(IF(pd.insurance_ctg_id = ctg1.id,1,NULL))) ctg1, (COUNT(IF(pd.insurance_ctg_id = ctg1.id AND pd.status=1,1,NULL))) status1,
+(COUNT(IF(pd.insurance_ctg_id = ctg2.id,1,NULL))) ctg2, (COUNT(IF(pd.insurance_ctg_id = ctg2.id AND pd.status=1,1,NULL))) status2,
+(COUNT(IF(pd.insurance_ctg_id = ctg3.id,1,NULL))) ctg3, (COUNT(IF(pd.insurance_ctg_id = ctg3.id AND pd.status=1,1,NULL))) status3
+FROM customers c 
+LEFT JOIN policy_detail pd ON pd.customer_id = c.id  
+LEFT JOIN massparameter ctg0 ON pd.insurance_ctg_id= ctg0.id  AND ctg0.id=1 AND ctg0.type='category' AND pd.end_date>=CURDATE()  
+LEFT JOIN massparameter ctg1 ON pd.insurance_ctg_id= ctg1.id  AND ctg1.id=2 AND ctg1.type='category' AND pd.end_date>=CURDATE()  
+LEFT JOIN massparameter ctg2 ON pd.insurance_ctg_id= ctg2.id  AND ctg2.id=3 AND ctg2.type='category' AND pd.end_date>=CURDATE()  
+LEFT JOIN massparameter ctg3 ON pd.insurance_ctg_id= ctg3.id  AND ctg3.id=4 AND ctg3.type='category' AND pd.end_date>=CURDATE()  
+WHERE c.is_family=0  GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC */
+
     $jnQry='';
     $strArr = [];
     $insuranceCtg = DB::table('massparameter')->where('type','category')->where('status',1)->get();
     foreach ($insuranceCtg as $key => $value) { //Dynamic queries 
         $jnQry .= " LEFT JOIN massparameter ctg{$key} ON pd.insurance_ctg_id= ctg{$key}.id  AND ctg{$key}.id=$value->id AND ctg{$key}.type='category' AND pd.end_date>=CURDATE() ";
         $name = preg_replace('/\s+/', '_', $value->name);
-        $strArr[$key] = "(COUNT(IF(pd.insurance_ctg_id = ctg{$key}.id,1,NULL))) ctg{$key}"; // (COUNT(IF(ctg{$key}.status=1,1,NULL))) status{$key}
+        $strArr[$key] = "(COUNT(IF(pd.insurance_ctg_id = ctg{$key}.id,1,NULL))) ctg{$key},(COUNT(IF( pd.insurance_ctg_id = ctg{$key}.id AND pd.status=1,1,NULL))) status{$key} "; 
     }
     $addQry =  implode(',',$strArr);
     $count = $insuranceCtg->count();
@@ -139,7 +142,7 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         $uniqueId = 0;
-        $data = customer::select('unique_id')->where('customers.is_family','0')->orderBy('id','desc')->first();
+        $data = customer::select('unique_id')->where('customers.is_family','0')->orderBy('unique_id','desc')->first();
         if(!empty($data)){
             $uniqueId = $data->unique_id;
         }
@@ -241,8 +244,10 @@ class CustomerController extends Controller
         ->where('customer_id',$request->id)
         ->groupBy('massparameter.id')
         ->get();
-        $data->family = customer::select(['id','first_name','last_name','mobile','email',DB::raw('DATE_FORMAT(dob, "%d-%m-%Y") as dob'),'nationality'])
-        ->where('is_family','1')
+        $data->postcode = DB::table('postcode_city')->select('city','plz')->get();
+        $data->postcodeCity = DB::table('postcode_city')->select('city','plz')->groupBy('city')->get();
+        $data->family = customer::select(['id','first_name','last_name','unique_id','mobile','email',DB::raw('DATE_FORMAT(dob, "%d-%m-%Y") as dob'),'nationality'])
+        // ->where('is_family','1')
         ->where('parent_id',$request->id)
         ->get();
         $data->appointments = task::select('task_name','task_detail','assigned_id',DB::raw('DATE_FORMAT(tasks.due_date,"%d-%m-%Y %h:%I:%p") as end_date'), DB::raw('DATE_FORMAT(tasks.start_date,"%d-%m-%Y %h:%I:%p") as start_date'),DB::raw('CONCAT_WS(" ",users.first_name,users.last_name) as userName'))->where('customer_id',$request->id)
@@ -833,12 +838,25 @@ class CustomerController extends Controller
     }
 
     public function saveAsCustomer(Request $request){
-        $data = customer::select('unique_id')->where('customers.is_family','0')->orderBy('id','desc')->first();
+        $data = customer::select('unique_id')->where('customers.is_family','0')->orderBy('unique_id','desc')->first();
         if(!empty($data)){
             $uniqueId = $data->unique_id;
         }
         $uniqueId = $uniqueId+1;
+        $data = customer::where('id',$request->id)->update([
+            'first_name' => $request['first_name_family'],
+            'unique_id'=> $uniqueId,
+            'last_name' => $request['last_name_family'],
+            'mobile' => $request['mobile_family'],
+            'is_family'=>'0',
+            'user_id'=> Auth::user()->id
+        ]);
+        return response()->json($request->id,200);
+    }
 
+    public function postCodeMap(Request $request){
+        $data = DB::table('postcode_city')->select('city')->where('plz',$request->zip)->first();
+        return response()->json($data->city,200);
     }
   
    
