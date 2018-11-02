@@ -36,6 +36,7 @@ var app = new Vue({
         parent_id:null,
         nationality:'',
         appointments:'',
+        city:'',
       },
       customerlogs:{
       },
@@ -302,6 +303,7 @@ var app = new Vue({
                     dob_family :item.dob,
                     nationality_family : item.nationality,
                     mobile_family : item.mobile,
+                    unique_id_family : item.unique_id,
                     id : item.id,
                     
                 }
@@ -697,6 +699,7 @@ var app = new Vue({
         },
         postCodeMap:function(){
             this.$http.post(this.urlPrefix+'postcode-map',this.customer).then(function(response){
+          
                 this.customer.city = response.data;
             }
           ) 

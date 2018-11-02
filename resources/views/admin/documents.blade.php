@@ -101,6 +101,7 @@ Documents List
 
 @section('js')
 <script>
+cnt = 0;
  $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -117,7 +118,7 @@ Documents List
             }
         },
         columns: [
-            {data: 'docId', name: 'docId'},
+            {data: 'DT_Row_Index', name: 'DT_Row_Index'},
             {data: 'document_name', name: 'document_name'},
             {data: 'name', name: 'name'},
             {data: 'docId', name: 'docId'},
@@ -131,18 +132,6 @@ Documents List
                     if(type === 'display'){
                         data = '<p align="center"><a href="javascript:void(0)" class="btn-view btn btn-default"> <span class="fa fa-eye" rel="ctg_'+meta.row+'_'+meta.col+'"></span> </a>';
                         data += '</p>';
-                        //<a href=""> <span class="fa fa-trash"></span> </a> 
-                    }
-            
-               return data;
-            }
-       },{
-            targets: 0,
-            data: null,
-            render: function(data, type, full, meta){
-                console.log();
-                    if(type === 'display'){
-                        data = meta.row+1;
                         //<a href=""> <span class="fa fa-trash"></span> </a> 
                     }
             
