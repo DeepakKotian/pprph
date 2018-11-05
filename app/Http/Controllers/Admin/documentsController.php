@@ -41,7 +41,7 @@ class documentsController extends Controller
                     return Str::contains(strtolower($row['document_name']), strtolower($request->get('searchTerm'))) || Str::contains($row['name'], $request->get('searchTerm')) ? true : false;
                 });
             }
-        })->make(true);;
+        })->addIndexColumn()->make(true);
     }
 
     /**
@@ -84,6 +84,7 @@ class documentsController extends Controller
         ->where('documents.id','=', $request->document_id)
         ->groupBy('policy_detail.policy_number')
         ->get();
+
         foreach ($document  as $key => $value) {
             $document->docName = $value->document_name;
         }
@@ -153,7 +154,12 @@ class documentsController extends Controller
     }
 
     public function uploadCustomerDocument(Request $request){
+     
+        //dd($request->file('documentData'));
         if(!empty($request->file('documentData'))){
+            if(!$request->file('documentData')->getSize()){
+                return response()->json('Document should not be more than 2MB',500);
+            }
             $file = $request->file('documentData');
             $docName = $file->getClientOriginalName();
             $destinationPath = public_path('/uploads/vertrag');

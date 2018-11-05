@@ -606,11 +606,13 @@ var app = new Vue({
                 }
                 }).then(
                 function(response){
-                    this.$toaster.success(response.data);
                     this.fetchCustomerDocs();
+                    this.$toaster.success(response.data);
                     this.customerDocument = '';
                     this.customerDocumentTitle= '';
                     this.currentCustomerDoc ='';
+                    $('#customerDocument').val('');
+                   
                 }
             ).catch(function(response){
                 let self = this;
@@ -698,6 +700,7 @@ var app = new Vue({
         postCodeMap:function(){
             this.$http.post(this.urlPrefix+'postcode-map',this.customer).then(function(response){
                 this.customer.city = response.data;
+               // this.oldCustomerData.city=response.data;
             }
           ) 
         }
