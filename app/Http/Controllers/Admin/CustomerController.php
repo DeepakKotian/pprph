@@ -340,8 +340,8 @@ WHERE c.is_family=0  GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC
             $data['start_date'] = date('Y-m-d',strtotime($request->start_date));
             $data['end_date'] = $request->end_date!=''?date('Y-m-d',strtotime( $request->end_date)):NULL;
             policydetail::whereId($check->policy_id)->update($data);
+            customerpolicymember::where('policy_detail_id','=',$check->policy_id)->delete();
             if($request->family){
-                customerpolicymember::where('policy_detail_id','=',$check->policy_id)->delete();
                 foreach ($request->family as $key => $value) {
                     customerpolicymember::create(['policy_detail_id'=>$check->policy_id,'family_member_id'=>$value]);
                 }
