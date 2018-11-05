@@ -39,7 +39,7 @@ class AppointmentController extends Controller
         );
         
         $startTime = $request['start_time']?$request['start_time']:'00';
-        $endTime = $request['end_time']?$request['end_time']:'00';
+        $endTime = $request['end_time']?$request['end_time']:'23';
 
         $startDate = $request['start_date'].' '.$startTime.':00';
         $endDate = $request['end_date'].' '.$endTime.':00';

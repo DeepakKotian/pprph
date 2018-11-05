@@ -559,6 +559,11 @@ var app = new Vue({
             }
         },
         uploadDocument:function(){
+            let docSize = $('#document')[0].files[0].size;
+            if(docSize>2097152){
+                this.$toaster.error('Document should not be more than 2 MB');
+                return;
+            }
             this.vertragData.document = $('#document')[0].files[0];
             let formData= new FormData();
             formData.append('policy_id',this.vertrag.policy_id);
@@ -597,6 +602,11 @@ var app = new Vue({
           )
         },
         uploadCustomerDocument:function(){
+            let docSize = $('#customerDocument')[0].files[0].size;
+            if(docSize>2097152){
+                this.$toaster.error('Document should not be more than 2 MB');
+                return;
+            }
             this.customerDocument = $('#customerDocument')[0].files[0];
             let formData= new FormData();
             formData.append('documentData',this.customerDocument);

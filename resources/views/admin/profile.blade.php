@@ -24,7 +24,7 @@
       <div class="btn-section userphtoinput">
       <label type="button" for="user_photo" class="btn btn-block btn-primary">Choose Photo</label>
       <input type="hidden"  class="form-control input-rounded"  v-model="profile.photo" id="userphoto_file" style="margin-right: 20px;" >
-        <input type="file" class="op_0" id="user_photo" >
+        <input type="file" accept="image/*" class="op_0" id="user_photo" >
       </div>
       </div>
       <!-- /.box-body -->
