@@ -887,7 +887,7 @@ WHERE c.is_family=0  GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC
     }
 
     public function postCodeMap(Request $request){
-        $data = DB::table('postcode_city')->select('city')->where('plz',$request->zip)->first();
+        $data = DB::table('postcode_city')->select(['id','city'])->where('plz',$request->zip)->first();
         return response()->json($data->city,200);
     }
   

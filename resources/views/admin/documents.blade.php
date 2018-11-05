@@ -101,6 +101,7 @@ Documents List
 
 @section('js')
 <script>
+cnt = 0;
  $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -136,21 +137,7 @@ Documents List
             
                return data;
             }
-       }
-    //,{
-    //         targets: 0,
-    //         data: null,
-    //         render: function(data, type, full, meta){
-                
-    //                 if(type === 'display'){
-    //                     data = meta.row+1;
-    //                     //<a href=""> <span class="fa fa-trash"></span> </a> 
-    //                 }
-            
-    //            return data;
-    //         }
-    //    }
-    ]
+       }]
     });
     $('#search-form').on('submit', function(e) {
         oTable.draw();
