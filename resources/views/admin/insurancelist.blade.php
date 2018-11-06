@@ -49,7 +49,8 @@
    </div>
 
 <!-- Delete Modal-->
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+
+<!-- <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
    <div class="modal-dialog" role="document">
       <div class="modal-content">
          <div class="modal-header">
@@ -65,9 +66,10 @@
          </div>
       </div>
    </div>
-</div>
+</div> -->
 
 <!-- change status Modal-->
+
 <div class="modal fade" id="statusModal" tabindex="-1" role="dialog" aria-labelledby="statusModalLabel" aria-hidden="true">
    <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -85,6 +87,7 @@
       </div>
    </div>
 </div>
+
  <!-- Add insurance -->
 <div class="modal fade" id="addInsurance" tabindex="-1" role="dialog" aria-labelledby="addInsuranceLabel" aria-hidden="true">
    <div class="modal-dialog" role="document">

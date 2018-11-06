@@ -24,7 +24,7 @@ class CreateTaskhistoriesTable extends Migration
             $table->string('task_detail')->nullable();
             $table->timestamp('due_date')->nullable();
             $table->string('priority')->nullable();
-            $table->string('comment')->nullable();
+            $table->text('comment')->nullable();
             $table->timestamps();
         });
     }

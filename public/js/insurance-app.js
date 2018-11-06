@@ -81,6 +81,7 @@ var app = new Vue({
             }
             this.$v.insurance.$reset();  
         },
+
         addNewInsurance: function () {
             
           if (this.$v.insurance.$invalid) {
@@ -363,13 +364,17 @@ var app = new Vue({
           setTimeout( function(){ $('#policyMappingTable').DataTable({destroy: true,"order": [[0, "desc" ]],}); },1000)
     
         },
+
         loadStatusModal:function(item){
             this.insurance =  item;
             $('#statusModal').modal('show');
         },
+
         changeStatus:function(item){
+           
+            
             this.insurance =  item;
-            console.log(this.insurance);
+           
             this.$http.post(this.urlPrefix+'update-insurance-status',this.insurance).then(
                 function(response){
                     this.$toaster.success(response.data);
