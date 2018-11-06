@@ -110,8 +110,9 @@
          </div>
          </div>
          <div class="modal-footer">
-          <button class="btn btn-primary" v-if="modalAction=='edit'" v-on:click="updateInsurance()" type="button">Save</a>
-            <button class="btn btn-primary" v-if="modalAction=='add'" v-on:click="addNewInsurance()" type="button">Save</a>
+          <button class="btn btn-secondary" type="button"  data-dismiss="modal">Cancel</button>
+          <button class="btn btn-primary" v-if="modalAction=='edit'" v-on:click="updateInsurance()" type="button">Update</a>
+          <button class="btn btn-primary" v-if="modalAction=='add'" v-on:click="addNewInsurance()" type="button">Save</a>
          </div>
       </div>
    </div>

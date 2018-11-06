@@ -158,8 +158,6 @@ class documentsController extends Controller
     }
 
     public function uploadCustomerDocument(Request $request){
-     
-        //dd($request->file('documentData'));
         if(!empty($request->file('documentData'))){
             if(!$request->file('documentData')->getSize()){
                 return response()->json('Document should not be more than 2MB',500);
