@@ -69,8 +69,6 @@ var app = new Vue({
      },
 
     methods: {
-       
-
         loadinsurancemodal:function(item){
             this.modalAction='add';
             this.insurance.name="";
@@ -364,13 +362,18 @@ var app = new Vue({
     
         },
         loadStatusModal:function(item){
-            this.insurance =  item;
+            if(item !== null){
+                this.modalAction='changeStatus';
+                this.insurance.name=item.name;
+                this.insurance.id=item.id;
+                this.insurance.status =  item.status;
+            }
+            // this.$v.insurance.$reset();  
             $('#statusModal').modal('show');
         },
         changeStatus:function(item){
             this.insurance =  item;
-            console.log(this.insurance);
-            this.$http.post(this.urlPrefix+'update-insurance-status',this.insurance).then(
+                this.$http.post(this.urlPrefix+'update-insurance-status',this.insurance).then(
                 function(response){
                     this.$toaster.success(response.data);
                     $('#statusModal').modal('hide');

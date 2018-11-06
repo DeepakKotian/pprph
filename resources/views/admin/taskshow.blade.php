@@ -168,7 +168,7 @@
                   <th>Modified By</th>
                   <th>Due Date</th>
                   <th>Status</th>
-                  <th>Comment</th>
+                  <th style="width:50%">Comment</th>
                 </tr>
                
                 <tr v-for="(rw,ky) in taskHistory">
@@ -176,7 +176,7 @@
                   <td><% rw.a_first_name %> <% rw.a_last_name %></td>
                   <td><% rw.due_date %></td>
                   <td><% rw.status %></td>
-                  <td><% rw.comment %></td>
+                  <td style="width:50%"><% rw.comment %></td>
                 </tr>
                </tbody></table>
             </div>
