@@ -6,6 +6,7 @@ var app = new Vue({
       insurance:{
        name:null,
        type:'category',
+       status:'',
       },
       insuranceslect:{},
       providersselect:{},
@@ -69,8 +70,6 @@ var app = new Vue({
      },
 
     methods: {
-       
-
         loadinsurancemodal:function(item){
             this.modalAction='add';
             this.insurance.name="";
@@ -359,23 +358,27 @@ var app = new Vue({
         },
 
         loadDataTable:function(){
-          setTimeout( function(){ $('#insuranceTable').DataTable({ destroy: true, "order": [[0, "desc" ]],}); },1000)
-          setTimeout( function(){ $('#providersTable').DataTable({ destroy: true, "order": [[0, "desc" ]],}); },1000)
-          setTimeout( function(){ $('#policyMappingTable').DataTable({destroy: true,"order": [[0, "desc" ]],}); },1000)
+          setTimeout( function(){ $('#insuranceTable').DataTable({ destroy: true, "order": [[0, "asc" ]],}); },1000)
+          setTimeout( function(){ $('#providersTable').DataTable({ destroy: true, "order": [[0, "asc" ]],}); },1000)
+          setTimeout( function(){ $('#policyMappingTable').DataTable({destroy: true,"order": [[0, "asc" ]],}); },1000)
     
         },
 
         loadStatusModal:function(item){
-            this.insurance =  item;
+            if(item !== null){
+                this.modalAction='changeStatus';
+                this.insurance.name=item.name;
+                this.insurance.id=item.id;
+                this.insurance.status =  item.status;
+            }
+            // this.$v.insurance.$reset();  
             $('#statusModal').modal('show');
         },
 
         changeStatus:function(item){
-           
-            
+    
             this.insurance =  item;
-           
-            this.$http.post(this.urlPrefix+'update-insurance-status',this.insurance).then(
+                this.$http.post(this.urlPrefix+'update-insurance-status',this.insurance).then(
                 function(response){
                     this.$toaster.success(response.data);
                     $('#statusModal').modal('hide');
@@ -384,7 +387,9 @@ var app = new Vue({
                     //this.loadDataTable();
                 }
             )
-        }
+        },
+
+
      },
      
     delimiters: ["<%","%>"]

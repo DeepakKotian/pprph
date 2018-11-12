@@ -39,10 +39,8 @@ class DashboardController extends Controller
     } 
 
     public function fetchDueAppointments(){
-     
-        $dueAppointments = [];
+      $dueAppointments = [];
         try{
-          
             $query=task::leftjoin('users as u','u.id','=','tasks.user_id')->leftjoin('customers as cst','cst.id','=','tasks.customer_id')
             ->select(DB::raw('DATE_FORMAT(tasks.created_at,"%d-%m-%Y") as created_on'),DB::raw('DATE_FORMAT(tasks.start_date,"%H:%i:00") as appointment_start_at'),DB::raw('DATE_FORMAT(tasks.due_date,"%H:%i:00") as appointment_end_at'),'tasks.task_name as title', 'u.first_name','u.last_name','cst.first_name as cfirst_name','cst.last_name as clast_name','tasks.assigned_id','tasks.task_detail as description','customer_id',DB::raw('DATE_FORMAT(tasks.due_date,"%d-%m-%Y") as end'), DB::raw('tasks.start_date as start'),
                              DB::raw('tasks.id as id' ))
