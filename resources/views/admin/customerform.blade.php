@@ -283,8 +283,9 @@
                 
                 @if(!empty($data))
                     <a href="{{ url('/admin/customers/') }}" class="btn btn-primary" >Cancel </a>
-                
+                    @if(Auth::user()->role == 1)  <!-- Only admin can see -->
                     <button type="button" class="btn btn-primary" v-on:click="updateCustomer">Update</button>
+                   
                     <button  class="btn btn-primary  " data-toggle="modal" v-on:click="taskapp.loadTaskDetail(null,currentId)" data-target="#addTask" >Add Task</button>
                   <!-- <a target="_blank" href="{{ url('/admin/printcustomer/'.$data->id) }}" class="btn btn-primary" >Print</a> -->
                      &nbsp;
@@ -293,6 +294,7 @@
                       <button  type="button" class="btn" data-toggle="modal" data-target="#statusModal" class="btn btn-danger" v-on:click="onStatus(0)" v-bind:class="'btn-danger'" v-bind:disabled="customer.status==0" >DEACTIVE</button>
                    </div> -->
                    <button  class="btn btn-primary  " data-toggle="modal" v-on:click="loadNotesDetail(null)" data-target="#addNotes" >Notes</button>
+                   @endif
                 @else
                   <button type="reset" v-on:click="resetForm" class="btn btn-info">Reset</button>
                   <button type="button" class="btn btn-primary" v-on:click="addNewCustomer">Save</button>
@@ -347,8 +349,12 @@
                     </div>
                     <div class="modal-footer">
                       <button class="btn btn-secondary" type="button"  data-dismiss="modal">Cancel</button>
+                      @if(Auth::user()->role == 1)
                       <button v-if="modalAction=='add'" class="btn btn-primary"  type="button"  v-on:click="storeFamily">Save</button>
                       <button v-if="modalAction=='edit'" class="btn btn-primary"  type="button"  v-on:click="updateFamily">Update</button>
+                      @else
+                        <button class="btn btn-primary"  disabled>Save</button>
+                      @endif
                     </div>
                  </div>
                 </div>
@@ -439,8 +445,12 @@
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-secondary" type="button"  data-dismiss="modal">Cancel</button>
+                        @if(Auth::user()->role == 1)
                         <button v-show="policyAction=='edit'"  class="btn btn-primary" type="button" v-on:click="savePolicy()">UPDATE </button>
                         <button v-show="policyAction==''" class="btn btn-primary" type="button" v-on:click="addNewPolicy()">ADD</button>
+                        @else
+                        <button class="btn btn-primary"  disabled>Save</button>
+                        @endif
                     </div>
                  </div>
                 </div>
@@ -464,7 +474,11 @@
                     <div class="modal-footer">
                       <button class="btn btn-secondary" type="button"  data-dismiss="modal">Cancel</button>
                       <!-- <button class="btn btn-primary"  type="button" data-dismiss="modal"  v-on:click="deleteFamily">Delete</button> -->
+                      @if(Auth::user()->role == 1)
                       <button v-show="family.unique_id_family==null" class="btn btn-primary"  type="button" data-dismiss="modal"  v-on:click="saveAsCustomer">Save As Customer</button>
+                      @else
+                      <button class="btn btn-primary"  disabled>Save</button>
+                      @endif
                     </div>
                  </div>
                 </div>

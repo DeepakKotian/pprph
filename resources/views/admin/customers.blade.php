@@ -109,6 +109,7 @@ Customers List
                                 <th>City</th>
                                 <th>Postcode</th>
                                 <th>Telephone</th>
+                                <th>Created By</th>
                                 @foreach($insuranceCtg as $key=> $rowCtg)
                                 <th> {{ $rowCtg->name }}</th>
                                 @endforeach
@@ -241,15 +242,17 @@ a.ui-button:active,
             {data: 'city', name: 'city'},
             {data: 'zip', name: 'zip'},
             {data: 'telephone', name: 'telephone'},
+            {data: 'u_name', name: 'u_name'},
             @foreach($insuranceCtg as $key=> $rowCtg)
             {data: 'ctg{{ $key }}', name: 'ctg{{ $key }}'},
             @endforeach
         ],
         columnDefs:[{
-            targets: [{{ $arrClms }}],
+            targets: [{{ $arrClms }}], //For Dynamic Column JS looping
             data: null,
             render: function(data, type, full, meta){
-                var index = meta.col - 7;
+                console.log(meta.col);
+                var index = meta.col - 8; //Insurance Column starts
                 var dataStr ='';
                 if(data>0){
                     if(type === 'display'){

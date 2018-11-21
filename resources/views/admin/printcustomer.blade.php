@@ -27,6 +27,7 @@
                     <th>City</th>
                     <th>Postcode</th>
                     <th>Telephone</th>
+                    <th>Created By</th>
                     @foreach($data['ctgs'] as $key=> $rowCtg)
                     <th> {{ $rowCtg->name }}</th>
                     @endforeach
@@ -42,6 +43,7 @@
                     <td>{{ $vl['city'] }}</td>
                     <td>{{ $vl['zip'] }}</td>
                     <td>{{ $vl['telephone'] }}</td>
+                    <td>{{ $vl['u_name'] }}</td>
                     <!-- <td align="center"> //@if($vl['status']>0)
                             <img style="width:8px;" src="uploads/checked.png" alt="">
                         //@else
