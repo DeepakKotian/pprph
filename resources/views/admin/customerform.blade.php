@@ -321,7 +321,6 @@
                     <a href="{{ url('/admin/customers/') }}" class="btn btn-primary" >Cancel </a>
                     @if(Auth::user()->role == 1)  <!-- Only admin can see -->
                     <button type="button" class="btn btn-primary" v-on:click="updateCustomer">Update</button>
-                   
                     <button  class="btn btn-primary  " data-toggle="modal" v-on:click="taskapp.loadTaskDetail(null,currentId)" data-target="#addTask" >Add Task</button>
                   <!-- <a target="_blank" href="{{ url('/admin/printcustomer/'.$data->id) }}" class="btn btn-primary" >Print</a> -->
                      &nbsp;
@@ -330,12 +329,12 @@
                       <button  type="button" class="btn" data-toggle="modal" data-target="#statusModal" class="btn btn-danger" v-on:click="onStatus(0)" v-bind:class="'btn-danger'" v-bind:disabled="customer.status==0" >DEACTIVE</button>
                    </div> -->
                    <!-- <button  class="btn btn-primary  " data-toggle="modal" v-on:click="loadNotesDetail(null)" data-target="#addNotes" >Notes</button> -->
+                   @endif
                 @else
                   <button type="reset" v-on:click="resetForm" class="btn btn-info">Reset</button>
                   <button type="button" class="btn btn-primary" v-on:click="addNewCustomer">Save</button>
-                 
-                @endif
-                
+               
+              @endif
               </div>
               </form>
             <div class="modal fade" id="familyModal" tabindex="-1" role="dialog" aria-labelledby="familyModalLabel" aria-hidden="true">
