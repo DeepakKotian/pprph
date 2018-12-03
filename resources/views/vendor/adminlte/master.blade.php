@@ -21,7 +21,7 @@
    
     <link rel="stylesheet" href="{{ asset('css/admin_custom.css') }} ">
     <link rel="stylesheet" href="{{ asset('css/jquery-ui.css') }} ">
-
+    <link rel="stylesheet" href="{{ asset('css/vue-tooltip.css') }} ">
     @if(config('adminlte.plugins.select2'))
         <!-- Select2 -->
         <link rel="stylesheet" href="{{ asset('vendor/adminlte/dist/css/select2.css') }}">
@@ -76,6 +76,7 @@
 <script src="{!! asset('js/vue-resource.js') !!}"></script>
 <script src="{!! asset('js/v-toaster.js') !!}"></script>
 <script src="{!! asset('js/v-mask.min.js') !!}"></script>
+<script src="{!! asset('js/v-tooltip.min.js') !!}"></script>
 <script>
     var urlPrefix = "/admin/";
 
@@ -90,6 +91,7 @@
     Vue.use(window.vuelidate.default)
     Vue.use(VToaster, {timeout: 5000})
     Vue.use(VueMask.VueMaskPlugin);
+    Vue.use(VTooltip);
 
     var required     = window.validators.required,
     sameAs          = window.validators.sameAs,

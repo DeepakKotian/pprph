@@ -10,9 +10,9 @@
   <ol class="breadcrumb">
     <li><a href="{{ url('/admin')}}"><i class="fa fa-dashboard"></i> Home</a></li>
     @if(!empty($data))
-      <li class="breadcrumb-item active">Edit Customer  </li>
+      <li class="breadcrumb-item active">Edit Customer</li>
     @else
-      <li class="breadcrumb-item active">Add Customer  </li>
+      <li class="breadcrumb-item active">Add Customer </li>
     @endif
   </ol>
 @stop
@@ -186,9 +186,9 @@
                                     <td> <% fmly.dob %></td>
                                     <td> <span v-show="fmly.mobile">+41</span> <% fmly.mobile %></td>
                                     <td>
-                                      <a type="button" class="btn btn-default" data-toggle="modal" data-target="#familyModal"  v-show="fmly.unique_id==null" v-on:click="loadFamily(fmly)"><i class="fa fa-edit"></i></a> 
-                                      <a v-bind:href="urlPrefix+'customer-form/'+fmly.id" v-show="fmly.unique_id" class="btn btn-default"  type="button"><i class="fa fa-edit"></i></a>
-                                      <a type="button" data-toggle="modal" v-show="fmly.unique_id==null" data-target="#deleteFamilyModal" v-on:click="loadFamily(fmly)" class="btn btn-default"><i class="fa fa-share"></i></a>
+                                      <a type="button" class="btn btn-default" data-toggle="modal" data-target="#familyModal"  v-show="fmly.unique_id==null" v-tooltip="'Edit'" v-on:click="loadFamily(fmly)"><i class="fa fa-edit"></i></a> 
+                                      <a v-bind:href="urlPrefix+'customer-form/'+fmly.id" v-show="fmly.unique_id" class="btn btn-default"  type="button" v-tooltip="'Edit'"><i class="fa fa-edit"></i></a>
+                                      <a type="button" data-toggle="modal" v-show="fmly.unique_id==null" data-target="#deleteFamilyModal" v-on:click="loadFamily(fmly)" v-tooltip="'Save as customer'" class="btn btn-default"><i class="fa fa-share"></i></a>
                                     </td>
                                 </tr>
                               </tbody>
@@ -251,8 +251,38 @@
                         </div>
                     </div>
                     </div>
-                 
-                    <div class="col-sm-12">
+                    <div class="mb-20">
+                        <textarea name="" style="resize:none" id=""  class="form-control" v-model="singleNote.description" cols="30" rows="3"></textarea>
+                    </div>
+                    <div class="mb-20">
+                        <button class="btn btn-primary" v-if="modalAction=='add'" v-on:click="addNote()" type="button">Add Note</button>
+                        <button class="btn btn-primary " v-if="modalAction=='update'" v-on:click="editNote()" type="button">Update Note</button>
+                     </div>
+                     
+                        <div class="box box-info " >
+                        <div class="box-header with-border">
+                          <h3 class="box-title">Notes</h3>
+                        </div>
+                          <div class="box-body box-scroll">
+                            <div class="table table-responsive">
+                                <table class="table table-bordered">
+                                  <!-- <thead>
+                                  <th>Upcoming Appointments</th>
+                                  </thead> -->
+                                  <tbody>
+                                  <tr v-for="(note,index) in notes">
+                                      <td><% index+1 %>. <% note.description %> </td>
+                                      <td>
+                                        <a href="javascript:void(0)" v-on:click="loadNotesDetail(note)" class="fa fa-edit"></a> &nbsp;
+                                        <a href="javascript:void(0)" v-on:click="deleteNote(note.id)"class="fa fa-trash"></a>
+                                      </td>
+                                      </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                          </div>
+                        </div>
+             
                         <div class="box box-info" v-show="customer.appointments!=''">
                         <div class="box-header with-border">
                           <h3 class="box-title">Appointments</h3>
@@ -272,7 +302,7 @@
                               </div>
                           </div>
                         </div>
-                       </div>
+                       
                     @endif
                 </div>
                
@@ -292,7 +322,7 @@
                       <button type="button" class="btn"  data-toggle="modal" data-target="#statusModal" class="btn btn-success" v-on:click="onStatus(1)" v-bind:class="'btn-success'"  v-bind:disabled="customer.status==1"   >ACTIVE</button>
                       <button  type="button" class="btn" data-toggle="modal" data-target="#statusModal" class="btn btn-danger" v-on:click="onStatus(0)" v-bind:class="'btn-danger'" v-bind:disabled="customer.status==0" >DEACTIVE</button>
                    </div> -->
-                   <button  class="btn btn-primary  " data-toggle="modal" v-on:click="loadNotesDetail(null)" data-target="#addNotes" >Notes</button>
+                   <!-- <button  class="btn btn-primary  " data-toggle="modal" v-on:click="loadNotesDetail(null)" data-target="#addNotes" >Notes</button> -->
                 @else
                   <button type="reset" v-on:click="resetForm" class="btn btn-info">Reset</button>
                   <button type="button" class="btn btn-primary" v-on:click="addNewCustomer">Save</button>
@@ -576,7 +606,6 @@
                             <h4 class="panel-heading"  style="margin-bottom: 0;background: #eee;" v-if="logs.type=='add_family'"> Added By  : <b><% logs.userName %> </b>  <span class="pull-right text-info">   On : <% logs.updatedAt %></span>  </h4>
                             <h4 class="panel-heading"  style="margin-bottom: 0;background: #eee;" v-if="logs.type=='update_family'">Edited By :<b> <% logs.userName %> </b> <span class="pull-right text-info">   On: <% logs.updatedAt %></span>  </h4>
                               <div class="form-group" v-if="logs.type=='add_family'">
-
                                   <ul class="list-group">
                                     <li class="text list-group-item">
                                       <% logs.logArr.dob %>
@@ -870,7 +899,7 @@
 
  <!-- Vertrag Modal End -->
  <!-- notes Modal -->
- <div class="modal fade" id="addNotes" tabindex="-1" role="dialog" aria-labelledby="notesModalLabel" aria-hidden="true">
+ <!-- <div class="modal fade" id="addNotes" tabindex="-1" role="dialog" aria-labelledby="notesModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                     <div class="modal-header">
@@ -880,20 +909,19 @@
                         <h4 class="modal-title" id="exampleModalLabel"> Notes</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="row">
+                        <div class="row"> -->
                        
                             <!-- <div class="form-group col-lg-12">
                               <label for="providerSlct">Title:</label>
                               <input type="text" class="form-control" name="" id="">
                             </div> -->
-                            <div class="form-group col-lg-12">
+                            <!-- <div class="form-group col-lg-12">
                               <textarea name="" id=""  class="form-control" v-model="singleNote.description" cols="30" rows="3"></textarea>
                             </div>
                        
                             <div class="form-group col-lg-12">
                               <button class="btn btn-primary pull-right"  v-if="modalAction=='add'" v-on:click="addNote()" type="button">Add</button>
                               <button class="btn btn-primary pull-right"  v-if="modalAction=='update'" v-on:click="editNote()" type="button">Update</button>
-                              
                             </div>
                            
                         </div>
@@ -924,7 +952,7 @@
             </div>
 
         </div>
-      </div>
+      </div> -->
  
  <!-- notes modal end -->
 </div>

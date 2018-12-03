@@ -160,7 +160,8 @@ var app = new Vue({
             todayHighlight: true,
 
         }).on(
-            'changeDate', function() { self.customer.dob = $('#dob').val();  $('#dob').datepicker('hide'); }
+            'changeDate', function() { self.customer.dob = $('#dob').val(); 
+             $('#dob').datepicker('hide'); }
           )
         $('#dob_family').datepicker({
             format:'dd-mm-yyyy',
@@ -225,6 +226,7 @@ var app = new Vue({
         } 
      }, 
      getCustomerData: function () {
+        this.loadNotesDetail();
         this.$http.get(this.urlPrefix+'fetchcustomer/'+this.currentId).then(function(response){
         this.oldCustomerData={
                 id:response.data.id,
@@ -252,14 +254,12 @@ var app = new Vue({
              };
 
         this.customer=response.data;
-       
-       
         setTimeout(function() {
             $('.selectJS').select2();
             $('#insuranceModal').find('.modal-body #selectJSFamily').select2();
-           
+
         }, 1000);
-         
+        $( "#dob" ).datepicker( "setDate", this.customer.dob);
         });
       }, 
 
@@ -305,19 +305,19 @@ var app = new Vue({
                     mobile_family : item.mobile,
                     unique_id_family : item.unique_id,
                     id : item.id,
-                    
                 }
             }
+            $( "#dob_family" ).datepicker( "setDate", this.family.dob_family);
         }
         this.$v.family.$reset();  
       },
       
       storeFamily: function () {
-          console.log(this.$v.family);
+  
         if (this.$v.family.$invalid) {
             this.$v.family.$touch();
         }else{
-            console.log(this.family);
+          
             this.$http.post(this.urlPrefix+'storefamily',this.family).then(
                 function(response){
                     this.$toaster.success(response.data);
@@ -335,11 +335,11 @@ var app = new Vue({
       },
 
       updateFamily: function () {
-            console.log(this.$v.family);
+          
         if (this.$v.family.$invalid) {
             this.$v.family.$touch();
         }else{
-            console.log(this.family);
+           
             this.$http.post(this.urlPrefix+'updatefamily',{family:this.family,oldFamily:this.oldCustomerData.family}).then(
                 function(response){
                     this.$toaster.success(response.data);
@@ -418,12 +418,15 @@ var app = new Vue({
                 this.insurancedata.end_date = response.data.end_date;
                 this.insurancedata.policy_number = response.data.policy_number;
                 this.insurancedata.policy_id =  response.data.policy_id;
+                $( "#start_date" ).datepicker( "setDate", this.insurancedata.start_date);
+              //  $( "#end_date" ).datepicker( "setDate", this.insurancedata.end_date);
              }).catch(function(response){
                 let self = this;
                 self.$toaster.error(response.data);
                 $('#insuranceModal').find('.modal-body #selectJSFamily').val('');
                 $('#insuranceModal').find('.modal-body #selectJSFamily').trigger('change');
            });
+          
         },
         fetchPolicyList :function(){
             this.insurancedata.provider_id = $('#providerSlct')[0].value;
@@ -438,7 +441,10 @@ var app = new Vue({
             this.policyAction = '';
             this.$http.post(this.urlPrefix+'fetchpolicylist/'+this.currentId,  this.insurancedata).then(function(response){  
                 this.policylist =  response.data;
+
             })
+            
+            
         },
         savePolicy:function(){ //update new policy
             if(this.$v.insurancedata.$invalid){
@@ -651,6 +657,7 @@ var app = new Vue({
         },
 
         loadNotesDetail:function(note){
+
             //this.modalAction='';
             if(note!=null){
                 this.modalAction='update';
@@ -658,9 +665,13 @@ var app = new Vue({
                 this.singleNote.noteId=note.id;
             }
             else{
+          
+                
                 this.modalAction='add'
                 this.singleNote.description="";
                 this.singleNote.noteId="";
+                // this.currentId=this.currentId;
+                // console.log(this.currentId);
                 this.fetchNotes();
             }
         },
@@ -681,6 +692,7 @@ var app = new Vue({
            });
         },
         editNote:function(){
+           
             this.$http.put(this.urlPrefix+'notes/'+this.singleNote.noteId,{ singleNote:this.singleNote,custId:this.currentId} ).then(function(response){
                 this.fetchNotes();
                 this.modalAction='add'

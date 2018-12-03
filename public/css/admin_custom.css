@@ -229,6 +229,16 @@
     .treeview-menu li{
         line-height: 1.4 !important;
     }
+
+    .mb-20{
+        margin-bottom: 20px;
+    }
+
+    .box-scroll{
+        height: auto;
+        max-height: 150px;
+        overflow-y: auto;
+    }
     @media (max-width:1600px) {
        
         #search-form .form-group {

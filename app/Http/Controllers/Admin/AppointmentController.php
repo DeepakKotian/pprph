@@ -57,7 +57,6 @@ class AppointmentController extends Controller
             'assigned_id' => $request['assigned_id'],
         ];
         if( $startDate < $endDate){
-           
             $duplicate=task::where('type','=','appointment')->where('user_id','=', $id)->where(
             'customer_id','=', ''.$request["customer_id"].'')->where(
             'start_date','=', ''.$startDate.'')->where(
@@ -68,7 +67,6 @@ class AppointmentController extends Controller
            }
            else{
             $insertData = task::create($data);
-
             if($insertData){
                 $response = task::leftjoin('users as u','u.id','=','tasks.user_id')->leftjoin('customers as cst','cst.id','=','tasks.customer_id')
                 ->select('tasks.task_name as title','tasks.customer_id', 'u.first_name','u.last_name','cst.first_name as cfirst_name','cst.last_name as clast_name','tasks.assigned_id', 'tasks.task_detail as description',DB::raw('tasks.due_date as end, tasks.start_date as start '),
@@ -79,7 +77,6 @@ class AppointmentController extends Controller
                 return response()->json($response,200);
             } 
            }
-           
         }
         else{
             return response()->json('End date and time must greater than start date and time',400); 
@@ -88,8 +85,7 @@ class AppointmentController extends Controller
     }
 
     public function update(Request $request){
-       
-        $id = Auth::user()->id;
+       $id = Auth::user()->id;
         $validate = $this->validate(request(),[
             'title' => 'required',
             'description' => 'required',

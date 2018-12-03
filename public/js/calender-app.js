@@ -81,9 +81,10 @@ var calenderapp = new Vue({
             todayHighlight: true,
             startDate:'0',
         }).on(
-            'changeDate',  function(selected) { self.appointment.end_date = $('#end_date').val(); 
+            'changeDate',  function(selected) {
             var maxDate = new Date(selected.date.valueOf());
             $('#start_date').datepicker('setEndDate', maxDate);
+            self.appointment.end_date = $('#end_date').val(); 
         })
         $('#start_date').datepicker({
             format:'dd-mm-yyyy',
@@ -112,7 +113,6 @@ var calenderapp = new Vue({
         this.$http.get(this.urlPrefix+'fetchappointments').then(
             function(response){
              this.events = response.data;
-            
              this.loadCalender();  
             }
         )
@@ -172,7 +172,6 @@ var calenderapp = new Vue({
                     self.appointment.end_time =  moment(calEvent.end).format('HH')+':'+ moment(calEvent.end).format('mm');
                     self.appointment.id =  calEvent.id;
                     self.action = 'edit';
-                   
                  },
                  timeFormat: 'H(:mm)',
                  events    : self.events,

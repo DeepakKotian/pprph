@@ -51,10 +51,8 @@ var taskapp = new Vue({
       
     }, 
     mounted: function(){
-       
         if($('#taskTable').length>0){
             this.loadAllTasks();
-
         }
         if($('#mytaskTable').length>0){
             this.fetchMyTaskList();

@@ -376,7 +376,6 @@ var app = new Vue({
         },
 
         changeStatus:function(item){
-    
             this.insurance =  item;
                 this.$http.post(this.urlPrefix+'update-insurance-status',this.insurance).then(
                 function(response){
@@ -388,9 +387,7 @@ var app = new Vue({
                 }
             )
         },
-
-
-     },
+ },
      
     delimiters: ["<%","%>"]
   })
