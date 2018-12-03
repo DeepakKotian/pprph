@@ -35,7 +35,7 @@ Customers List
             <div class="form-group">
                <form method="POST" id="search-form" class="form-inline" role="form">
                     <div class="form-group">
-                    <div class="input-group">
+                    <div class="input-group" style="width:160px;">
                         <input type="text" class="form-control" name="searchTerm" id="searchTerm" placeholder="Quick Search">
                         <div class="input-group-btn"><button type="submit" class="btn btn-primary btn-flat"> <i class="fa fa-search"></i> </button></div> </div>
                     </div>
@@ -48,7 +48,7 @@ Customers List
                            @endforeach
                         </select>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group customSlctWidth">
                         <label class="left-15" for="id">Customer ID</label>
                         <select class="form-control selectJS" name="id">
                            <option value="">------</option>
@@ -65,11 +65,15 @@ Customers List
                            <option value="{{ $ky }}">{{ $rwCtg->name }}</option>
                            @endforeach
                         </select>
-                        <select class="form-control selectJS" name="status_prd">
+                        <span class="customSlctWidth">
+                        <select class="form-control selectJS customSlctWidth" name="status_prd">
                            <option value="">------</option>
                            <option value="0">Inactive</option>
                            <option value="1">Active</option>
                         </select>
+
+                        </span>
+                        
                     </div>
                    
                     @if(Auth::user()->role == 1)  <!-- Only admin can see -->
@@ -109,8 +113,9 @@ Customers List
                                 <th>City</th>
                                 <th>Postcode</th>
                                 <th>Telephone</th>
+                                <th>Created By</th>
                                 @foreach($insuranceCtg as $key=> $rowCtg)
-                                <th> {{ $rowCtg->name }}</th>
+                                <th title="{{ $rowCtg->name }}" class="masterTooltip"> {{ str_limit($rowCtg->name,10) }}</th>
                                 @endforeach
                             </tr>
                         </thead>
@@ -209,6 +214,16 @@ a.ui-button:active,
 	font-weight: normal;
 	color: #ffffff;
 }
+.tooltip_custom {
+	display:none;
+	position:absolute;
+	border:1px solid #333;
+	background-color:#161616;
+	border-radius:5px;
+	padding:10px;
+	color:#fff;
+	font-size:12px Arial;
+}
 </style>
 
 @stop
@@ -241,15 +256,17 @@ a.ui-button:active,
             {data: 'city', name: 'city'},
             {data: 'zip', name: 'zip'},
             {data: 'telephone', name: 'telephone'},
+            {data: 'u_name', name: 'u_name'},
             @foreach($insuranceCtg as $key=> $rowCtg)
-            {data: 'ctg{{ $key }}', name: 'ctg{{ $key }}'},
+            {data: 'ctg{{ $key }}', name: 'ctg{{ $key }}',width:'80'},
             @endforeach
         ],
         columnDefs:[{
-            targets: [{{ $arrClms }}],
+            targets: [{{ $arrClms }}], //For Dynamic Column JS looping
             data: null,
             render: function(data, type, full, meta){
-                var index = meta.col - 7;
+                console.log(meta.col);
+                var index = meta.col - 8; //Insurance Column starts
                 var dataStr ='';
                 if(data>0){
                     if(type === 'display'){
@@ -394,6 +411,25 @@ a.ui-button:active,
             $('#customerTable').DataTable().search('').draw(); 
           
         });
+
+    $('.masterTooltip').hover(function(){
+            // Hover over code
+            var title = $(this).attr('title');
+            $(this).data('tipText', title).removeAttr('title');
+            $('<p class="tooltip_custom"></p>')
+            .text(title)
+            .appendTo('body')
+            .fadeIn('slow');
+    }, function() {
+            // Hover out code
+            $(this).attr('title', $(this).data('tipText'));
+            $('.tooltip_custom').remove();
+    }).mousemove(function(e) {
+            var mousex = e.pageX + 20; //Get X coordinates
+            var mousey = e.pageY + 10; //Get Y coordinates
+            $('.tooltip_custom')
+            .css({ top: mousey, left: mousex })
+    });
 
 </script>
 @stop

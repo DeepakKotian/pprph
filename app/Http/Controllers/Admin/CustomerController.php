@@ -46,11 +46,11 @@ class CustomerController extends Controller
         $insuranceCtg = DB::table('massparameter')->where('type','category')->where('status',1)->get();
         
         $arrClm = [];
-        $cnt = $insuranceCtg->count()+6;
-        for($i=7;$i<=$cnt;$i++){
+        $cnt = $insuranceCtg->count()+7;
+        for($i=8;$i<=$cnt;$i++){
             $arrClm[]= $i;
         }
-        $arrClms = implode(',',$arrClm);
+        $arrClms = implode(',',$arrClm); // For Dynamic Column JS looping
         $users = User::select('*')->get();
         return view('admin.customers',compact(['customer','insuranceCtg','arrClms','users']));
     }
@@ -86,7 +86,7 @@ WHERE c.is_family=0  GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC
     {
       $customWhere = " AND c.user_id =".Auth::user()->id;
     }
-    $selectQry =  "SELECT c.id,c.unique_id, c.first_name,c.user_id, c.last_name,c.status, c.email,c.city,c.nationality,c.zip,c.telephone, {$addQry} FROM customers c LEFT JOIN policy_detail pd ON pd.customer_id = c.id {$jnQry} WHERE c.is_family=0 {$customWhere} GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC";      
+    $selectQry =  "SELECT c.id,c.unique_id, c.first_name,c.user_id, c.last_name, CONCAT_WS(' ',users.first_name,users.last_name) as u_name, c.status, c.email,c.city,c.nationality,c.zip,c.telephone, {$addQry} FROM customers c LEFT JOIN users ON users.id = c.user_id LEFT JOIN policy_detail pd ON pd.customer_id = c.id {$jnQry} WHERE c.is_family=0 {$customWhere} GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC";      
 
     $customer =  DB::select(DB::raw($selectQry));
 
@@ -185,7 +185,7 @@ WHERE c.is_family=0  GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC
             'user_id'=> Auth::user()->id,
         ]);
         if($insertData)
-        return response()->json('Successfully created',200);
+        return response()->json($insertData,200);
         return redirect()->back()->withErrors($validate->errors());
     }
 
@@ -451,6 +451,9 @@ WHERE c.is_family=0  GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC
 
     public function storeFamily(Request $request)
     {
+        $familyMemberCount = customer::where('parent_id',$request['parent_id'])->count() + 1;
+        $parentData =  customer::select('unique_id')->where('id',$request['parent_id'])->first();
+        $familyMemberId = $parentData['unique_id'].'.'.$familyMemberCount;
         if($request['dob_family']!=null)
         {
            $dob= date('Y-m-d h:i:s',strtotime($request['dob_family']));
@@ -466,6 +469,7 @@ WHERE c.is_family=0  GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC
             'dob' => $dob,
             'nationality' => $request['nationality_family'],
             'mobile' => $request['mobile_family'],
+            'family_member_id' => $familyMemberId,
         ]);
         if($insertData){
             $arrCustomer['logs'] = serialize([
@@ -476,6 +480,7 @@ WHERE c.is_family=0  GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC
                 'dob' => $dob,
                 'nationality' => $request['nationality_family'],
                 'mobile' => $request['mobile_family'],
+                'family_member_id' => $familyMemberId,
             ]); // serialize should always kept on top to insert only form changes. 
             $arrCustomer['user_id'] = Auth::user()->id;
             $arrCustomer['customer_id'] = $request['parent_id'];
@@ -546,8 +551,8 @@ WHERE c.is_family=0  GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC
     
     public function fetchDocuments(Request $request)
     {
-
-        $data = policydetail::select(['policy_detail.id as policy_id', 'insurance_ctg_id','document_name', 'customers.id','policy_number',DB::raw('DATE_FORMAT(start_date, "%d-%m-%Y") as start_date'),DB::raw('DATE_FORMAT(end_date, "%d-%m-%Y") as end_date'),'insurance_ctg_id','provider_id','first_name'])
+        /*
+         $data = policydetail::select(['policy_detail.id as policy_id', 'insurance_ctg_id','document_name', 'customers.id','policy_number',DB::raw('DATE_FORMAT(start_date, "%d-%m-%Y") as start_date'),DB::raw('DATE_FORMAT(end_date, "%d-%m-%Y") as end_date'),'insurance_ctg_id','provider_id','first_name'])
         ->leftJoin('customers','policy_detail.customer_id','=','customers.id')
         ->where('customer_id',$request->customer_id)
         ->where('policy_detail.id',$request->policy_id)
@@ -569,7 +574,13 @@ WHERE c.is_family=0  GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC
             ->select('*')
             ->whereRaw(DB::raw( $addQry." customer_id=".$request->customer_id))->get();
             $data->allDocs = $allDocs;
-        }
+        } */
+        $data = DB::table('documents')
+        ->select('*')
+        ->where("customer_id",$request->customer_id)
+        ->where("insurance_type",$request->insurance_ctg_id)
+        ->get();
+        $data->policyDocs =  $data;
         if($data)
         return response()->json($data, 200);
     }
@@ -581,7 +592,7 @@ WHERE c.is_family=0  GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC
                     return response()->json('Document should not be more than 2MB',500);
                 }
         }
-        if($request->documnetType!=0){
+        if($request->documnetType!=0){ //This is not in issue because of new change.
             if(empty($request->document_id)){
                     if(!empty($request->file('documentData'))){
                         $file = $request->file('documentData');
@@ -600,16 +611,16 @@ WHERE c.is_family=0  GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC
                 }
             return response()->json('Successfully updated document',200);
            
-        }else{
+        }else{ 
             if($request->documentData!='undefined'){
                 $file = $request->file('documentData');
                 $docName = $file->getClientOriginalName();
                 $destinationPath = public_path('/uploads/vertrag');
                 $file->move($destinationPath, $docName);
-                policydetail::whereId($request->policy_id)->update(['document_name'=>$docName ]);
+                DB::table('documents')->insert(['title'=>$request->title,'document_name'=>$docName,'customer_id'=>$request->customer_id,'insurance_type'=>$request->insureId]);
                 return response()->json('Successfully updated document',200);
             }else{
-                
+      
                     return response()->json('Document not selected',404);
                 
             }
@@ -694,7 +705,7 @@ WHERE c.is_family=0  GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC
         {
           $customWhere = " AND c.user_id =".Auth::user()->id;
         }
-        $selectQry =  "SELECT c.id, c.first_name,c.user_id, c.last_name,c.status, c.email,c.city,c.nationality,c.zip,c.telephone, {$addQry} FROM customers c LEFT JOIN policy_detail pd ON pd.customer_id = c.id {$jnQry} WHERE c.is_family=0 {$customWhere} GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC";      
+        $selectQry =  "SELECT c.id, c.first_name,c.user_id, c.last_name,c.status, c.email,c.city,c.nationality,c.zip,c.telephone,CONCAT_WS(' ',users.first_name,users.last_name) as u_name, {$addQry} FROM customers c LEFT JOIN users ON users.id = c.user_id LEFT JOIN policy_detail pd ON pd.customer_id = c.id {$jnQry} WHERE c.is_family=0 {$customWhere} GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC";      
 
         $customer =  DB::select(DB::raw($selectQry));
 
@@ -757,14 +768,15 @@ WHERE c.is_family=0  GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC
            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(5,$row, 'Postal code');
            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(6,$row, 'City');
            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(7,$row, 'Telephone');
-           $column = 8;
+           $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(8,$row, 'Created By');
+           $column = 9; //dynamic column starts 
            $ctgs = $customer['ctgs']->toArray();
 
            foreach ($ctgs as $ky => $val) {
              $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow($column,$row, $val->name);  
              $column++;
            }
-           $arrAlpha =  ['0'=>'H','1'=>'I','2'=>'J','3'=>'K','4'=>'L','5'=>'M'];
+           $arrAlpha =  ['0'=>'I','1'=>'J','2'=>'K','3'=>'L','4'=>'M','5'=>'N']; //Adjust Columns
            $row++;
           
            $spreadsheet->getActiveSheet()->getStyle("A1:Z1")->getFont()->setBold( true )->setName('Arial');
@@ -776,6 +788,7 @@ WHERE c.is_family=0  GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC
             $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(5,$row, $value['zip']);
             $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(6,$row, $value['city']);
             $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(7,$row, $value['telephone']);
+            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(8,$row, $value['u_name']);
             /* if($value['status']==0){
                 $objDrawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
                 $objDrawing->setPath(public_path('uploads/unchecked.png')); //your image path

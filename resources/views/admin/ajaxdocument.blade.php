@@ -4,9 +4,9 @@
     <table class="table table-bordered">  
         <thead> 
             <tr>
-            <th> Policy Number </th>
+            <!-- <th> Policy Number </th> -->
             <th> Policy Name</th>
-            <th> Provider Name </th>
+            <!-- <th> Provider Name </th> -->
            
             </tr> 
         </thead>    
@@ -14,9 +14,9 @@
         @foreach($documents as $key=>$val)   
             @if($val->policy_number!='')     
             <tr>
-                <td>{{ $val->policy_number }} </td>   
+                <!-- <td>{{ $val->policy_number }} </td>    -->
                 <td>{{ $val->insurance_name }} </td>   
-                <td>{{ $val->provider_name }} </td>   
+                <!-- <td>{{ $val->provider_name }} </td>    -->
             </tr>
             @else
             <tr>

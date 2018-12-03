@@ -14,6 +14,6 @@ class customer extends Model
      */
     protected $fillable = [
         'id', 'first_name','last_name','dob','email','email_office','last_name','telephone','company','gender','language','nationality','parent_id',
-        'is_family', 'zip','city','country','address','mobile','unique_id','user_id'
+        'is_family', 'zip','city','country','address','mobile','unique_id','user_id','family_member_id',
     ];
 }

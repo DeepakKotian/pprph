@@ -194,8 +194,13 @@
 #policyDetailTable.dataTable thead th:first-child,#policyDetailTable.dataTable tbody td:first-child{
     text-align: center;
 }
+.select2-container{
+    width:150px !important;
+}
+.customSlctWidth .select2-container{
+    width:80px !important;
+}
 
- 
 [v-cloak] {display: none;}
 .dataTables_length select{ margin: 0 10px;}
 

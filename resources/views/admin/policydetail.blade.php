@@ -41,7 +41,7 @@ Policy List
                         <label class="left-15" for="id">Open / Provision </label>
                         <select class="form-control selectJS" name="status">
                            <option value="">------</option>
-                           <option value="0">Open</option>
+                           <option value="0" selected>Open</option>
                            <option value="1">Provision</option>
                         </select>
                     </div>

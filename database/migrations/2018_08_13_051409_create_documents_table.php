@@ -19,6 +19,7 @@ class CreateDocumentsTable extends Migration
             $table->string('document_name');
             $table->string('title');
             $table->integer('type'); //not used anywhere
+            $table->integer('insurance_type');
             $table->timestamps();
         });
     }
