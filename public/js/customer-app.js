@@ -69,7 +69,9 @@ var app = new Vue({
           provider_id:'',
           policy_id:'',
       },
-      vertrag:'',
+      vertrag:{
+        policyDocs:[],
+      },
       vertragData:{
         
      },
@@ -211,9 +213,10 @@ var app = new Vue({
         }else{
             this.$http.post(this.urlPrefix+'storecustomer',this.customer).then(
                 function(response){
-                    this.$toaster.success(response.data);
+                    this.$toaster.success('Successfully Created');
                     setTimeout(function(){
-                        window.location.href = urlPrefix+'customers';
+                        //console.log(response.data.id);
+                        window.location.href = urlPrefix+'customer-form/'+response.data.id;
                     },2000)
                 }
             ).catch(function(response){
@@ -511,21 +514,25 @@ var app = new Vue({
             $('#vertragModal').find(".modal-body #vertragProviderSlct").val('');
             $('#vertragModal').find(".modal-body #vertragProviderSlct").trigger('change');
             $('#vertragModal').find(".modal-footer .btn-primary.documentAdd").hide();
+            $('#vertragModal').find(".modal-body #document").val('');
+            $('#vertragModal').find(".modal-body #docTitle").val('');
+            $('#vertragModal').find(".modal-body #editDocumentfile").val('');
             this.policylist = [];
            if(this.customer.policyArr.indexOf(item.id)>=0){
                 $('#vertragModal').modal('show');
-                this.vertrag = '';
+                //this.vertrag = '';
                 this.fetchProvidersData(item.id);
                 this.insurancedata.insurance_ctg_id = item.id;
                 this.currentCtgName = item.name;
-           }
+                this.loadDocuments();
+            }
         },
         loadDocuments:function(){
-           this.insurancedata.policy_id = $('#policy_id')[0].value;
+           //this.insurancedata.policy_id = $('#policy_id')[0].value;
            this.currentVertragDoc = '';
            $('#otherDocuments').val('');
-           this.$http.post(this.urlPrefix+'fetchdocuments', { policy_id:this.insurancedata.policy_id, provider_id:this.insurancedata.provider_id, customer_id:this.currentId }).then(function(response){
-                this.vertrag = response.data;
+           this.$http.post(this.urlPrefix+'fetchdocuments', { insurance_ctg_id:this.insurancedata.insurance_ctg_id, provider_id:this.insurancedata.provider_id, customer_id:this.currentId }).then(function(response){
+                this.vertrag.policyDocs = response.data;
           });
         },
         loadVertragPolicyList:function(item){
@@ -565,10 +572,13 @@ var app = new Vue({
                 return;
             }
             this.vertragData.document = $('#document')[0].files[0];
+            console.log(this);
             let formData= new FormData();
-            formData.append('policy_id',this.vertrag.policy_id);
+            // formData.append('policy_id',this.vertrag.policy_id);
             formData.append('documentData',this.vertragData.document);
-            formData.append('documnetType',$('#documentType').val());
+            formData.append('title', $('#docTitle').val());
+            formData.append('insureId', this.insurancedata.insurance_ctg_id);
+            formData.append('documnetType',0); //$('#documentType').val() - By default New Document
             formData.append('customer_id',this.currentId);
             if($('#documentType').val()!=0){
                 formData.append('document_id',$('#otherDocuments').val());
@@ -583,6 +593,11 @@ var app = new Vue({
                     this.loadDocuments();
                     $('#documentType').val('');
                     $('#document').val('');
+                    $('#docTitle').val('');
+                    $("#editDocumentfile").val('');
+                    $('#vertragModal').find(".modal-body #document").val('');
+                    $('#vertragModal').find(".modal-body #docTitle").val('');
+                    $('#vertragModal').find(".modal-body #editDocumentfile").val('');
                 }
             ).catch(function(response){
                 let self = this;

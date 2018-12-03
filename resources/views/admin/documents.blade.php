@@ -42,7 +42,7 @@ Documents List
                             <thead>
                                 <tr>
                                     <th>Sl No</th>
-                                    <th>Document </th>
+                                    <th>Document Title </th>
                                     <th>Customer Name</th>
                                     <th>Action</th>                           
                                 </tr>
@@ -130,11 +130,23 @@ cnt = 0;
             render: function(data, type, full, meta){
             
                     if(type === 'display'){
-                        data = '<p align="center"><a href="javascript:void(0)" class="btn-view btn btn-default"> <span class="fa fa-eye" rel="ctg_'+meta.row+'_'+meta.col+'"></span> </a>';
+                        data = '<p align="center"><a href="../uploads/vertrag/'+full.document_name+'" class="btn-view btn btn-default"> <span class="fa fa-eye" rel="ctg_'+meta.row+'_'+meta.col+'"></span> </a>';
+                        //<a download href="../uploads/vertrag/'+full.document_name+'" class="btn-view btn btn-default"> <span class="fa fa-download" rel="ctg_'+meta.row+'_'+meta.col+'"></span> </a>
                         data += '</p>';
                         //<a href=""> <span class="fa fa-trash"></span> </a> 
                     }
             
+               return data;
+            }
+       },{
+            targets: 1,
+            data: null,
+            render: function(data, type, full, meta){
+                    if(type === 'display'){
+                       if(full.title)
+                       return full.title;
+                        //<a href=""> <span class="fa fa-trash"></span> </a> 
+                    }
                return data;
             }
        }]

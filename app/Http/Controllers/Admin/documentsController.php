@@ -26,7 +26,7 @@ class documentsController extends Controller
     {
        /* SELECT documents.id,documents.document_name, policy_documents.*, customers.first_name, inc.name as insurance_name, prd.name as provider_name FROM documents  LEFT JOIN policy_documents ON document_id = documents.id LEFT JOIN policy_detail ON policy_detail.id = policy_detail_id LEFT JOIN massparameter inc ON inc.id =  policy_detail.insurance_ctg_id LEFT JOIN massparameter prd ON prd.id =  policy_detail.provider_id LEFT JOIN customers ON customers.id = documents.customer_id */
 
-        $document =  DB::table('documents')->select(['documents.customer_id','documents.id as docId','documents.document_name', 'policy_documents.*', 
+        $document =  DB::table('documents')->select(['documents.customer_id','documents.title','documents.id as docId','documents.document_name', 'policy_documents.*', 
         'customers.first_name as name', 'inc.name as insurance_name', 'prd.name as provider_name'])
         ->leftJoin('customers','customers.id','=','documents.customer_id')
         ->leftJoin('policy_documents','document_id','=','documents.id')
@@ -45,7 +45,7 @@ class documentsController extends Controller
                     return Str::contains(strtolower($row['document_name']), strtolower($request->get('searchTerm'))) || Str::contains($row['name'], $request->get('searchTerm')) ? true : false;
                 });
             }
-        })->addIndexColumn()->make(true);;
+        })->addIndexColumn()->make(true);
     }
 
     /**
@@ -130,9 +130,9 @@ class documentsController extends Controller
     public function delete(Request $request)
     {
         if($request->id){
-            $data = DB::table('policy_documents')
-            ->where('policy_detail_id',$request->policy_detail_id)
-            ->where('document_id',$request->document_id)->delete();
+            $data = DB::table('documents')
+            // ->where('policy_detail_id',$request->policy_detail_id)
+            ->where('id',$request->id)->delete();
             return response()->json('Successfully Deleted',200);
         }
     }

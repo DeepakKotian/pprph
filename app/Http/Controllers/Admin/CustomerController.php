@@ -185,7 +185,7 @@ WHERE c.is_family=0  GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC
             'user_id'=> Auth::user()->id,
         ]);
         if($insertData)
-        return response()->json('Successfully created',200);
+        return response()->json($insertData,200);
         return redirect()->back()->withErrors($validate->errors());
     }
 
@@ -451,6 +451,9 @@ WHERE c.is_family=0  GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC
 
     public function storeFamily(Request $request)
     {
+        $familyMemberCount = customer::where('parent_id',$request['parent_id'])->count() + 1;
+        $parentData =  customer::select('unique_id')->where('id',$request['parent_id'])->first();
+        $familyMemberId = $parentData['unique_id'].'.'.$familyMemberCount;
         if($request['dob_family']!=null)
         {
            $dob= date('Y-m-d h:i:s',strtotime($request['dob_family']));
@@ -466,6 +469,7 @@ WHERE c.is_family=0  GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC
             'dob' => $dob,
             'nationality' => $request['nationality_family'],
             'mobile' => $request['mobile_family'],
+            'family_member_id' => $familyMemberId,
         ]);
         if($insertData){
             $arrCustomer['logs'] = serialize([
@@ -476,6 +480,7 @@ WHERE c.is_family=0  GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC
                 'dob' => $dob,
                 'nationality' => $request['nationality_family'],
                 'mobile' => $request['mobile_family'],
+                'family_member_id' => $familyMemberId,
             ]); // serialize should always kept on top to insert only form changes. 
             $arrCustomer['user_id'] = Auth::user()->id;
             $arrCustomer['customer_id'] = $request['parent_id'];
@@ -546,8 +551,8 @@ WHERE c.is_family=0  GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC
     
     public function fetchDocuments(Request $request)
     {
-
-        $data = policydetail::select(['policy_detail.id as policy_id', 'insurance_ctg_id','document_name', 'customers.id','policy_number',DB::raw('DATE_FORMAT(start_date, "%d-%m-%Y") as start_date'),DB::raw('DATE_FORMAT(end_date, "%d-%m-%Y") as end_date'),'insurance_ctg_id','provider_id','first_name'])
+        /*
+         $data = policydetail::select(['policy_detail.id as policy_id', 'insurance_ctg_id','document_name', 'customers.id','policy_number',DB::raw('DATE_FORMAT(start_date, "%d-%m-%Y") as start_date'),DB::raw('DATE_FORMAT(end_date, "%d-%m-%Y") as end_date'),'insurance_ctg_id','provider_id','first_name'])
         ->leftJoin('customers','policy_detail.customer_id','=','customers.id')
         ->where('customer_id',$request->customer_id)
         ->where('policy_detail.id',$request->policy_id)
@@ -569,7 +574,13 @@ WHERE c.is_family=0  GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC
             ->select('*')
             ->whereRaw(DB::raw( $addQry." customer_id=".$request->customer_id))->get();
             $data->allDocs = $allDocs;
-        }
+        } */
+        $data = DB::table('documents')
+        ->select('*')
+        ->where("customer_id",$request->customer_id)
+        ->where("insurance_type",$request->insurance_ctg_id)
+        ->get();
+        $data->policyDocs =  $data;
         if($data)
         return response()->json($data, 200);
     }
@@ -581,7 +592,7 @@ WHERE c.is_family=0  GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC
                     return response()->json('Document should not be more than 2MB',500);
                 }
         }
-        if($request->documnetType!=0){
+        if($request->documnetType!=0){ //This is not in issue because of new change.
             if(empty($request->document_id)){
                     if(!empty($request->file('documentData'))){
                         $file = $request->file('documentData');
@@ -600,16 +611,16 @@ WHERE c.is_family=0  GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC
                 }
             return response()->json('Successfully updated document',200);
            
-        }else{
+        }else{ 
             if($request->documentData!='undefined'){
                 $file = $request->file('documentData');
                 $docName = $file->getClientOriginalName();
                 $destinationPath = public_path('/uploads/vertrag');
                 $file->move($destinationPath, $docName);
-                policydetail::whereId($request->policy_id)->update(['document_name'=>$docName ]);
+                DB::table('documents')->insert(['title'=>$request->title,'document_name'=>$docName,'customer_id'=>$request->customer_id,'insurance_type'=>$request->insureId]);
                 return response()->json('Successfully updated document',200);
             }else{
-                
+      
                     return response()->json('Document not selected',404);
                 
             }

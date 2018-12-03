@@ -51,12 +51,18 @@
               <div class="row">
               <form class="form-vertical" action="" method="post">
                     @if($data)
-                    <div class="form-group col-sm-4">
+                    @if($data->parent_id!=0)
+                    <div class="form-group col-sm-3">
+                      <label for="id">Member Id</label>
+                      <input type="text" class="form-control" v-model="customer.family_member_id"  id="family_member_id" readonly>
+                    </div>
+                    @endif
+                    <div class="form-group {{ !empty($data)?($data->parent_id!=0?'col-sm-3':'col-sm-4'):'col-sm-4'  }}">
                       <label for="id">Customer Id</label>
                       <input type="text" class="form-control" v-model="customer.unique_id"  id="id"  placeholder="Customer Id" readonly>
                     </div>
                     @endif
-                    <div class="form-group col-sm-4"> 
+                    <div class="form-group {{  !empty($data)?($data->parent_id!=0?'col-sm-3':'col-sm-4'):'col-sm-4'  }}"> 
                       <label for="language">Language</label>
                       <select class="form-control" name="language" id="language" v-model="customer.language">
                         <option value="DE">DE</option>
@@ -64,7 +70,7 @@
                         <option value="FR">FR</option>
                       </select>
                     </div>
-                    <div class="form-group col-sm-4" :class="{ 'has-error': $v.customer.gender.$error }">
+                    <div class="form-group {{ !empty($data)?($data->parent_id!=0?'col-sm-3':'col-sm-4'):'col-sm-4'  }}" :class="{ 'has-error': $v.customer.gender.$error }">
                       <label for="gender">Gender*</label>
                       <select class="form-control" name="gender" id="gender" v-model="$v.customer.gender.$model">
                         <option value="M">Male</option>
@@ -468,14 +474,14 @@
                     </div>
                     <div class="modal-body">
                     <div class="">
-                      Are you sure you want to save as customer ?
+                      Are you sure you want to save this family member as customer ?
                    </div>
                     </div>
                     <div class="modal-footer">
                       <button class="btn btn-secondary" type="button"  data-dismiss="modal">Cancel</button>
                       <!-- <button class="btn btn-primary"  type="button" data-dismiss="modal"  v-on:click="deleteFamily">Delete</button> -->
                       @if(Auth::user()->role == 1)
-                      <button v-show="family.unique_id_family==null" class="btn btn-primary"  type="button" data-dismiss="modal"  v-on:click="saveAsCustomer">Save As Customer</button>
+                      <button v-show="family.unique_id_family==null" class="btn btn-primary"  type="button" data-dismiss="modal"  v-on:click="saveAsCustomer">Yes Save</button>
                       @else
                       <button class="btn btn-primary"  disabled>Save</button>
                       @endif
@@ -779,7 +785,7 @@
                         <h4 class="modal-title" id="exampleModalLabel"><% currentCtgName %> Vertrag </h4>
                     </div>
                     <div class="modal-body">
-                      <div class="row">
+                      <!-- <div class="row">
                         <div class="form-group col-sm-4">
                             <label for="vertragProviderSlct">Provider Name*</label>
                             <select sty="width:100%;" class="form-control" name="provider" id="vertragProviderSlct" v-model="$v.insurancedata.provider_id.$model" v-on:change="loadVertragPolicyList(event)" >
@@ -794,18 +800,18 @@
                               <option v-for="(pRow,index) in policylist" v-bind:value="pRow.policy_id"  >  <% pRow.policy_number %></option>
                             </select>
                         </div>
-                      </div>
+                      </div> -->
                       
 
                       <div class="row">
-                        <div class="form-group col-sm-12" v-if="vertrag">
-                          <div v-show="vertrag.document_name!==null">
+                        <div class="form-group col-sm-12">
+                          <!-- <div v-show="vertrag.document_name!==null">
                             <label for="">Contract Form: </label> <a target="_blank" v-bind:href="urlPrefix+'../uploads/vertrag/'+vertrag.document_name"> <% vertrag.document_name %> </a>
-                          </div>
+                          </div> 
                           <div v-if="vertrag.document_name==null">
                             <span class="text-danger">Click on ADD DOCUMENT to upload contract form</span>
-                          </div>
-                          <h4 v-show="vertrag.policyDocs!=''">Documents Uploaded to Policy</h4>
+                          </div> -->
+                          <h4 v-show="vertrag.policyDocs!=''">Documents</h4>
                           <div class="table table-responsive"  v-show="vertrag.policyDocs!=''">
                             <table class="table table-bordered">
                               <thead>
@@ -815,7 +821,7 @@
                                 </tr>
                                 <tbody>
                                   <tr v-for="(doc, index) in vertrag.policyDocs">
-                                    <td> <% doc.document_name %> </td>
+                                    <td> <% doc.title %> </td>
                                     <td> <a class="fa fa-eye" target="_blank" v-bind:href="urlPrefix+'../uploads/vertrag/'+doc.document_name"></a> &nbsp;&nbsp;
                                     <a class="fa fa-download" download v-bind:href="urlPrefix+'../uploads/vertrag/'+doc.document_name"> </a> &nbsp;&nbsp;
                                     <a class="fa fa-trash" target="_blank" v-on:click="$('#docId'+doc.id).show()"></a>
@@ -831,13 +837,14 @@
                               </thead>
                             </table>
                           </div>
-                          <div class="form-group col-sm-12" >
+                          <!-- <div class="form-group col-sm-12" >
                             <div class="pull-right">
                                 <button type="button" class="btn btn-sm btn-primary" v-on:click="$('.documentAdd').toggle()"> ADD DOCUMENTS </button>
                             </div>
-                          </div>
-                          <div class="documentAdd" style="display:none;">
+                          </div> -->
+                        <div class="documentAdd" > <!-- style="display:none;" -->
                            <div class="row">
+                             <!-- 
                             <div class="form-group col-sm-6">
                                 <label for="">Choose Document Type</label>
                                 <select class="form-control" name="documentType" id="documentType" v-on:change="checkDocumentType">
@@ -854,7 +861,12 @@
                                 </select>
                                 <span class="text-danger" v-show="vertrag.allDocs==''">No policy documents exist to add, Please upload a new file</span>
                               </div>
-                                <div class="form-group col-sm-12 uploadDoc" >
+                               -->
+                               <div  class="form-group col-sm-6">
+                                  <label for="docTitle">Document Title: </label> 
+                                  <input type="text" class="form-control" id="docTitle" >
+                                </div>
+                                <div class="form-group col-sm-6 uploadDoc" >
                                   <label for="uploadDoc">Upload Document: </label> 
                                   <div class="input-group">
                                     <div class="input-group-btn">
@@ -864,18 +876,19 @@
                                     <input type="file" id="document" class="filestyle" v-on:change="uploadFile" style="display: none;">
                                   </div>
                                 </div>
+                                
                               </div>
-                            </div>
+                            </div> 
                         </div>
-                        <div class="form-group col-sm-12" v-else="vertrag">
+                        <!-- <div class="form-group col-sm-12" v-else="vertrag">
                             <h5>No Policy Added</h5>
-                        </div>
+                        </div> -->
                       </div>
                       
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                        <button class="btn btn-primary documentAdd" style="display:none;" v-on:click="uploadDocument"  type="button">Save</a>
+                        <button class="btn btn-primary" v-on:click="uploadDocument"  type="button">Save</a>
                     </div>
             </div>
 
@@ -921,9 +934,7 @@
                                   </tr>
                                 </thead>
                                 <tr v-for="note in notes">
-
                                   <td> <% note.description %> </td>
-                               
                                   <td>
                                     <a href="javascript:void(0)" v-on:click="loadNotesDetail(note)" class="fa fa-edit"></a> &nbsp;
                                     <a href="javascript:void(0)" v-on:click="deleteNote(note.id)"class="fa fa-trash"></a>
