@@ -386,12 +386,19 @@ var app = new Vue({
                 }
             )
         },
-
         reorderData:function(index){
-            let currentElem = this.insuranceData[index];
-            this.insuranceData.splice(index,1);
-            this.insuranceData = this.insuranceData.slice(0, this.sortIndex[index]).concat([currentElem]).concat(this.insuranceData.slice(this.sortIndex[index], this.insuranceData.length));
-               
+            if(this.sortIndex[index] >= 0) {
+                let currentElem = this.insuranceData[index];
+                this.insuranceData.splice(index,1);
+                this.insuranceData = this.insuranceData.slice(0, this.sortIndex[index]).concat([currentElem]).concat(this.insuranceData.slice(this.sortIndex[index], this.insuranceData.length));
+                console.log(this.insuranceData);
+                this.$http.post(this.urlPrefix+'change-order',{data : this.insuranceData}).then(function(response){
+                    this.$toaster.success(response.data);
+                    // this.loadAllProviders();
+                    //this.loadAllInsurance();
+                    //this.loadDataTable();
+                })
+            }
         }
  },
      

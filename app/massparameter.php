@@ -9,6 +9,6 @@ class massparameter extends Model
     //
     protected $table="massparameter";
     protected $fillable = [
-        'type','name','status','description',
+        'type','name','status','description','order_by','id',
     ];
 }

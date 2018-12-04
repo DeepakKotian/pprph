@@ -42,8 +42,8 @@
                         <a data-toggle="modal"  class="btn btn-default" v-on:click="loadStatusModal(row)"> <i class="fa fa-square" v-bind:class="{'text-green':row.status==1,'text-red':row.status==0}"></i> </a>
                      </td>
                      <td>
-                     <select class="form-control" v-model="sortIndex[index]">
-                        <option v-for="(row,index) in insuranceData"  v-bind:value="index"> <% index+1 %> </option>
+                     <select class="form-control" v-model="sortIndex[index]" style="width:55px;">
+                        <option v-for="(row,indx) in insuranceData"  v-bind:value="indx" v-if="index != indx"> <% indx +1 %> </option>
                      </select>
                      <button class=" btn default" v-on:click="reorderData(index)" type="button"> Go </button>
                      </td>

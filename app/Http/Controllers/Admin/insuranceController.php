@@ -41,7 +41,7 @@ class insuranceController extends Controller
     public function fetchInsurance()
     {
         $insuranceList = [];
-        $insuranceList = DataTables::of(massparameter::where('type','=','category')->orderby('id','desc'))->toJson();
+        $insuranceList = DataTables::of(massparameter::where('type','=','category')->orderby('order_by','asc')->orderby('id','desc'))->escapeColumns([])->toJson();
         if($insuranceList)
             $fchinsuranceList= $insuranceList;
         if (Gate::denies('manage-admin', $fchinsuranceList)) {
@@ -258,6 +258,13 @@ class insuranceController extends Controller
         }
         $json_data = massparameter::whereId($request->id)->update($data);
         return response()->json('Successfully updated status', 200);
+    }
+
+    public function changeOrder(Request $request){
+      foreach ($request->data as $key => $value) {
+        massparameter::whereId($value['id'])->update(['order_by'=>$key]);
+      }
+      return response()->json('Successfully updated',200);
     }
 
     public function policyDetail()
