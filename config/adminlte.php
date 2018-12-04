@@ -243,6 +243,17 @@ return [
             'icon'    => 'calendar',
             'url'  => 'admin/appointment',
         ],
+        [
+            'text'    => 'Settings',
+            'icon'    => 'wrench',
+            'submenu' => [
+                [
+                    'text' => 'Language',
+                    'url'  => 'admin/language-setting',
+                ],
+                
+            ],
+        ],
         
         // 'LOGOUT',
         // [

@@ -63,11 +63,11 @@
                     </div>
                     @endif
                     <div class="form-group {{  !empty($data)?($data->parent_id!=0?'col-sm-3':'col-sm-4'):'col-sm-4'  }}"> 
-                      <label for="language">Language</label>
+                      <label for="language">Language </label>
+
                       <select class="form-control" name="language" id="language" v-model="customer.language">
-                        <option value="DE">DE</option>
-                        <option value="EN">EN</option>
-                        <option value="FR">FR</option>
+
+                        <option  v-for="lngName in languagedata" v-bind:value="lngName.name"><% lngName.name %></option>
                       </select>
                     </div>
                     <div class="form-group {{ !empty($data)?($data->parent_id!=0?'col-sm-3':'col-sm-4'):'col-sm-4'  }}" :class="{ 'has-error': $v.customer.gender.$error }">
@@ -987,6 +987,7 @@
 @section('js')
 <script src="{!! asset('js/task-app.js') !!}"></script>
 <script src="{!! asset('js/customer-app.js') !!}"></script>
+
 <script>
  $(document).ready(function() {
        $('.selectJS').select2();

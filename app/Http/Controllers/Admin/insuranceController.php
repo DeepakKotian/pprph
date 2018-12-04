@@ -261,9 +261,10 @@ class insuranceController extends Controller
     }
 
     public function changeOrder(Request $request){
-       $position = $request->currentItemOrder; 
-       $newData[$request->id] = $request->currentItemOrder;
-
+      foreach ($request->data as $key => $value) {
+        massparameter::whereId($value['id'])->update(['order_by'=>$key]);
+      }
+      return response()->json('Successfully updated',200);
     }
 
     public function policyDetail()

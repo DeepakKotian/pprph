@@ -31,6 +31,7 @@
                   <th>Sl.no</th>
                   <th>Name</th>
                   <th>Options</th>
+                  <th>order</th>
                </thead>
                <tbody>
                   <tr v-for="(row,index) in insuranceData">
@@ -39,7 +40,13 @@
                      <td>
                         <a data-toggle="modal"  data-target="#addInsurance"  v-on:click="loadinsurancemodal(row)" class="btn btn-default"><i class="fa fa-edit"></i></a>
                         <a data-toggle="modal"  class="btn btn-default" v-on:click="loadStatusModal(row)"> <i class="fa fa-square" v-bind:class="{'text-green':row.status==1,'text-red':row.status==0}"></i> </a>
-                      </td>
+                     </td>
+                     <td>
+                     <select class="form-control" v-model="sortIndex[index]" style="width:55px;">
+                        <option v-for="(row,indx) in insuranceData"  v-bind:value="indx" v-if="index != indx"> <% indx +1 %> </option>
+                     </select>
+                     <button class=" btn default" v-on:click="reorderData(index)" type="button"> Go </button>
+                     </td>
                   </tr>
                </tbody>
             </table>

@@ -15,7 +15,7 @@ var app = new Vue({
         name:null,
         type:'provider',
       },
-
+      sortIndex:[],
       providersData:[],
       policyMappings:{
         insure_id:'',
@@ -98,12 +98,11 @@ var app = new Vue({
                     if(response.data){
                        $(document).find('body .v-toaster .v-toast-error').remove();
                        this.$toaster.error(response.data);
-                 
                     }
                     else{
                      let self = this;
                      $.each(response.data.errors, function(key, value){
-                         console.log(value);
+                        
                          self.$toaster.error(value[0]);
                      });
                     }
@@ -387,6 +386,20 @@ var app = new Vue({
                 }
             )
         },
+        reorderData:function(index){
+            if(this.sortIndex[index] >= 0) {
+                let currentElem = this.insuranceData[index];
+                this.insuranceData.splice(index,1);
+                this.insuranceData = this.insuranceData.slice(0, this.sortIndex[index]).concat([currentElem]).concat(this.insuranceData.slice(this.sortIndex[index], this.insuranceData.length));
+                console.log(this.insuranceData);
+                this.$http.post(this.urlPrefix+'change-order',{data : this.insuranceData}).then(function(response){
+                    this.$toaster.success(response.data);
+                    // this.loadAllProviders();
+                    //this.loadAllInsurance();
+                    //this.loadDataTable();
+                })
+            }
+        }
  },
      
     delimiters: ["<%","%>"]

@@ -134,6 +134,14 @@ Route::group(['prefix' => 'admin','middleware'=>'auth'], function () {
     //notes
     Route::resource('notes', 'Admin\NotesController');
     Route::post('fetch-notes', 'Admin\NotesController@fetchNotes');
-    
 
+    //settings
+    Route::get('/language-setting', function () {
+        return view('admin.languagesetting');
+    });
+    Route::get('/language-list', 'Admin\SettingsController@fetchLanguages');
+    Route::post('/add-language', 'Admin\SettingsController@addLanguage');
+    Route::post('/update-language/{id}', 'Admin\SettingsController@updateLanguage');
+    Route::post('/update-language-status', 'Admin\SettingsController@updateLanguageStatus');
+    
 });
