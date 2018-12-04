@@ -13,6 +13,7 @@ var app = new Vue({
       policylist:'',
       policyAction:'',
       currentCtgName:'',
+      languagedata:'',
       customerDocs:{
 
       },
@@ -147,6 +148,10 @@ var app = new Vue({
             self.countries = countries.data;
            
         });
+
+       this.languagelist();
+      
+       
     }, 
 
     mounted: function(){
@@ -200,6 +205,17 @@ var app = new Vue({
      },
 
     methods: {
+        languagelist(){
+            this.$http.get(this.urlPrefix+'language-list').then(function(response){
+                response.data.data.forEach(function(element) {
+                     if(element.status==0){
+                        response.data.data.splice(element,1);
+                     }
+                 });
+                 this.languagedata=response.data.data;
+                });
+
+        },
         resetForm: function () {
             var self = this; 
             Object.keys(this.customer).forEach(function(key,index) {
