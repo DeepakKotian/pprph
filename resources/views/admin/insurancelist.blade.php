@@ -43,7 +43,7 @@
                      </td>
                      <td>
                      <select class="form-control" v-model="sortIndex[index]">
-                        <option v-for="(row,index) in insuranceData"  v-bind:value="index"> <% index %> </option>
+                        <option v-for="(row,index) in insuranceData"  v-bind:value="index"> <% index+1 %> </option>
                      </select>
                      <button class=" btn default" v-on:click="reorderData(index)" type="button"> Go </button>
                      </td>

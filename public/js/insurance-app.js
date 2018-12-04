@@ -391,7 +391,8 @@ var app = new Vue({
             let currentElem = this.insuranceData[index];
             this.insuranceData.splice(index,1);
             this.insuranceData = this.insuranceData.slice(0, this.sortIndex[index]).concat([currentElem]).concat(this.insuranceData.slice(this.sortIndex[index], this.insuranceData.length));
-            }
+               
+        }
  },
      
     delimiters: ["<%","%>"]
