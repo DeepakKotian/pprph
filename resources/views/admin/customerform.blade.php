@@ -95,7 +95,7 @@
                       <div class="input-group-addon">
                       <i class="fa fa-calendar"></i>
                       </div>
-                      <input type="text" class="form-control datepicker" name="dob"  id="dob" placeholder="DOB" v-model="customer.dob">
+                      <input type="text" class="form-control datepicker" name="dob"  id="dob" placeholder="DD-MM-YYYY" v-mask="'##-##-####'" v-model="customer.dob">
                       </div>
                     </div>
                     <div class="form-group col-sm-6">
