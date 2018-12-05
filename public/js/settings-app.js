@@ -35,19 +35,19 @@ var settingapp = new Vue({
 
     methods: {
         loadLanguage(item){
-          
-        if(item!=null){
-            this.modalAction="edit";
-            this.language.name=item.name;
-            this.language.description=item.description;
-            this.language.lngid=item.id;
-        }
-        else{
-            this.modalAction="add";
-            this.language.name="";
-            this.language.description="";
-            this.language.lngid="";
-        }
+            if(item!=null){
+                this.modalAction="edit";
+                this.language.name=item.name;
+                this.language.description=item.description;
+                this.language.lngid=item.id;
+            }
+            else{
+                this.modalAction="add";
+                this.language.name="";
+                this.language.description="";
+                this.language.lngid="";
+            }
+        this.$v.language.$reset();
         },
         fetchLanguages(){
             this.$http.get(this.urlPrefix+'language-list').then(function(response){
