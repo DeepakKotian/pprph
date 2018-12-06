@@ -43,7 +43,7 @@ class CustomerController extends Controller
             $customer->where('customers.user_id',Auth::user()->id);
         } 
         $customer = $customer->get();
-        $insuranceCtg = DB::table('massparameter')->where('type','category')->where('status',1)->get();
+        $insuranceCtg = DB::table('massparameter')->where('type','category')->where('status',1)->orderby('order_by','asc')->get();
         
         $arrClm = [];
         $cnt = $insuranceCtg->count()+7;
@@ -73,7 +73,7 @@ WHERE c.is_family=0  GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC
 
     $jnQry='';
     $strArr = [];
-    $insuranceCtg = DB::table('massparameter')->where('type','category')->where('status',1)->get();
+    $insuranceCtg = DB::table('massparameter')->where('type','category')->where('status',1)->orderby('order_by','asc')->get();
     foreach ($insuranceCtg as $key => $value) { //Dynamic queries 
         $jnQry .= " LEFT JOIN massparameter ctg{$key} ON pd.insurance_ctg_id= ctg{$key}.id  AND ctg{$key}.id=$value->id AND ctg{$key}.type='category' AND pd.end_date>=CURDATE() ";
         $name = preg_replace('/\s+/', '_', $value->name);
@@ -207,7 +207,7 @@ WHERE c.is_family=0  GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC
                 return redirect('/admin/customer-form');
             }
         }
-        $insuranceCtg = DB::table('massparameter')->where('type','category')->get();
+        $insuranceCtg = DB::table('massparameter')->where('type','category')->orderby('order_by','asc')->get();
         $providers = DB::table('massparameter')->where('type','provider')->get();
         return view('admin.customerform',compact(['data','insuranceCtg','providers']));
     }
@@ -240,6 +240,7 @@ WHERE c.is_family=0  GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC
         ->where('massparameter.type','category')
         ->where('status',1)
         ->groupBy('massparameter.id')
+        ->orderby('massparameter.order_by','asc')
         ->get();
         $data->providers = DB::table('massparameter')->select(['id','type','name'])->where('type','provider')->where('status',1)->get();
         $data->policy = DB::table('massparameter')->select(['massparameter.id','insurance_ctg_id','provider_id'])
@@ -692,7 +693,7 @@ WHERE c.is_family=0  GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC
 
         $jnQry='';
         $strArr = [];
-        $insuranceCtg = DB::table('massparameter')->where('type','category')->where('status',1)->get();
+        $insuranceCtg = DB::table('massparameter')->where('type','category')->where('status',1)->orderby('order_by','asc')->get();
         foreach ($insuranceCtg as $key => $value) { //Dynamic queries 
             $jnQry .= " LEFT JOIN massparameter ctg{$key} ON pd.insurance_ctg_id= ctg{$key}.id  AND ctg{$key}.id=$value->id AND ctg{$key}.type='category'  AND pd.end_date>=CURDATE() ";
             $name = preg_replace('/\s+/', '_', $value->name);

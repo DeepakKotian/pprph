@@ -270,6 +270,7 @@ var app = new Vue({
                 parent_id:response.data.parent_id,
                 nationality:response.data.nationality,
                 user_id:response.data.user_id,
+                family_member_id:response.data.family_member_id,
              };
 
         this.customer=response.data;

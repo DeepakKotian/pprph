@@ -31,7 +31,7 @@
                   <th>Sl.no</th>
                   <th>Name</th>
                   <th>Options</th>
-                  <th>order</th>
+                  <th>Order</th>
                </thead>
                <tbody>
                   <tr v-for="(row,index) in insuranceData">
