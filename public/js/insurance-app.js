@@ -387,13 +387,16 @@ var app = new Vue({
             )
         },
         reorderData:function(index){
+            console.log(this.sortIndex[index]);
             if(this.sortIndex[index] >= 0) {
                 let currentElem = this.insuranceData[index];
                 this.insuranceData.splice(index,1);
                 this.insuranceData = this.insuranceData.slice(0, this.sortIndex[index]).concat([currentElem]).concat(this.insuranceData.slice(this.sortIndex[index], this.insuranceData.length));
                 console.log(this.insuranceData);
                 this.$http.post(this.urlPrefix+'change-order',{data : this.insuranceData}).then(function(response){
+                    $(document).find('body .v-toaster .v-toast-success').remove();
                     this.$toaster.success(response.data);
+                    this.sortIndex = [];
                     // this.loadAllProviders();
                     //this.loadAllInsurance();
                     //this.loadDataTable();
