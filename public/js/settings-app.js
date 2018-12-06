@@ -48,6 +48,7 @@ var settingapp = new Vue({
             this.language.description="";
             this.language.lngid="";
         }
+        this.$v.language.$reset();
         },
         fetchLanguages(){
             this.$http.get(this.urlPrefix+'language-list').then(function(response){
