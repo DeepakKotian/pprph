@@ -105,7 +105,7 @@
                   </div>
                   <div class="form-group">
                     <label for="address">Address</label>
-                    <textarea class="form-control" name="address" id="address" cols="10" v-model="customer.address" rows="2"></textarea>
+                    <textarea class="form-control" name="address" id="address" cols="10" v-model="customer.address" rows="2" style="resize:none;"></textarea>
                   </div>
                   <div class="row">
                     <div class="form-group col-sm-4" :class="{ 'has-error': $v.customer.zip.$error }">
@@ -277,8 +277,8 @@
                                   </thead> -->
                                   <tbody>
                                   <tr v-for="(note,index) in notes">
-                                      <td><% index+1 %>. <% note.description %> </td>
-                                      <td>
+                                      <td style="max-width: 378px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"><% index+1 %>. <% note.description %> </td>
+                                      <td align="center">
                                         <a href="javascript:void(0)" v-on:click="loadNotesDetail(note)" class="fa fa-edit"></a> &nbsp;
                                         <a href="javascript:void(0)" v-on:click="deleteNote(note.id)"class="fa fa-trash"></a>
                                       </td>
