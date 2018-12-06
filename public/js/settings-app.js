@@ -49,6 +49,7 @@ var settingapp = new Vue({
             }
         this.$v.language.$reset();
         },
+        
         fetchLanguages(){
             this.$http.get(this.urlPrefix+'language-list').then(function(response){
             $('#languageTable').DataTable().destroy();  
