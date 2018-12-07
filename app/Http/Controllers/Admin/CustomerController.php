@@ -706,7 +706,7 @@ WHERE c.is_family=0  GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC
         {
           $customWhere = " AND c.user_id =".Auth::user()->id;
         }
-        $selectQry =  "SELECT c.id, c.first_name,c.user_id, c.last_name,c.status, c.email,c.city,c.nationality,c.zip,c.telephone,CONCAT_WS(' ',users.first_name,users.last_name) as u_name, {$addQry} FROM customers c LEFT JOIN users ON users.id = c.user_id LEFT JOIN policy_detail pd ON pd.customer_id = c.id {$jnQry} WHERE c.is_family=0 {$customWhere} GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC";      
+        $selectQry =  "SELECT c.id, c.first_name,c.user_id, c.last_name,c.status, c.email,c.city,c.nationality,c.zip,c.telephone,CONCAT_WS(' ',users.first_name,users.last_name) as u_name, {$addQry} FROM customers c LEFT JOIN users ON users.id = c.user_id LEFT JOIN policy_detail pd ON pd.customer_id = c.id {$jnQry} WHERE c.is_family=0 {$customWhere} GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id ASC";      
 
         $customer =  DB::select(DB::raw($selectQry));
 

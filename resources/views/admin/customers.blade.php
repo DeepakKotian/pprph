@@ -115,7 +115,7 @@ Customers List
                                 <th>Telephone</th>
                                 <th>Created By</th>
                                 @foreach($insuranceCtg as $key=> $rowCtg)
-                                <th title="{{ $rowCtg->name }}" class="masterTooltip"> {{ str_limit($rowCtg->name,10) }}</th>
+                                <th title="'{{ $rowCtg->name }}'"  data-toggle="tooltip" data-placement="top" class="masterTooltip"> {{ str_limit($rowCtg->name,10) }} </th>
                                 @endforeach
                             </tr>
                         </thead>
@@ -214,15 +214,14 @@ a.ui-button:active,
 	font-weight: normal;
 	color: #ffffff;
 }
-.tooltip_custom {
-	display:none;
-	position:absolute;
+.ui-tooltip {
 	border:1px solid #333;
 	background-color:#161616;
 	border-radius:5px;
 	padding:10px;
 	color:#fff;
 	font-size:12px Arial;
+    border: none !important;
 }
 </style>
 
@@ -411,25 +410,8 @@ a.ui-button:active,
             $('#customerTable').DataTable().search('').draw(); 
           
         });
+        $('[data-toggle="tooltip"]').tooltip(); 
 
-    $('.masterTooltip').hover(function(){
-            // Hover over code
-            var title = $(this).attr('title');
-            $(this).data('tipText', title).removeAttr('title');
-            $('<p class="tooltip_custom"></p>')
-            .text(title)
-            .appendTo('body')
-            .fadeIn('slow');
-    }, function() {
-            // Hover out code
-            $(this).attr('title', $(this).data('tipText'));
-            $('.tooltip_custom').remove();
-    }).mousemove(function(e) {
-            var mousex = e.pageX + 20; //Get X coordinates
-            var mousey = e.pageY + 10; //Get Y coordinates
-            $('.tooltip_custom')
-            .css({ top: mousey, left: mousex })
-    });
 
 </script>
 @stop
