@@ -10,24 +10,26 @@
     table, th, td {
         border: 1px solid #ddd;
         font-size:11px;
+        max-width:70px;
+        word-wrap: break-word;
     }
   </style>
 </head>
 <body>
   <header align="center"> <h4 align="center" style="color:#FFF;">Prophos</h4>  </header>
-   <main>
+   <main style="width:100%;">
         <h5>Customer List</h5>
-        <table cellspacing="0" width="100%">
+        <table cellspacing="0" width="100%" style="table-layout: fixed;width: 100%;">
             <thead style="background-color:#CCC">
                 <tr>
-                    <th>Id</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Email</th>
-                    <th>City</th>
-                    <th>Postcode</th>
-                    <th>Telephone</th>
-                    <th>Created By</th>
+                    <th style="width:5%">Id</th>
+                    <th style="width:10%">First Name</th>
+                    <th style="width:10%">Last Name</th>
+                    <th style="width:10%">Email</th>
+                    <th style="width:10%">City</th>
+                    <th style="width:5%">Postcode</th>
+                    <th style="width:10%">Telephone</th>
+                    <th style="width:10%">Created By</th>
                     @foreach($data['ctgs'] as $key=> $rowCtg)
                     <th> {{ $rowCtg->name }}</th>
                     @endforeach
