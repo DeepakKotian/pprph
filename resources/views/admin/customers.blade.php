@@ -115,7 +115,7 @@ Customers List
                                 <th>Telephone</th>
                                 <th>Created By</th>
                                 @foreach($insuranceCtg as $key=> $rowCtg)
-                                <th title="'{{ $rowCtg->name }}'"  data-toggle="tooltip" data-placement="top" class="masterTooltip"> {{ str_limit($rowCtg->name,10) }} </th>
+                                <th title="{{ $rowCtg->name }}"  data-toggle="tooltip" data-placement="top" class="masterTooltip"> {{ str_limit($rowCtg->name,10) }} </th>
                                 @endforeach
                             </tr>
                         </thead>
