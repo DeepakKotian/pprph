@@ -102,7 +102,7 @@ Customers List
                 </form>
             </div>
             <div class="col-12">
-            <div class="table table-responsive">
+            <!-- <div class="table table-responsive"> -->
                 <table class="table table-bordered" id="customerTable">
                         <thead>
                             <tr>
@@ -123,7 +123,7 @@ Customers List
                    
                         </tbody>				
                 </table>
-             </div>
+             <!-- </div> -->
             </div>
         </div>
     </div>
@@ -153,6 +153,9 @@ Customers List
 @section('css')
 <link rel="stylesheet" href="{{ asset('css/jquery-ui.css') }} ">
 <style>
+div.dataTables_wrapper div.row:nth-child(2){
+    overflow-x: auto;
+}
    .ui-autocomplete {
     position: absolute;
     top: 100%;
