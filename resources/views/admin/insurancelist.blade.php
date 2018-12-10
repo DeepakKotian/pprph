@@ -38,6 +38,7 @@
                      <td><% index+1 %></td>
                      <td><% row.name %> </td>
                      <td>
+                    
                         <a data-toggle="modal"  data-target="#addInsurance"  v-on:click="loadinsurancemodal(row)" class="btn btn-default"><i class="fa fa-edit"></i></a>
                         <a data-toggle="modal"  class="btn btn-default" v-on:click="loadStatusModal(row)"> <i class="fa fa-square" v-bind:class="{'text-green':row.status==1,'text-red':row.status==0}"></i> </a>
                      </td>

@@ -414,6 +414,7 @@ WHERE c.is_family=0  GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC
         $customer = array_slice($customer, 0,22);
         $oldCustomerData = $request->oldCustomerData;
         $result = array_diff_assoc($customer,$oldCustomerData);
+       // dump($result);
         $arrCustomer =  [];
 
         foreach ($result as $key => $value) {

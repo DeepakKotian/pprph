@@ -13,6 +13,7 @@ var app = new Vue({
       policylist:'',
       policyAction:'',
       currentCtgName:'',
+      isEnabled:true,
       languagedata:'',
       customerDocs:{
 
@@ -595,7 +596,6 @@ var app = new Vue({
                 return;
             }
             this.vertragData.document = $('#document')[0].files[0];
-            console.log(this);
             let formData= new FormData();
             // formData.append('policy_id',this.vertrag.policy_id);
             formData.append('documentData',this.vertragData.document);
@@ -628,7 +628,6 @@ var app = new Vue({
                 // $.each(response.data.errors, function(key, value){
                 //     self.$toaster.error(value[0]);
                 // });
-                
             });
         },
         deletePolicyDocument:function(doc){
@@ -681,6 +680,7 @@ var app = new Vue({
             }
           )
         },
+        
         fetchLogs:function(){
             this.$http.get(this.urlPrefix+'fetch-logs/'+this.currentId).then(function(response){
                 this.customerlogs = response.data;
@@ -689,7 +689,6 @@ var app = new Vue({
         },
 
         loadNotesDetail:function(note){
-
             //this.modalAction='';
             if(note!=null){
                 this.modalAction='update';
@@ -697,8 +696,6 @@ var app = new Vue({
                 this.singleNote.noteId=note.id;
             }
             else{
-          
-                
                 this.modalAction='add'
                 this.singleNote.description="";
                 this.singleNote.noteId="";

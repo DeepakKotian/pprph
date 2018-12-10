@@ -45,7 +45,7 @@ class documentsController extends Controller
                     return Str::contains(strtolower($row['document_name']), strtolower($request->get('searchTerm'))) || Str::contains($row['name'], $request->get('searchTerm')) ? true : false;
                 });
             }
-        })->addIndexColumn()->make(true);
+        })->addIndexColumn()->make(true); //->addIndexColumn()
     }
 
     /**

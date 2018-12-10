@@ -117,7 +117,6 @@ var settingapp = new Vue({
                     this.$toaster.success(response.data);
                     $('#statusModal').modal('hide');
                     this.fetchLanguages();
-                   
                 }
             )
         },

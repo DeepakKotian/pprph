@@ -20,7 +20,7 @@ Documents List
 <div class="box box-primary" id="documents-app" >
        <!-- Breadcrumbs-->
         <div class="box-header">
-              <h3 class="box-title">       View Documents List</h3>
+              <h3 class="box-title">View Documents List</h3>
               <div class="box-tools">
                 <!-- <a class="btn btn-primary btn-md pull-right" href="{{ url('admin/user-form') }}">Add New</a> -->
             </div>
@@ -141,7 +141,9 @@ cnt = 0;
        },{
             targets: 1,
             data: null,
+            
             render: function(data, type, full, meta){
+                
                     if(type === 'display'){
                        if(full.title)
                        return full.title;

@@ -265,7 +265,7 @@ a.ui-button:active,
             targets: [{{ $arrClms }}], //For Dynamic Column JS looping
             data: null,
             render: function(data, type, full, meta){
-                console.log(meta.col);
+             
                 var index = meta.col - 8; //Insurance Column starts
                 var dataStr ='';
                 if(data>0){
