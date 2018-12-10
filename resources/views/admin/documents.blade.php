@@ -41,7 +41,7 @@ Documents List
                     <table class="table table-bordered" id="documentsTable">
                             <thead>
                                 <tr>
-                                    <th>Sl No</th>
+                                    <!-- <th>Sl. No</th> -->
                                     <th>Document Title </th>
                                     <th>Customer Name</th>
                                     <th>Action</th>                           
@@ -95,7 +95,12 @@ Documents List
 
 @section('css')
 <style>
-
+/* .dataTable thead th:first-child{
+    pointer-events: none;
+}
+table.dataTable thead th:first-child:after{
+    display:none;
+} */
 </style>
 @stop
 
@@ -118,7 +123,7 @@ cnt = 0;
             }
         },
         columns: [
-            {data: 'DT_Row_Index', name: 'DT_Row_Index'},
+            // {data: 'DT_Row_Index', name: 'DT_Row_Index'},
             {data: 'document_name', name: 'document_name'},
             {data: 'name', name: 'name'},
             {data: 'docId', name: 'docId'},
