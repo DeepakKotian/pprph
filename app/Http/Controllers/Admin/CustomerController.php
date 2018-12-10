@@ -706,7 +706,7 @@ WHERE c.is_family=0  GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC
         {
           $customWhere = " AND c.user_id =".Auth::user()->id;
         }
-        $selectQry =  "SELECT c.id, c.first_name,c.user_id, c.last_name,c.status, c.email,c.city,c.nationality,c.zip,c.telephone,CONCAT_WS(' ',users.first_name,users.last_name) as u_name, {$addQry} FROM customers c LEFT JOIN users ON users.id = c.user_id LEFT JOIN policy_detail pd ON pd.customer_id = c.id {$jnQry} WHERE c.is_family=0 {$customWhere} GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id ASC";      
+        $selectQry =  "SELECT c.id,c.unique_id, c.first_name,c.user_id, c.last_name,c.status, c.email,c.city,c.nationality,c.zip,c.telephone,CONCAT_WS(' ',users.first_name,users.last_name) as u_name, {$addQry} FROM customers c LEFT JOIN users ON users.id = c.user_id LEFT JOIN policy_detail pd ON pd.customer_id = c.id {$jnQry} WHERE c.is_family=0 {$customWhere} GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id ASC";      
 
         $customer =  DB::select(DB::raw($selectQry));
 
@@ -766,8 +766,8 @@ WHERE c.is_family=0  GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC
            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(2,$row, 'First Name');
            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(3,$row, 'Last Name');
            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(4,$row, 'Email');
-           $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(5,$row, 'Postal code');
-           $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(6,$row, 'City');
+           $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(5,$row, 'City');
+           $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(6,$row, 'Postal code');
            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(7,$row, 'Telephone');
            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(8,$row, 'Created By');
            $column = 9; //dynamic column starts 
@@ -782,12 +782,12 @@ WHERE c.is_family=0  GROUP BY c.id, c.first_name, c.last_name ORDER BY c.id DESC
           
            $spreadsheet->getActiveSheet()->getStyle("A1:Z1")->getFont()->setBold( true )->setName('Arial');
            foreach ($customer['table'] as $key => $value) {
-            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(1,$row, $value['id']);
+            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(1,$row, $value['unique_id']);
             $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(2,$row, $value['first_name']);
             $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(3,$row, $value['last_name']);
             $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(4,$row, $value['email']);
-            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(5,$row, $value['zip']);
-            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(6,$row, $value['city']);
+            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(5,$row, $value['city']);
+            $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(6,$row, $value['zip']);
             $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(7,$row, $value['telephone']);
             $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(8,$row, $value['u_name']);
             /* if($value['status']==0){

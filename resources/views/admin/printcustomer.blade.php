@@ -38,7 +38,7 @@
             <tbody>
                @foreach($data['table'] as $ky => $vl)
                <tr>
-                    <td>{{ $vl['id'] }}</td>
+                    <td>{{ $vl['unique_id'] }}</td>
                     <td>{{ $vl['first_name'] }}</td>
                     <td>{{ $vl['last_name'] }}</td>
                     <td>{{ $vl['email'] }}</td>
