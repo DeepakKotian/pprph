@@ -48,6 +48,7 @@ var app = new Vue({
           noteId:""
        },
       oldCustomerData:{
+          family:[]
       },
       sampleDta:[],
       currentVertragDoc:'',
@@ -317,8 +318,7 @@ var app = new Vue({
             this.family.mobile_family = item.mobile;
             this.family.unique_id_family = item.unique_id;
             this.family.id = item.id; 
-            this.oldCustomerData = {
-                family : {
+            this.oldCustomerData.family = {
                     first_name_family:item.first_name,
                     last_name_family:item.last_name,
                     dob_family :item.dob,
@@ -326,7 +326,7 @@ var app = new Vue({
                     mobile_family : item.mobile,
                     unique_id_family : item.unique_id,
                     id : item.id,
-                }
+
             }
             $( "#dob_family" ).datepicker( "setDate", this.family.dob_family);
         }

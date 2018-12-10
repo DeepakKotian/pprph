@@ -277,7 +277,7 @@
                                   </thead> -->
                                   <tbody>
                                   <tr v-for="(note,index) in notes">
-                                      <td style="max-width: 378px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"><% index+1 %>. <% note.description %> </td>
+                                      <td style="max-width: 378px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"  v-on:click="loadNotesDetail(note)" v-tooltip="'Click to view/edit'" >  <% index+1 %>. <% note.description %> </td>
                                       <td align="center">
                                         <a href="javascript:void(0)" v-on:click="loadNotesDetail(note)" class="fa fa-edit"></a> &nbsp;
                                         <a href="javascript:void(0)" v-on:click="deleteNote(note.id)"class="fa fa-trash"></a>
