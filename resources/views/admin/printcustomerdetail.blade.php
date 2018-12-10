@@ -38,7 +38,7 @@
                 </tr> 
                 <tr>
                     <th>Contact Details</th>
-                    <td>:</td> <td> Phone - {{ $data['telephone'] }} {{ $data['mobile'] }} , Email - {{ $data['email'] }} {{ $data['email_office'] }}</td>
+                    <td>:</td> <td> Phone - {{ $data['telephone'] }}  @if($data['mobile']) , @endif {{ $data['mobile'] }} , Email - {{ $data['email'] }} @if($data['email_office']) , @endif {{ $data['email_office'] }}</td>
                 </tr> 
             </tbody>            
         </table>
