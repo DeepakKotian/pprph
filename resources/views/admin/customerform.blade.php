@@ -31,7 +31,7 @@
                   @endif
                   <a  class="btn btn-primary btn-md" data-toggle="modal" data-target="#uploadModal" v-on:click="fetchCustomerDocs">Documents</a>
                   <a  class="btn btn-primary btn-md" data-toggle="modal" data-target="#logsModal" v-on:click="fetchLogs">Logs</a>
-                  <a href="{{ url('admin/printcustomer/'.$data->id) }}" class="btn btn-primary btn-md"> Print </a>
+                  <a href="{{ url('admin/printcustomer/'.$data->id) }}" class="btn btn-primary btn-md" target="_blank"> Print </a>
                 @endif
                 <a class="btn btn-primary btn-md " href="{{ url('admin/customers') }}">Back to List Page</a>
 
