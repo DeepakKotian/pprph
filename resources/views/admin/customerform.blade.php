@@ -265,7 +265,7 @@
                         <button class="btn btn-primary " v-if="modalAction=='update'" v-on:click="editNote()" type="button">Update Note</button>
                      </div>
                      
-                        <div class="box box-info " >
+                        <div class="box box-info" >
                         <div class="box-header with-border">
                           <h3 class="box-title">Notes</h3>
                         </div>
@@ -277,7 +277,8 @@
                                   </thead> -->
                                   <tbody>
                                   <tr v-for="(note,index) in notes">
-                                      <td style="max-width: 378px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"  v-on:click="loadNotesDetail(note)" v-tooltip="'Click to view/edit'" >  <% index+1 %>. <% note.description %> </td>
+                                      <td style="max-width: 378px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap; cursor:pointer"  v-on:click="loadNotesDetail(note)" v-if="note.description.length>150" v-tooltip="{content: 'Click to view/edit'}" > <% index+1 %>. <% note.description %> </td>
+                                      <td style="max-width: 378px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"  v-if="note.description.length<150" > <% index+1 %>. <% note.description %> </td>
                                       <td align="center">
                                         <a href="javascript:void(0)" v-on:click="loadNotesDetail(note)" class="fa fa-edit"></a> &nbsp;
                                         <a href="javascript:void(0)" v-on:click="deleteNote(note.id)"class="fa fa-trash"></a>

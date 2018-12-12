@@ -13,7 +13,7 @@ var app = new Vue({
       policylist:'',
       policyAction:'',
       currentCtgName:'',
-      isEnabled:true,
+      isTooltip:null,
       languagedata:'',
       customerDocs:{
 
@@ -204,6 +204,21 @@ var app = new Vue({
         $('#nationality').on('change',function(){
               self.customer.nationality = $(this).val();
         })
+      
+        // setTimeout(function()  {
+        //     self.fetchNotes();
+        //     self.notes.forEach(element => {
+        //         if(element.description.length >20){
+        //             self.isTooltip=true;
+        //             console.log(element.description.length +' have tooltip' +self.isTooltip);
+        //         }
+        //         else{
+        //             self.isTooltip=false;
+        //             console.log(element.description.length +' no tooltip' + self.isTooltip );
+        //         }
+              
+        //     }); 
+        // }, 3000);
      },
 
     methods: {
@@ -248,6 +263,10 @@ var app = new Vue({
      }, 
      getCustomerData: function () {
         this.loadNotesDetail();
+        // this.notes.forEach(element => {
+        //     console.log(element);
+            
+        // });
         this.$http.get(this.urlPrefix+'fetchcustomer/'+this.currentId).then(function(response){
         this.oldCustomerData={
                 id:response.data.id,
@@ -702,12 +721,17 @@ var app = new Vue({
                 // this.currentId=this.currentId;
                 // console.log(this.currentId);
                 this.fetchNotes();
+                
+                
             }
         },
         /*notes section*/
         fetchNotes:function(){
             this.$http.post(this.urlPrefix+'fetch-notes',{ custId:this.currentId}).then(function(response){
                 this.notes = response.data; 
+                //console.log(this.notes);
+               
+               
             }
          )
         },
