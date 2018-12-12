@@ -669,7 +669,7 @@
                                             Start Date : <% logs.logArr.start_date %>
                                           </div>
                                           <div>
-                                            End Date : <% logs.logArr.start_date %>
+                                            End Date : <% logs.logArr.end_date %>
                                           </div>
                                       </li>
                                     </ul>
